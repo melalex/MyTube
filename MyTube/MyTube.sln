@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTube.WEB", "MyTube.WEB\MyTube.WEB.csproj", "{A90A503D-C0C9-4F55-8CFC-F347C3B3ECE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTube.Tests", "MyTube.Tests\MyTube.Tests.csproj", "{9E662074-2D25-4B74-8F3C-D7C7C2E11DFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTube.DAL", "MyTube.DAL\MyTube.DAL.csproj", "{8F31D95F-4A2E-4AE5-A153-64E7119D68AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyTube.BLL", "MyTube.BLL\MyTube.BLL.csproj", "{DF547C25-11F3-4846-9463-273EE22A3F5D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A90A503D-C0C9-4F55-8CFC-F347C3B3ECE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A90A503D-C0C9-4F55-8CFC-F347C3B3ECE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A90A503D-C0C9-4F55-8CFC-F347C3B3ECE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A90A503D-C0C9-4F55-8CFC-F347C3B3ECE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E662074-2D25-4B74-8F3C-D7C7C2E11DFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E662074-2D25-4B74-8F3C-D7C7C2E11DFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E662074-2D25-4B74-8F3C-D7C7C2E11DFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E662074-2D25-4B74-8F3C-D7C7C2E11DFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F31D95F-4A2E-4AE5-A153-64E7119D68AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F31D95F-4A2E-4AE5-A153-64E7119D68AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F31D95F-4A2E-4AE5-A153-64E7119D68AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F31D95F-4A2E-4AE5-A153-64E7119D68AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF547C25-11F3-4846-9463-273EE22A3F5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF547C25-11F3-4846-9463-273EE22A3F5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF547C25-11F3-4846-9463-273EE22A3F5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF547C25-11F3-4846-9463-273EE22A3F5D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
