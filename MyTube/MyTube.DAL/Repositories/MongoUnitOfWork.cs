@@ -9,18 +9,19 @@ using MongoDB.Driver;
 
 namespace MyTube.DAL.Repositories
 {
-    class MongoUnitOfWork : IUnitOfWork
+    public class MongoUnitOfWork : IUnitOfWork
     {
         private const string dataBaseName = "MyTube";
+        private const string channelsCollectionName = "Channels";
+        private const string videosCollectionName = "Videos";
 
         private IMongoDatabase database;
 
         private MongoRepository<Channel> _chanels = null;
         private MongoRepository<Video> _videos = null;
 
-        public MongoUnitOfWork(string connectionString)
+        public MongoUnitOfWork(MongoClient mongoClient)
         {
-            var mongoClient = new MongoClient(connectionString);
             database = mongoClient.GetDatabase(dataBaseName);
         }
 
@@ -30,7 +31,7 @@ namespace MyTube.DAL.Repositories
             {
                 if (_chanels == null)
                 {
-                    _chanels = new MongoRepository<Channel>(database);
+                    _chanels = new MongoRepository<Channel>(database, channelsCollectionName);
                 }
                 return _chanels;
             }
@@ -42,7 +43,7 @@ namespace MyTube.DAL.Repositories
             {
                 if (_videos == null)
                 {
-                    _videos = new MongoRepository<Video>(database);
+                    _videos = new MongoRepository<Video>(database, videosCollectionName);
                 }
                 return _videos;
             }

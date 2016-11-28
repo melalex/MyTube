@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace MyTube.DAL.Interfaces
 {
-    interface IRepositotory<TDocument> where TDocument : IEntitie
+    public interface IRepositotory<TDocument> where TDocument : IEntitie
     {
-        void Create(TDocument item);
-        void Delete(ObjectId id);
+        Task Create(TDocument item);
+        Task Delete(ObjectId id);
         Task<IEnumerable<TDocument>> Find(Func<TDocument, bool> predicate);
         Task<TDocument> Get(ObjectId id);
         IEnumerable<TDocument> GetAll();

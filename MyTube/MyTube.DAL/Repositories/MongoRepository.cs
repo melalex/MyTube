@@ -10,25 +10,23 @@ using MongoDB.Driver;
 
 namespace MyTube.DAL.Repositories
 {
-    class MongoRepository<TDocument> : IRepositotory<TDocument> where TDocument : IEntitie
+    public class MongoRepository<TDocument> : IRepositotory<TDocument> where TDocument : IEntitie
     {
         private IMongoCollection<TDocument> collection;
-        private const string collectionName = "Channels";
 
-        public MongoRepository(IMongoDatabase database)
+        public MongoRepository(IMongoDatabase database, string collectionName)
         {
             collection = database.GetCollection<TDocument>(collectionName); ;
         }
 
-        public async void Create(TDocument item)
+        public async Task Create(TDocument item)
         {
             await collection.InsertOneAsync(item);
         }
 
-        public async void Delete(ObjectId id)
+        public async Task Delete(ObjectId id)
         {
-            var filter = Builders<TDocument>.Filter.Eq(o => o.Id, id);
-            await collection.DeleteOneAsync(filter);
+            await collection.DeleteOneAsync(a => a.Id == id);
         }
 
         public Task<IEnumerable<TDocument>> Find(Func<TDocument, bool> predicate)

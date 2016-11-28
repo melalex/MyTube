@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyTube.DAL.Interfaces
 {
-    interface IUnitOfWork
+    public interface IUnitOfWork
     {
         IRepositotory<Channel> Channels { get; }
         IRepositotory<Video> Videos { get; }

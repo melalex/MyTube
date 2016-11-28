@@ -19,7 +19,7 @@ namespace MyTube.DAL.Entities
         public string Username { get; set; }
 
         [BsonRepresentation(BsonType.String)]
-        public Uri AvatarUri { get; set; }
+        public string AvatarUrl { get; set; }
 
         public List<MongoDBRef> ViewedVideos { get; set; }
 
