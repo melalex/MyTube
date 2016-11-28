@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyTube.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace MyTube.DAL.Interfaces
 {
     interface IUnitOfWork
     {
+        IRepositotory<Channel> Channels { get; }
+        IRepositotory<Video> Videos { get; }
     }
 }

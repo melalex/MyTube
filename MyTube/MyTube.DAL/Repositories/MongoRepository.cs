@@ -10,47 +10,47 @@ using MongoDB.Driver;
 
 namespace MyTube.DAL.Repositories
 {
-    class ChannelRepository : IRepository<Channel>
+    class MongoRepository<TDocument> : IRepositotory<TDocument> where TDocument : IEntitie
     {
-        private IMongoCollection<Channel> collection;
+        private IMongoCollection<TDocument> collection;
         private const string collectionName = "Channels";
 
-        public ChannelRepository(IMongoDatabase database)
+        public MongoRepository(IMongoDatabase database)
         {
-            collection = database.GetCollection<Channel>(collectionName); ;
+            collection = database.GetCollection<TDocument>(collectionName); ;
         }
 
-        public async void Create(Channel item)
+        public async void Create(TDocument item)
         {
             await collection.InsertOneAsync(item);
         }
 
         public async void Delete(ObjectId id)
         {
-            var filter = Builders<Channel>.Filter.Eq(o => o.Id, id);
+            var filter = Builders<TDocument>.Filter.Eq(o => o.Id, id);
             await collection.DeleteOneAsync(filter);
         }
 
-        public Task<IEnumerable<Channel>> Find(Func<Channel, bool> predicate)
+        public Task<IEnumerable<TDocument>> Find(Func<TDocument, bool> predicate)
         {
             return Task.Run(() => collection.AsQueryable().Where(predicate));
         }
 
-        public async Task<Channel> Get(ObjectId id)
+        public async Task<TDocument> Get(ObjectId id)
         {
-            var filter = Builders<Channel>.Filter.Eq(o => o.Id, id);
+            var filter = Builders<TDocument>.Filter.Eq(o => o.Id, id);
             var result = await collection.Find(filter).ToListAsync();
             return result.First();
         }
 
-        public IEnumerable<Channel> GetAll()
+        public IEnumerable<TDocument> GetAll()
         {
             return collection.AsQueryable();
         }
 
-        public async void Update(Channel item)
+        public async void Update(TDocument item)
         {
-            var filter = Builders<Channel>.Filter.Eq(o => o.Id, item.Id);
+            var filter = Builders<TDocument>.Filter.Eq(o => o.Id, item.Id);
             await collection.ReplaceOneAsync(filter, item);
         }
     }
