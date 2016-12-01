@@ -104,6 +104,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyTube.DAL\Extensions\VideoRepositoryExtension.cs" />
     <Compile Include="MyTube.DAL\UnitOfWork\UnitOfWorkChannelRepository.cs" />
     <Compile Include="MyTube.DAL\UnitOfWork\UnitOfWorkVideoRepository.cs" />
     <Compile Include="MyTube.DAL\DBRefsTest.cs" />

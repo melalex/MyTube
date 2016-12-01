@@ -12,9 +12,10 @@ namespace MyTube.DAL.Extensions
 {
     public static class VideoRepositoryExtension
     {
-        //static async Task<IEnumerable<Video>> SearchByString(this IRepositotory<Video> video, string searchString)
-        //{
-
-        //}
+        public static IEnumerable<Video> SearchByString(this IRepositotory<Video> video, string searchString, int skip, int limit)
+        {
+            var filter = Builders<Video>.Filter.Text(searchString);
+            return video.Collection.Find(filter).Skip(skip).Limit(limit).ToEnumerable();
+        }
     }
 }
