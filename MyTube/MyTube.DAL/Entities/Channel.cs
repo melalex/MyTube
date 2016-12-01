@@ -15,5 +15,17 @@ namespace MyTube.DAL.Entities
         public string Username { get; set; }
 
         public string AvatarUrl { get; set; }
+
+        [BsonIgnore]
+        public static string collectionName { get; private set; } = "Channels";
+
+        [BsonIgnore]
+        public MongoDBRef DBRef
+        {
+            get
+            {
+                return new MongoDBRef(collectionName, Id);
+            }
+        }
     }
 }

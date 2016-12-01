@@ -61,6 +61,7 @@
     <Compile Include="Entities\Entitie.cs" />
     <Compile Include="Interfaces\IRepositotory.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
+    <Compile Include="Extensions\VideoRepositoryExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\MongoRepository.cs" />
     <Compile Include="Repositories\MongoUnitOfWork.cs" />

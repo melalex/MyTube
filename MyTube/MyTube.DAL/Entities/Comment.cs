@@ -17,5 +17,17 @@ namespace MyTube.DAL.Entities
         public DateTimeOffset CommentDateTime { get; set; }
 
         public string Text { get; set; }
+
+        [BsonIgnore]
+        public static string collectionName { get; private set; } = "Comments";
+
+        [BsonIgnore]
+        public MongoDBRef DBRef
+        {
+            get
+            {
+                return new MongoDBRef(collectionName, Id);
+            }
+        }
     }
 }

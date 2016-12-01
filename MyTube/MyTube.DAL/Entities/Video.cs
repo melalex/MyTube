@@ -31,5 +31,18 @@ namespace MyTube.DAL.Entities
         public int Dislikes { get; set; }
 
         public int Views { get; set; }
+
+        [BsonIgnore]
+        public static string collectionName { get; private set; } = "Videos";
+
+        [BsonIgnore]
+        public MongoDBRef DBRef
+        {
+            get
+            {
+                return new MongoDBRef(collectionName, Id);
+            }
+        }
+
     }
 }

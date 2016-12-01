@@ -12,12 +12,6 @@ namespace MyTube.DAL.Repositories
     public class MongoUnitOfWork : IUnitOfWork
     {
         private const string dataBaseName = "MyTube";
-        private const string channelsCollectionName = "Channels";
-        private const string videosCollectionName = "Videos";
-        private const string commentsCollectionName = "Comments";
-        private const string notificationsCollectionName = "Notifications";
-        private const string subscriptionsCollectionName = "subscriptionsCollectionName";
-        private const string viewedVideoTransfersCollectionName = "ViewedVideoTransfers";
 
         private IMongoDatabase database;
 
@@ -39,7 +33,7 @@ namespace MyTube.DAL.Repositories
             {
                 if (_chanels == null)
                 {
-                    _chanels = new MongoRepository<Channel>(database, channelsCollectionName);
+                    _chanels = new MongoRepository<Channel>(database, Channel.collectionName);
                 }
                 return _chanels;
             }
@@ -51,7 +45,7 @@ namespace MyTube.DAL.Repositories
             {
                 if (_videos == null)
                 {
-                    _videos = new MongoRepository<Video>(database, videosCollectionName);
+                    _videos = new MongoRepository<Video>(database, Video.collectionName);
                 }
                 return _videos;
             }
@@ -63,7 +57,7 @@ namespace MyTube.DAL.Repositories
             {
                 if (_comments == null)
                 {
-                    _comments = new MongoRepository<Comment>(database, commentsCollectionName);
+                    _comments = new MongoRepository<Comment>(database, Comment.collectionName);
                 }
                 return _comments;
             }
@@ -75,7 +69,7 @@ namespace MyTube.DAL.Repositories
             {
                 if (_notifications == null)
                 {
-                    _notifications = new MongoRepository<Notification>(database, notificationsCollectionName);
+                    _notifications = new MongoRepository<Notification>(database, Notification.collectionName);
                 }
                 return _notifications;
             }
@@ -87,7 +81,7 @@ namespace MyTube.DAL.Repositories
             {
                 if (_subscriptions == null)
                 {
-                    _subscriptions = new MongoRepository<Subscription>(database, subscriptionsCollectionName);
+                    _subscriptions = new MongoRepository<Subscription>(database, Subscription.collectionName);
                 }
                 return _subscriptions;
             }
@@ -99,7 +93,7 @@ namespace MyTube.DAL.Repositories
             {
                 if (_viewedVideoTransfers == null)
                 {
-                    _viewedVideoTransfers = new MongoRepository<ViewedVideoTransfer>(database, viewedVideoTransfersCollectionName);
+                    _viewedVideoTransfers = new MongoRepository<ViewedVideoTransfer>(database, ViewedVideoTransfer.collectionName);
                 }
                 return _viewedVideoTransfers;
             }

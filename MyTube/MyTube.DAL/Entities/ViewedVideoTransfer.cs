@@ -26,5 +26,17 @@ namespace MyTube.DAL.Entities
         public ViewStatus Status { get; set; }
 
         public DateTimeOffset ShowDateTime { get; set; }
+
+        [BsonIgnore]
+        public static string collectionName { get; private set; } = "ViewedVideoTransfers";
+
+        [BsonIgnore]
+        public MongoDBRef DBRef
+        {
+            get
+            {
+                return new MongoDBRef(collectionName, Id);
+            }
+        }
     }
 }
