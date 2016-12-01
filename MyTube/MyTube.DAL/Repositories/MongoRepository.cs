@@ -10,7 +10,7 @@ using MongoDB.Driver;
 
 namespace MyTube.DAL.Repositories
 {
-    public class MongoRepository<TDocument> : IRepositotory<TDocument> where TDocument : IEntitie
+    public class MongoRepository<TDocument> : IRepositotory<TDocument> where TDocument : Entitie
     {
         private IMongoCollection<TDocument> collection;
 
@@ -24,9 +24,10 @@ namespace MyTube.DAL.Repositories
             await collection.InsertOneAsync(item);
         }
 
-        public async Task Delete(ObjectId id)
+        public async Task Delete(string id)
         {
-            await collection.DeleteOneAsync(a => a.Id == id);
+            ObjectId documentId = new ObjectId(id);
+            await collection.DeleteOneAsync(a => a.Id == documentId);
         }
 
         public Task<IEnumerable<TDocument>> Find(Func<TDocument, bool> predicate)
@@ -34,9 +35,10 @@ namespace MyTube.DAL.Repositories
             return Task.Run(() => collection.AsQueryable().Where(predicate));
         }
 
-        public async Task<TDocument> Get(ObjectId id)
+        public async Task<TDocument> Get(string id)
         {
-            var filter = Builders<TDocument>.Filter.Eq(o => o.Id, id);
+            ObjectId documentId = new ObjectId(id);
+            var filter = Builders<TDocument>.Filter.Eq(o => o.Id, documentId);
             var result = await collection.Find(filter).ToListAsync();
             return result.First();
         }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyTube.DAL.Entities
 {
-    public class Video : IEntitie
+    public class Video : Entitie
     {
         [BsonId]
         [BsonElement("_id")]
@@ -33,16 +33,5 @@ namespace MyTube.DAL.Entities
         public int Dislikes { get; set; }
 
         public int Views { get; set; }
-
-        public List<Comment> Comments { get; set; }
-    }
-
-    public class Comment
-    {
-        public MongoDBRef Comentator { get; set; }
-
-        public DateTimeOffset UploadDate { get; set; }
-
-        public string Text { get; set; }
     }
 }

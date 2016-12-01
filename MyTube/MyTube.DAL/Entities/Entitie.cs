@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace MyTube.DAL.Interfaces
 {
-    public interface IEntitie
+    public class Entitie
     {
-        ObjectId Id { get; set; }
+        [BsonId]
+        [BsonElement("_id")]
+        public ObjectId Id { get; set; }
     }
 }

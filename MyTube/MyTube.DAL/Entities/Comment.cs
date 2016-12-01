@@ -10,20 +10,16 @@ using System.Threading.Tasks;
 
 namespace MyTube.DAL.Entities
 {
-    public class Channel : Entitie
+    public class Comments : Entitie
     {
         [BsonId]
         [BsonElement("_id")]
         public ObjectId Id { get; set; }
 
-        public string Username { get; set; }
+        public MongoDBRef Comentator { get; set; }
 
-        public string AvatarUrl { get; set; }
+        public DateTimeOffset CommentDateTime { get; set; }
 
-        public List<MongoDBRef> ViewedVideos { get; set; }
-
-        public List<MongoDBRef> Notifications { get; set; }
-
-        public List<MongoDBRef> Subscribers { get; set; }
+        public string Text { get; set; }
     }
 }

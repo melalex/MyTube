@@ -11,5 +11,9 @@ namespace MyTube.DAL.Interfaces
     {
         IRepositotory<Channel> Channels { get; }
         IRepositotory<Video> Videos { get; }
+        IRepositotory<Comment> Comments { get; }
+        IRepositotory<Notification> Notifications { get; }
+        IRepositotory<Subscription> Subscriptions { get; }
+        IRepositotory<ViewedVideoTransfer> ViewedVideoTransfers { get; }
     }
 }
