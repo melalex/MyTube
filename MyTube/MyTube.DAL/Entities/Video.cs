@@ -16,6 +16,8 @@ namespace MyTube.DAL.Entities
         
         public string VideoUrl { get; set; }
 
+        public string PosterUrl { get; set; }
+
         public string Description { get; set; }
 
         public MongoDBRef Uploder { get; set; }

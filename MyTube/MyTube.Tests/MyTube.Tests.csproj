@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MyTube.DAL\Extensions\VideoRepositoryExtension.cs" />
+    <Compile Include="MyTube.DAL\FileStorage\VideoStorage.cs" />
     <Compile Include="MyTube.DAL\UnitOfWork\UnitOfWorkChannelRepository.cs" />
     <Compile Include="MyTube.DAL\UnitOfWork\UnitOfWorkVideoRepository.cs" />
     <Compile Include="MyTube.DAL\DBRefsTest.cs" />
@@ -122,9 +123,13 @@
       <Project>{df547c25-11f3-4846-9463-273ee22a3f5d}</Project>
       <Name>MyTube.BLL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MyTube.DAL\MyTube.DAL.csproj">
+    <ProjectReference Include="..\MyTube.DAL.FileStorage\MyTube.DAL.FileStorage.csproj">
+      <Project>{CB58CAE7-5299-4713-A998-FFCFCD86FAD3}</Project>
+      <Name>MyTube.DAL.FileStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyTube.DAL\MyTube.DAL.DataStorage.csproj">
       <Project>{8f31d95f-4a2e-4ae5-a153-64e7119d68ae}</Project>
-      <Name>MyTube.DAL</Name>
+      <Name>MyTube.DAL.DataStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyTube.WEB\MyTube.WEB.csproj">
       <Project>{A90A503D-C0C9-4F55-8CFC-F347C3B3ECE5}</Project>
