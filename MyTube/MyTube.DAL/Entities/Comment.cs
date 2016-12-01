@@ -10,12 +10,8 @@ using System.Threading.Tasks;
 
 namespace MyTube.DAL.Entities
 {
-    public class Comments : Entitie
+    public class Comment : Entitie
     {
-        [BsonId]
-        [BsonElement("_id")]
-        public ObjectId Id { get; set; }
-
         public MongoDBRef Comentator { get; set; }
 
         public DateTimeOffset CommentDateTime { get; set; }

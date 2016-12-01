@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyTube.DAL.Interfaces
+namespace MyTube.DAL.Entities
 {
     public class Entitie
     {

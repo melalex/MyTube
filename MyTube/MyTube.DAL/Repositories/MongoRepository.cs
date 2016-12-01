@@ -48,7 +48,7 @@ namespace MyTube.DAL.Repositories
             return collection.AsQueryable();
         }
 
-        public async void Update(TDocument item)
+        public async Task Update(TDocument item)
         {
             var filter = Builders<TDocument>.Filter.Eq(o => o.Id, item.Id);
             await collection.ReplaceOneAsync(filter, item);

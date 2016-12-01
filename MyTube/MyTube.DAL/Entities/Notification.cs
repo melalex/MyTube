@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace MyTube.DAL.Entities
 {
-    class Notifications
+    public class Notification : Entitie
     {
+        public MongoDBRef Channel { get; set; }
+        public DateTimeOffset NotificationDateTime { get; set; }
+        public string Text { get; set; }
     }
 }

@@ -53,8 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Channel.cs" />
+    <Compile Include="Entities\Comment.cs" />
+    <Compile Include="Entities\Notification.cs" />
+    <Compile Include="Entities\Subscription.cs" />
     <Compile Include="Entities\Video.cs" />
-    <Compile Include="Interfaces\IEntitie.cs" />
+    <Compile Include="Entities\ViewedVideoTransfer.cs" />
+    <Compile Include="Entities\Entitie.cs" />
     <Compile Include="Interfaces\IRepositotory.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

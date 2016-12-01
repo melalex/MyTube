@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MyTube.DAL.Entities;
 
 namespace MyTube.DAL.Interfaces
 {
@@ -14,6 +15,6 @@ namespace MyTube.DAL.Interfaces
         Task<IEnumerable<TDocument>> Find(Func<TDocument, bool> predicate);
         Task<TDocument> Get(string id);
         IEnumerable<TDocument> GetAll();
-        void Update(TDocument item);
+        Task Update(TDocument item);
     }
 }

@@ -104,7 +104,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyTube.DAL\UnitOfWork.cs" />
+    <Compile Include="MyTube.DAL\UnitOfWork\UnitOfWorkChannelRepository.cs" />
+    <Compile Include="MyTube.DAL\UnitOfWork\UnitOfWorkVideoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MyTube.WEB\Controllers\HomeControllerTest.cs" />
   </ItemGroup>

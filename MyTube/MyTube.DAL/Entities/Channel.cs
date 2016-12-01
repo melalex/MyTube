@@ -12,18 +12,8 @@ namespace MyTube.DAL.Entities
 {
     public class Channel : Entitie
     {
-        [BsonId]
-        [BsonElement("_id")]
-        public ObjectId Id { get; set; }
-
         public string Username { get; set; }
 
         public string AvatarUrl { get; set; }
-
-        public List<MongoDBRef> ViewedVideos { get; set; }
-
-        public List<MongoDBRef> Notifications { get; set; }
-
-        public List<MongoDBRef> Subscribers { get; set; }
     }
 }
