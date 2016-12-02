@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="FileStorageFacade.cs" />
     <Compile Include="Interfaces\IFileRepository.cs" />
+    <Compile Include="Interfaces\IStorageFacade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\FielRepository.cs" />
   </ItemGroup>

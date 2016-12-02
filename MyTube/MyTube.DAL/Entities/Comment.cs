@@ -12,6 +12,8 @@ namespace MyTube.DAL.Entities
 {
     public class Comment : Entitie
     {
+        public MongoDBRef DestinationVideo { get; set; }
+
         public MongoDBRef Comentator { get; set; }
 
         public DateTimeOffset CommentDateTime { get; set; }
@@ -20,6 +22,32 @@ namespace MyTube.DAL.Entities
 
         [BsonIgnore]
         public static string collectionName { get; private set; } = "Comments";
+
+        [BsonIgnore]
+        public string DestinationVideoIdString
+        {
+            get
+            {
+                return DestinationVideo.Id.ToString();
+            }
+            set
+            {
+                DestinationVideo = new MongoDBRef(Video.collectionName, value);
+            }
+        }
+
+        [BsonIgnore]
+        public string ComentatorIdString
+        {
+            get
+            {
+                return Comentator.Id.ToString();
+            }
+            set
+            {
+                Comentator = new MongoDBRef(Channel.collectionName, value);
+            }
+        }
 
         [BsonIgnore]
         public MongoDBRef DBRef

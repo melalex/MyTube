@@ -20,6 +20,32 @@ namespace MyTube.DAL.Entities
         public static string collectionName { get; private set; } = "Subscriptions";
 
         [BsonIgnore]
+        public string PublisherIdString
+        {
+            get
+            {
+                return Publisher.Id.ToString();
+            }
+            set
+            {
+                Publisher = new MongoDBRef(Channel.collectionName, value);
+            }
+        }
+
+        [BsonIgnore]
+        public string SubscriberIdString
+        {
+            get
+            {
+                return Subscriber.Id.ToString();
+            }
+            set
+            {
+                Subscriber = new MongoDBRef(Channel.collectionName, value);
+            }
+        }
+
+        [BsonIgnore]
         public MongoDBRef DBRef
         {
             get

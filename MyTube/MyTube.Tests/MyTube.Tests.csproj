@@ -119,9 +119,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MyTube.BLL\MyTube.BLL.csproj">
+    <ProjectReference Include="..\MyTube.BLL\MyTube.BLL.User.csproj">
       <Project>{df547c25-11f3-4846-9463-273ee22a3f5d}</Project>
-      <Name>MyTube.BLL</Name>
+      <Name>MyTube.BLL.User</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyTube.DAL.FileStorage\MyTube.DAL.FileStorage.csproj">
       <Project>{CB58CAE7-5299-4713-A998-FFCFCD86FAD3}</Project>

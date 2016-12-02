@@ -10,14 +10,29 @@ namespace MyTube.DAL.Entities
 {
     public class Notification : Entitie
     {
-        public MongoDBRef Channel { get; set; }
+        public MongoDBRef DestinationChannel { get; set; }
 
         public DateTimeOffset NotificationDateTime { get; set; }
 
         public string Text { get; set; }
 
+        public string Link { get; set; }
+
         [BsonIgnore]
         public static string collectionName { get; private set; } = "Notifications";
+
+        [BsonIgnore]
+        public string DestinationChannelIdString
+        {
+            get
+            {
+                return DestinationChannel.Id.ToString();
+            }
+            set
+            {
+                DestinationChannel = new MongoDBRef(Channel.collectionName, value);
+            }
+        }
 
         [BsonIgnore]
         public MongoDBRef DBRef

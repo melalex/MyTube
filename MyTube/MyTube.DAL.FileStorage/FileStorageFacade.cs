@@ -8,7 +8,7 @@ using MyTube.DAL.FileStorage.Repositories;
 
 namespace MyTube.DAL.FileStorage
 {
-    public class FileStorageFacade
+    public class FileStorageFacade : IStorageFacade
     {
         private IFileRepository videoStorage;
         private IFileRepository avatarsStorage;

@@ -40,7 +40,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessEntities\Channel.cs" />
+    <Compile Include="BusinessEntities\Video.cs" />
+    <Compile Include="DTO\CommentDTO.cs" />
+    <Compile Include="DTO\NotificationDTO.cs" />
+    <Compile Include="DTO\SubscriptionDTO.cs" />
+    <Compile Include="DTO\ViewedVideoTransferDTO.cs" />
+    <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BusinessModels\" />
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyTube.DAL.FileStorage\MyTube.DAL.FileStorage.csproj">
+      <Project>{cb58cae7-5299-4713-a998-ffcfcd86fad3}</Project>
+      <Name>MyTube.DAL.FileStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyTube.DAL\MyTube.DAL.DataStorage.csproj">
+      <Project>{8f31d95f-4a2e-4ae5-a153-64e7119d68ae}</Project>
+      <Name>MyTube.DAL.DataStorage</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

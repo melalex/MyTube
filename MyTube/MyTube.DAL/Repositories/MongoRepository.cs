@@ -19,9 +19,10 @@ namespace MyTube.DAL.Repositories
             Collection = database.GetCollection<TDocument>(collectionName); ;
         }
 
-        public async Task Create(TDocument item)
+        public async Task<string> Create(TDocument item)
         {
             await Collection.InsertOneAsync(item);
+            return item.IDString;
         }
 
         public async Task Delete(string id)

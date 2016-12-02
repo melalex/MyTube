@@ -38,6 +38,19 @@ namespace MyTube.DAL.Entities
         public static string collectionName { get; private set; } = "Videos";
 
         [BsonIgnore]
+        public string UploderIdString
+        {
+            get
+            {
+                return Uploder.Id.ToString();
+            }
+            set
+            {
+                Uploder = new MongoDBRef(Channel.collectionName, value);
+            }
+        }
+
+        [BsonIgnore]
         public MongoDBRef DBRef
         {
             get

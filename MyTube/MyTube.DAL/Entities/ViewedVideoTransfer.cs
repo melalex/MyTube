@@ -18,9 +18,9 @@ namespace MyTube.DAL.Entities
 
     public class ViewedVideoTransfer : Entitie
     {
-        public MongoDBRef Channel { get; set; }
+        public MongoDBRef Viewer { get; set; }
 
-        public MongoDBRef Video { get; set; }
+        public MongoDBRef ViewedVideo { get; set; }
 
         [BsonRepresentation(BsonType.Int32)]
         public ViewStatus Status { get; set; }
@@ -29,6 +29,32 @@ namespace MyTube.DAL.Entities
 
         [BsonIgnore]
         public static string collectionName { get; private set; } = "ViewedVideoTransfers";
+
+        [BsonIgnore]
+        public string ViewerIdString
+        {
+            get
+            {
+                return Viewer.Id.ToString();
+            }
+            set
+            {
+                Viewer = new MongoDBRef(Channel.collectionName, value);
+            }
+        }
+
+        [BsonIgnore]
+        public string ViewedVideoIdString
+        {
+            get
+            {
+                return ViewedVideo.Id.ToString();
+            }
+            set
+            {
+                ViewedVideo = new MongoDBRef(Video.collectionName, value);
+            }
+        }
 
         [BsonIgnore]
         public MongoDBRef DBRef
