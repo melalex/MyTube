@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyTube.BLL.DTO
 {
-    class NotificationDTO
+    public class NotificationDTO
     {
         public string Id { get; set; }
         public string Text { get; set; }

@@ -31,17 +31,16 @@ namespace MyTube.DAL.Repositories
             await Collection.DeleteOneAsync(a => a.Id == documentId);
         }
 
-        public Task<IEnumerable<TDocument>> Find(Func<TDocument, bool> predicate)
+        public IEnumerable<TDocument> Find(Func<TDocument, bool> predicate)
         {
-            return Task.Run(() => Collection.AsQueryable().Where(predicate));
+            return Collection.AsQueryable().Where(predicate);
         }
 
-        public async Task<TDocument> Get(string id)
+        public TDocument Get(string id)
         {
             ObjectId documentId = new ObjectId(id);
             var filter = Builders<TDocument>.Filter.Eq(o => o.Id, documentId);
-            var result = await Collection.Find(filter).ToListAsync();
-            return result.First();
+            return Collection.Find(filter).Single();
         }
 
         public IEnumerable<TDocument> GetAll()

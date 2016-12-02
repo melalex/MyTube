@@ -9,11 +9,11 @@ using MyTube.BLL.Interfaces;
 
 namespace MyTube.BLL.BusinessEntities
 {
-    class Channel
+    public class Channel
     {
         private IUnitOfWork database;
 
-        Channel(IUnitOfWork database)
+        public Channel(IUnitOfWork database)
         {
             this.database = database;
         }

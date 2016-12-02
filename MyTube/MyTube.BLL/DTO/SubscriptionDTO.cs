@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyTube.BLL.DTO
 {
-    class SubscriptionDTO
+    public class SubscriptionDTO
     {
         public string Id { get; set; }
         public DateTimeOffset SubscriptionDate { get; set; }

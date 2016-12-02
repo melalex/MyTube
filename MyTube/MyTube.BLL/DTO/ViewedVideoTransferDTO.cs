@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyTube.BLL.DTO
 {
-    class ViewedVideoTransferDTO
+    public class ViewedVideoTransferDTO
     {
         public string Id { get; set; }
         public DateTimeOffset ViewDateTime { get; set; }

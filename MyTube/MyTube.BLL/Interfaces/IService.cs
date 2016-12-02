@@ -30,5 +30,8 @@ namespace MyTube.BLL.Interfaces
 
         Task Subscribe(string publisher, string subscriber);
         Task Unsubscribe(string subscriptionId);
+
+        Task ReportVideo(string videoId);
+        Task ReportComment(string CommentId);
     }
 }

@@ -29,20 +29,20 @@ namespace MyTube.BLL.BusinessEntities
         public int Dislikes { get; set; }
         public int Views { get; set; } 
 
-        public async IEnumerable<CommentDTO> Comments()
+        public IEnumerable<CommentDTO> Comments()
         {
             var comments = database.Comments.GetAll();
             return from comment in comments
                    where comment.DestinationVideoIdString == Id
-                   let commentator = await database.Channels.Get(comment.ComentatorIdString)
+                   let commentator = database.Channels.Get(comment.ComentatorIdString)
                    select new CommentDTO
                    {
-                       Id = comment.Id,
-                       CommentatorId = "",
-                       CommentatorUsername = "",
-                       CommentatorAvatarUri = "",
-                       CommentDateTime =,
-                       CommentText = "",
+                       Id = comment.IDString,
+                       CommentatorId = commentator.IDString,
+                       CommentatorUsername = commentator.Username,
+                       CommentatorAvatarUri = commentator.AvatarUrl,
+                       CommentDateTime = comment.CommentDateTime,
+                       CommentText = comment.Text,
                    };
         }
     }

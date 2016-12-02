@@ -15,8 +15,8 @@ namespace MyTube.DAL.Interfaces
 
         Task<string> Create(TDocument item);
         Task Delete(string id);
-        Task<IEnumerable<TDocument>> Find(Func<TDocument, bool> predicate);
-        Task<TDocument> Get(string id);
+        IEnumerable<TDocument> Find(Func<TDocument, bool> predicate);
+        TDocument Get(string id);
         IEnumerable<TDocument> GetAll();
         Task Update(TDocument item);
     }

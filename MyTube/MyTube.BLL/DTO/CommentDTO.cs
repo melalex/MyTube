@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyTube.BLL.DTO
 {
-    class CommentDTO
+    public class CommentDTO
     {
         public string Id { get; set; }
         public string CommentatorId { get; set; }
