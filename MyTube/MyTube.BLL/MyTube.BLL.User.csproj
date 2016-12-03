@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.2.0\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,23 +54,35 @@
     <Compile Include="DTO\NotificationDTO.cs" />
     <Compile Include="DTO\SubscriptionDTO.cs" />
     <Compile Include="DTO\ViewedVideoTransferDTO.cs" />
+    <Compile Include="Infrastructure\ServiceModule.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="BusinessModels\" />
-    <Folder Include="Infrastructure\" />
-    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MyTube.BLL.Identity\MyTube.BLL.Identity.csproj">
+      <Project>{ce49cf5b-3ab6-4451-b3ca-fbe7d674e084}</Project>
+      <Name>MyTube.BLL.Identity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MyTube.DAL.FileStorage\MyTube.DAL.FileStorage.csproj">
       <Project>{cb58cae7-5299-4713-a998-ffcfcd86fad3}</Project>
       <Name>MyTube.DAL.FileStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyTube.DAL.Identity\MyTube.DAL.Identity.csproj">
+      <Project>{8D14CFEF-581B-4E2E-8C46-63E0C2883C72}</Project>
+      <Name>MyTube.DAL.Identity</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyTube.DAL\MyTube.DAL.DataStorage.csproj">
       <Project>{8f31d95f-4a2e-4ae5-a153-64e7119d68ae}</Project>
       <Name>MyTube.DAL.DataStorage</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

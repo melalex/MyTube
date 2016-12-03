@@ -37,16 +37,14 @@ namespace MyTube.BLL.Identity.Services
 
         public async Task<IdentityResult> CreateAsync(UserDTO user, string password)
         {
-            ApplicationUser appUser = new ApplicationUser();
-            Mapper.Map(user, appUser);
+            ApplicationUser appUser = Mapper.Map<UserDTO, ApplicationUser>(user);
             return await database.UserManager.CreateAsync(appUser, password);
         }
 
         public async Task<UserDTO> FindByEmailAsync(string email)
         {
             ApplicationUser appUser = await database.UserManager.FindByEmailAsync(email);
-            UserDTO user = new UserDTO();
-            Mapper.Map(appUser, user);
+            UserDTO user = Mapper.Map<ApplicationUser, UserDTO>(appUser);
             return user;
         }
 
@@ -67,8 +65,7 @@ namespace MyTube.BLL.Identity.Services
 
         public async Task SignInAsync(UserDTO user, bool isPersistent, bool rememberBrowser)
         {
-            ApplicationUser appUser = new ApplicationUser();
-            Mapper.Map(user, appUser);
+            ApplicationUser appUser = Mapper.Map<UserDTO, ApplicationUser>(user);
             await signInManager.SignInAsync(appUser, isPersistent, rememberBrowser);
         }
 

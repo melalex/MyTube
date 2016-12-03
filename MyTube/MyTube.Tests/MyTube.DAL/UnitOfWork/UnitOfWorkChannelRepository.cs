@@ -30,7 +30,7 @@ namespace MyTube.Tests.MyTube.DAL
             Channel chanel = new Channel
             {
                 Username = "melalex",
-                AvatarUrl = "http://www.pierobon.org/iis/review1.htm"              
+                AvatarUri = "http://www.pierobon.org/iis/review1.htm"              
             };
 
             // Act
@@ -52,7 +52,7 @@ namespace MyTube.Tests.MyTube.DAL
             Channel channel = new Channel
             {
                 Username = "melalex",
-                AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
+                AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
 
             // Act
@@ -76,7 +76,7 @@ namespace MyTube.Tests.MyTube.DAL
             Channel channel = new Channel
             {
                 Username = "melalex",
-                AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
+                AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
 
             // Act
@@ -98,22 +98,22 @@ namespace MyTube.Tests.MyTube.DAL
             Channel channel1 = new Channel
             {
                 Username = "melalex",
-                AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
+                AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
             Channel channel2 = new Channel
             {
                 Username = "melalex",
-                AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
+                AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
             Channel channel3 = new Channel
             {
                 Username = "melalex",
-                AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
+                AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
             Channel channel4 = new Channel
             {
                 Username = "belalex",
-                AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
+                AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
 
             // Act
@@ -141,19 +141,19 @@ namespace MyTube.Tests.MyTube.DAL
             Channel channel1 = new Channel
             {
                 Username = "melalex",
-                AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
+                AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
             await unitOfWork.Channels.CreateAsync(channel1);
 
             // Act
             channel1.Username = "balex";
-            channel1.AvatarUrl = "http://www.example.com";
+            channel1.AvatarUri = "http://www.example.com";
             await unitOfWork.Channels.UpdateAsync(channel1);
 
             // Assert
             Channel anotherChennel = unitOfWork.Channels.Get(channel1.Id.ToString());
             Assert.AreEqual(channel1.Username, anotherChennel.Username);
-            Assert.AreEqual(channel1.AvatarUrl, anotherChennel.AvatarUrl);
+            Assert.AreEqual(channel1.AvatarUri, anotherChennel.AvatarUri);
 
             channels.DeleteOne(a => a.Id == channel1.Id);
         }

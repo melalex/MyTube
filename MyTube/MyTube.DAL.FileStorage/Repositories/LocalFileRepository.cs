@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace MyTube.DAL.FileStorage.Repositories
 {
-    public class FielRepository : IFileRepository
+    public class LocalFileRepository : IFileRepository
     {
         private string storageFolder;
 
-        public FielRepository(string storageFolder)
+        public LocalFileRepository(string storageFolder)
         {
             this.storageFolder = storageFolder;
         }
@@ -22,13 +22,13 @@ namespace MyTube.DAL.FileStorage.Repositories
             throw new NotImplementedException();
         }
 
-        public Uri SaveFile(byte[] fileContent, string fileName, string fileExtension)
+        public string SaveFile(byte[] fileContent, string fileName, string fileExtension)
         {
             string path = $@"{Directory.GetCurrentDirectory()}\{storageFolder}\{fileName}.{fileExtension}";
             FileInfo fileInfo = new FileInfo(path);
             fileInfo.Directory.Create();
             File.WriteAllBytes(path, fileContent);
-            return new Uri(path);
+            return $@"{storageFolder.Replace('\\','/')}/{fileName}.{fileExtension}";
         }
     }
 }

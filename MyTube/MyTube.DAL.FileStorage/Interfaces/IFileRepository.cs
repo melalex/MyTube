@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MyTube.DAL.FileStorage.Interfaces
 {
-    interface IFileRepository
+    public interface IFileRepository
     {
-        Uri SaveFile(byte[] fileContent, string fileName, string fileExtension);
+        string SaveFile(byte[] fileContent, string fileName, string fileExtension);
         void DeleteFile(Uri uri);
     }
 }

@@ -8,30 +8,40 @@ using MyTube.DAL.FileStorage.Repositories;
 
 namespace MyTube.DAL.FileStorage
 {
-    public class FileStorageFacade : IStorageFacade
+    public class LocalFileStorageFacade : IStorageFacade
     {
         private IFileRepository videoStorage;
         private IFileRepository avatarsStorage;
         private IFileRepository posterStorage;
 
-        public FileStorageFacade()
+        public LocalFileStorageFacade()
         {
-            avatarsStorage = new FielRepository(@"Images\Avatars");
-            posterStorage = new FielRepository(@"Images\Posters");
-            videoStorage = new FielRepository(@"Videos");
+            avatarsStorage = new LocalFileRepository(@"Images\Avatars");
+            posterStorage = new LocalFileRepository(@"Images\Posters");
+            videoStorage = new LocalFileRepository(@"Videos");
         }
 
-        public Uri SaveAvatar(byte[] fileContent, string fileName, string fileExtension)
+        public string DefaultAvatarUri()
+        {
+            return "Images/Avatars/default_user_image.gif";
+        }
+
+        public string DefaultPosterUri()
+        {
+            return "Images/Posters/default_poster_image.gif";
+        }
+
+        public string SaveAvatar(byte[] fileContent, string fileName, string fileExtension)
         {
             return avatarsStorage.SaveFile(fileContent, fileName, fileExtension);
         }
 
-        public Uri SavePoster(byte[] fileContent, string fileName, string fileExtension)
+        public string SavePoster(byte[] fileContent, string fileName, string fileExtension)
         {
             return posterStorage.SaveFile(fileContent, fileName, fileExtension);
         }
 
-        public Uri SaveVideo(byte[] fileContent, string fileName, string fileExtension)
+        public string SaveVideo(byte[] fileContent, string fileName, string fileExtension)
         {
             return videoStorage.SaveFile(fileContent, fileName, fileExtension);
         }

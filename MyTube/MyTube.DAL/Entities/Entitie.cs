@@ -22,6 +22,10 @@ namespace MyTube.DAL.Entities
             {
                 return Id.ToString();
             }
+            set
+            {
+                Id = new ObjectId(value);
+            }
         }
     }
 }

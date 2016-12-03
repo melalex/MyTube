@@ -15,7 +15,7 @@ namespace MyTube.BLL.Interfaces
         DISLIKE,
     }
 
-    interface IUserService
+    public interface IUserService
     {
         Task<string> CreateChannel(string userName, byte[] avatar = null);
         Task<Channel> GetChannel(string id);

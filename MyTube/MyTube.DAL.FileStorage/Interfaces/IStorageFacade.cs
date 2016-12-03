@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 
 namespace MyTube.DAL.FileStorage.Interfaces
 {
-    interface IStorageFacade
+    public interface IStorageFacade
     {
-        Uri SaveAvatar(byte[] fileContent, string fileName, string fileExtension);
+        string DefaultAvatarUri();
 
-        Uri SavePoster(byte[] fileContent, string fileName, string fileExtension);
+        string DefaultPosterUri();
 
-        Uri SaveVideo(byte[] fileContent, string fileName, string fileExtension);
+        string SaveAvatar(byte[] fileContent, string fileName, string fileExtension);
+
+        string SavePoster(byte[] fileContent, string fileName, string fileExtension);
+
+        string SaveVideo(byte[] fileContent, string fileName, string fileExtension);
 
         void DeleteAvatar(Uri uri);
 

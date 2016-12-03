@@ -14,7 +14,7 @@ namespace MyTube.DAL.Entities
     {
         public string Username { get; set; }
 
-        public string AvatarUrl { get; set; }
+        public string AvatarUri { get; set; }
 
         [BsonIgnore]
         public static string collectionName { get; private set; } = "Channels";

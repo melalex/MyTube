@@ -40,7 +40,7 @@ namespace MyTube.BLL.BusinessEntities
                        Id = comment.IDString,
                        CommentatorId = commentator.IDString,
                        CommentatorUsername = commentator.Username,
-                       CommentatorAvatarUri = commentator.AvatarUrl,
+                       CommentatorAvatarUri = commentator.AvatarUri,
                        CommentDateTime = comment.CommentDateTime,
                        CommentText = comment.Text,
                    };

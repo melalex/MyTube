@@ -29,7 +29,7 @@ namespace MyTube.Tests.MyTube.DAL
             Channel channel1 = new Channel
             {
                 Username = "melalex",
-                AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
+                AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
             await unitOfWork.Channels.CreateAsync(channel1);
             DateTimeOffset UploadDate = DateTimeOffset.Now;

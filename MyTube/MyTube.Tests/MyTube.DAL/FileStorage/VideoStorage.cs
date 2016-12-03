@@ -14,7 +14,7 @@ namespace MyTube.Tests.MyTube.DAL.FileStorage
             // Arrange
             string path = @"C:\Users\Alexander\Desktop\20161126_202757.mp4";
             byte[] content = File.ReadAllBytes(path);
-            FileStorageFacade fileStorage = new FileStorageFacade();
+            LocalFileStorageFacade fileStorage = new LocalFileStorageFacade();
 
             // Act
             Uri fileUri = fileStorage.SaveVideo(content, "123", "mp4");
