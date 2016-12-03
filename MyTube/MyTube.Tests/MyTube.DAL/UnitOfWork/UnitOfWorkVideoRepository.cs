@@ -32,7 +32,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Username = "melalex",
                 AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
             };
-            await unitOfWork.Channels.Create(channel1);
+            await unitOfWork.Channels.CreateAsync(channel1);
             DateTimeOffset UploadDate = DateTimeOffset.Now;
             Video video = new Video
             {
@@ -53,7 +53,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             };
 
             // Act
-            await unitOfWork.Videos.Create(video);
+            await unitOfWork.Videos.CreateAsync(video);
 
             // Assert
             var filter = Builders<Video>.Filter.Eq(o => o.Id, video.Id);
@@ -68,7 +68,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             Assert.AreEqual(video.Dislikes, anotherVideo.Dislikes);
             Assert.AreEqual(video.Views, anotherVideo.Views);
 
-            await unitOfWork.Channels.Delete(channel1.Id.ToString());
+            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Username = "melalex",
                 AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
             };
-            await unitOfWork.Channels.Create(channel1);
+            await unitOfWork.Channels.CreateAsync(channel1);
             DateTimeOffset UploadDate = DateTimeOffset.Now;
             Video video = new Video
             {
@@ -101,17 +101,17 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Dislikes = 228,
                 Views = 100,
             };
-            await unitOfWork.Videos.Create(video);
+            await unitOfWork.Videos.CreateAsync(video);
 
             // Act
-            await unitOfWork.Videos.Delete(video.Id.ToString());
+            await unitOfWork.Videos.DeleteAsync(video.Id.ToString());
 
             // Assert
             var filter = Builders<Video>.Filter.Eq(o => o.Id, video.Id);
             long result = videos.Find(filter).Count();
             Assert.AreEqual(result, 0);
 
-            await unitOfWork.Channels.Delete(channel1.Id.ToString());
+            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
         }
 
         [TestMethod]
@@ -125,7 +125,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Username = "melalex",
                 AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
             };
-            await unitOfWork.Channels.Create(channel1);
+            await unitOfWork.Channels.CreateAsync(channel1);
             DateTimeOffset UploadDate = DateTimeOffset.Now;
             Video video = new Video
             {
@@ -144,7 +144,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Dislikes = 228,
                 Views = 100,
             };
-            await unitOfWork.Videos.Create(video);
+            await unitOfWork.Videos.CreateAsync(video);
 
             // Act
             Video anotherVideo = await unitOfWork.Videos.Get(video.Id.ToString());
@@ -153,7 +153,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             Assert.AreEqual(anotherVideo.Id, video.Id);
             videos.DeleteOne(a => a.Id == video.Id);
 
-            await unitOfWork.Channels.Delete(channel1.Id.ToString());
+            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
         }
 
         [TestMethod]
@@ -167,7 +167,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Username = "melalex",
                 AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
             };
-            await unitOfWork.Channels.Create(channel1);
+            await unitOfWork.Channels.CreateAsync(channel1);
             DateTimeOffset UploadDate = DateTimeOffset.Now;
             Video video1 = new Video
             {
@@ -220,9 +220,9 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Dislikes = 228,
                 Views = 100,
             };
-            await unitOfWork.Videos.Create(video1);
-            await unitOfWork.Videos.Create(video2);
-            await unitOfWork.Videos.Create(video3);
+            await unitOfWork.Videos.CreateAsync(video1);
+            await unitOfWork.Videos.CreateAsync(video2);
+            await unitOfWork.Videos.CreateAsync(video3);
 
             // Act
             var result = await unitOfWork.Videos.Find((Video video) => video.Category == "Category1");
@@ -233,7 +233,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             videos.DeleteOne(a => a.Id == video1.Id);
             videos.DeleteOne(a => a.Id == video2.Id);
             videos.DeleteOne(a => a.Id == video3.Id);
-            await unitOfWork.Channels.Delete(channel1.Id.ToString());
+            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
         }
 
         [TestMethod]
@@ -247,7 +247,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Username = "melalex",
                 AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
             };
-            await unitOfWork.Channels.Create(channel1);
+            await unitOfWork.Channels.CreateAsync(channel1);
             DateTimeOffset UploadDate = DateTimeOffset.Now;
             Video video = new Video
             {
@@ -266,18 +266,18 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Dislikes = 228,
                 Views = 100,
             };
-            await unitOfWork.Videos.Create(video);
+            await unitOfWork.Videos.CreateAsync(video);
 
             // Act
             video.Category = "Another";
-            await unitOfWork.Videos.Update(video);
+            await unitOfWork.Videos.UpdateAsync(video);
 
             // Assert
             Video anotherVideo = await unitOfWork.Videos.Get(video.Id.ToString());
             Assert.AreEqual(video.Category, anotherVideo.Category);
 
             videos.DeleteOne(a => a.Id == video.Id);
-            await unitOfWork.Channels.Delete(channel1.Id.ToString());
+            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
         }
     }
 }

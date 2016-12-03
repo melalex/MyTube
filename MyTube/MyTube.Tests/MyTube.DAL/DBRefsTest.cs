@@ -31,7 +31,7 @@ namespace MyTube.Tests.MyTube.DAL
                 Username = "melalex",
                 AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
             };
-            await unitOfWork.Channels.Create(channel1);
+            await unitOfWork.Channels.CreateAsync(channel1);
             DateTimeOffset UploadDate = DateTimeOffset.Now;
             Video video = new Video
             {
@@ -50,7 +50,7 @@ namespace MyTube.Tests.MyTube.DAL
                 Dislikes = 228,
                 Views = 100,
             };
-            await unitOfWork.Videos.Create(video);
+            await unitOfWork.Videos.CreateAsync(video);
 
             // Act
             MongoDBRef videoRef = video.DBRef;
@@ -62,8 +62,8 @@ namespace MyTube.Tests.MyTube.DAL
             Assert.AreEqual(channelRef.CollectionName, Channel.collectionName);
             Assert.AreEqual(channelRef.Id, channel1.Id);
 
-            await unitOfWork.Videos.Delete(video.Id.ToString());
-            await unitOfWork.Channels.Delete(channel1.Id.ToString());
+            await unitOfWork.Videos.DeleteAsync(video.Id.ToString());
+            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
         }
     }
 }

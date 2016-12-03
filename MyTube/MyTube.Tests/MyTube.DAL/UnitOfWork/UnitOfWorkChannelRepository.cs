@@ -34,7 +34,7 @@ namespace MyTube.Tests.MyTube.DAL
             };
 
             // Act
-            await unitOfWork.Channels.Create(chanel);
+            await unitOfWork.Channels.CreateAsync(chanel);
 
             // Assert
             var filter = Builders<Channel>.Filter.Eq(o => o.Id, chanel.Id);
@@ -56,10 +56,10 @@ namespace MyTube.Tests.MyTube.DAL
             };
 
             // Act
-            await unitOfWork.Channels.Create(channel);
+            await unitOfWork.Channels.CreateAsync(channel);
             var filter = Builders<Channel>.Filter.Eq(o => o.Id, channel.Id);
             bool created = chanels.Find(filter).Count() == 1;
-            await unitOfWork.Channels.Delete(channel.Id.ToString());
+            await unitOfWork.Channels.DeleteAsync(channel.Id.ToString());
 
             // Assert
             long result = chanels.Find(filter).Count();
@@ -80,7 +80,7 @@ namespace MyTube.Tests.MyTube.DAL
             };
 
             // Act
-            await unitOfWork.Channels.Create(channel);
+            await unitOfWork.Channels.CreateAsync(channel);
             var filter = Builders<Channel>.Filter.Eq(o => o.Id, channel.Id);
             Channel anotherChennel = await unitOfWork.Channels.Get(channel.Id.ToString());
 
@@ -117,10 +117,10 @@ namespace MyTube.Tests.MyTube.DAL
             };
 
             // Act
-            await unitOfWork.Channels.Create(channel1);
-            await unitOfWork.Channels.Create(channel2);
-            await unitOfWork.Channels.Create(channel3);
-            await unitOfWork.Channels.Create(channel4);
+            await unitOfWork.Channels.CreateAsync(channel1);
+            await unitOfWork.Channels.CreateAsync(channel2);
+            await unitOfWork.Channels.CreateAsync(channel3);
+            await unitOfWork.Channels.CreateAsync(channel4);
             var result = await unitOfWork.Channels.Find((Channel channel) => channel.Username == "melalex");
             long count = result.Count();
 
@@ -143,12 +143,12 @@ namespace MyTube.Tests.MyTube.DAL
                 Username = "melalex",
                 AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
             };
-            await unitOfWork.Channels.Create(channel1);
+            await unitOfWork.Channels.CreateAsync(channel1);
 
             // Act
             channel1.Username = "balex";
             channel1.AvatarUrl = "http://www.example.com";
-            await unitOfWork.Channels.Update(channel1);
+            await unitOfWork.Channels.UpdateAsync(channel1);
 
             // Assert
             Channel anotherChennel = await unitOfWork.Channels.Get(channel1.Id.ToString());

@@ -13,11 +13,11 @@ namespace MyTube.DAL.Interfaces
     {
         IMongoCollection<TDocument> Collection { get; }
 
-        Task<string> Create(TDocument item);
-        Task Delete(string id);
+        Task<string> CreateAsync(TDocument item);
+        Task DeleteAsync(string id);
         IEnumerable<TDocument> Find(Func<TDocument, bool> predicate);
         TDocument Get(string id);
         IEnumerable<TDocument> GetAll();
-        Task Update(TDocument item);
+        Task UpdateAsync(TDocument item);
     }
 }

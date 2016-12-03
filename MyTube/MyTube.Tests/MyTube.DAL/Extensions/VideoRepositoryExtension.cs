@@ -33,7 +33,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Username = "melalex",
                 AvatarUrl = "http://www.pierobon.org/iis/review1.htm"
             };
-            await unitOfWork.Channels.Create(channel1);
+            await unitOfWork.Channels.CreateAsync(channel1);
             DateTimeOffset UploadDate = DateTimeOffset.Now;
             Video video1 = new Video
             {
@@ -104,10 +104,10 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Dislikes = 228,
                 Views = 100,
             };
-            await unitOfWork.Videos.Create(video1);
-            await unitOfWork.Videos.Create(video2);
-            await unitOfWork.Videos.Create(video3);
-            await unitOfWork.Videos.Create(video4);
+            await unitOfWork.Videos.CreateAsync(video1);
+            await unitOfWork.Videos.CreateAsync(video2);
+            await unitOfWork.Videos.CreateAsync(video3);
+            await unitOfWork.Videos.CreateAsync(video4);
 
             // Act
             var result = unitOfWork.Videos.SearchByString("searchStr", 0, 10);
@@ -120,7 +120,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
             videos.DeleteOne(a => a.Id == video3.Id);
             videos.DeleteOne(a => a.Id == video4.Id);
 
-            await unitOfWork.Channels.Delete(channel1.Id.ToString());
+            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
         }
     }
 }

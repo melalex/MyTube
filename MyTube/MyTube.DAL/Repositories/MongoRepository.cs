@@ -19,13 +19,13 @@ namespace MyTube.DAL.Repositories
             Collection = database.GetCollection<TDocument>(collectionName); ;
         }
 
-        public async Task<string> Create(TDocument item)
+        public async Task<string> CreateAsync(TDocument item)
         {
             await Collection.InsertOneAsync(item);
             return item.IDString;
         }
 
-        public async Task Delete(string id)
+        public async Task DeleteAsync(string id)
         {
             ObjectId documentId = new ObjectId(id);
             await Collection.DeleteOneAsync(a => a.Id == documentId);
@@ -48,7 +48,7 @@ namespace MyTube.DAL.Repositories
             return Collection.AsQueryable();
         }
 
-        public async Task Update(TDocument item)
+        public async Task UpdateAsync(TDocument item)
         {
             var filter = Builders<TDocument>.Filter.Eq(o => o.Id, item.Id);
             await Collection.ReplaceOneAsync(filter, item);
