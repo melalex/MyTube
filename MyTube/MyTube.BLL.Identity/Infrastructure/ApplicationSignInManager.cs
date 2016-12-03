@@ -19,6 +19,12 @@ namespace MyTube.BLL.Identity.Infrastructure
         {
         }
 
+        public async Task<SignInStatus> PasswordEmailSignInAsync(string email, string password, bool isPersistent, bool shouldLockout)
+        {
+            var user = await UserManager.FindByEmailAsync(email);
+            return await PasswordSignInAsync(user.UserName, password, isPersistent, shouldLockout);
+        }
+
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {
             return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);

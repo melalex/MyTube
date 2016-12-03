@@ -82,7 +82,7 @@ namespace MyTube.Tests.MyTube.DAL
             // Act
             await unitOfWork.Channels.CreateAsync(channel);
             var filter = Builders<Channel>.Filter.Eq(o => o.Id, channel.Id);
-            Channel anotherChennel = await unitOfWork.Channels.Get(channel.Id.ToString());
+            Channel anotherChennel = unitOfWork.Channels.Get(channel.Id.ToString());
 
             // Assert
             Assert.AreEqual(anotherChennel.Id, channel.Id);
@@ -121,7 +121,7 @@ namespace MyTube.Tests.MyTube.DAL
             await unitOfWork.Channels.CreateAsync(channel2);
             await unitOfWork.Channels.CreateAsync(channel3);
             await unitOfWork.Channels.CreateAsync(channel4);
-            var result = await unitOfWork.Channels.Find((Channel channel) => channel.Username == "melalex");
+            var result = unitOfWork.Channels.Find((Channel channel) => channel.Username == "melalex");
             long count = result.Count();
 
             // Assert
@@ -151,7 +151,7 @@ namespace MyTube.Tests.MyTube.DAL
             await unitOfWork.Channels.UpdateAsync(channel1);
 
             // Assert
-            Channel anotherChennel = await unitOfWork.Channels.Get(channel1.Id.ToString());
+            Channel anotherChennel = unitOfWork.Channels.Get(channel1.Id.ToString());
             Assert.AreEqual(channel1.Username, anotherChennel.Username);
             Assert.AreEqual(channel1.AvatarUrl, anotherChennel.AvatarUrl);
 

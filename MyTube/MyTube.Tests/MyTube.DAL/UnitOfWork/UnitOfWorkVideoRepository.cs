@@ -147,7 +147,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             await unitOfWork.Videos.CreateAsync(video);
 
             // Act
-            Video anotherVideo = await unitOfWork.Videos.Get(video.Id.ToString());
+            Video anotherVideo = unitOfWork.Videos.Get(video.Id.ToString());
 
             // Assert
             Assert.AreEqual(anotherVideo.Id, video.Id);
@@ -225,7 +225,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             await unitOfWork.Videos.CreateAsync(video3);
 
             // Act
-            var result = await unitOfWork.Videos.Find((Video video) => video.Category == "Category1");
+            var result = unitOfWork.Videos.Find((Video video) => video.Category == "Category1");
 
             // Assert
             long count = result.Count();
@@ -273,7 +273,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             await unitOfWork.Videos.UpdateAsync(video);
 
             // Assert
-            Video anotherVideo = await unitOfWork.Videos.Get(video.Id.ToString());
+            Video anotherVideo = unitOfWork.Videos.Get(video.Id.ToString());
             Assert.AreEqual(video.Category, anotherVideo.Category);
 
             videos.DeleteOne(a => a.Id == video.Id);

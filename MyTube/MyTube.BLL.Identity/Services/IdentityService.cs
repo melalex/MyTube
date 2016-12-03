@@ -42,9 +42,9 @@ namespace MyTube.BLL.Identity.Services
             return await database.UserManager.CreateAsync(appUser, password);
         }
 
-        public async Task<UserDTO> FindByNameAsync(string name)
+        public async Task<UserDTO> FindByEmailAsync(string email)
         {
-            ApplicationUser appUser = await database.UserManager.FindByNameAsync(name);
+            ApplicationUser appUser = await database.UserManager.FindByEmailAsync(email);
             UserDTO user = new UserDTO();
             Mapper.Map(appUser, user);
             return user;
@@ -55,9 +55,9 @@ namespace MyTube.BLL.Identity.Services
             return await database.UserManager.IsEmailConfirmedAsync(userId);
         }
 
-        public async Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
+        public async Task<SignInStatus> PasswordSignInAsync(string email, string password, bool isPersistent, bool shouldLockout)
         {
-            return await signInManager.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
+            return await signInManager.PasswordEmailSignInAsync(email, password, isPersistent, shouldLockout);
         }
 
         public async Task<IdentityResult> ResetPasswordAsync(string userId, string token, string newPassword)
@@ -70,14 +70,6 @@ namespace MyTube.BLL.Identity.Services
             ApplicationUser appUser = new ApplicationUser();
             Mapper.Map(user, appUser);
             await signInManager.SignInAsync(appUser, isPersistent, rememberBrowser);
-        }
-
-        public Func<CookieValidateIdentityContext, Task> OnValidateIdentity()
-        {
-            return SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
-                            validateInterval: TimeSpan.FromMinutes(30),
-                            regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager)
-                        );
         }
 
         public void Dispose()

@@ -97,6 +97,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IdentityService.cs" />
     <Compile Include="Services\IdentityServiceCreator.cs" />
+    <Compile Include="Services\IdentityValidator.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

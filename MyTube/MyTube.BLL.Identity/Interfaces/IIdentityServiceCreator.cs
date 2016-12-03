@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using MyTube.BLL.Identity.Infrastructure;
+using MyTube.DAL.Identity.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace MyTube.BLL.Identity.Interfaces
 {
     public interface IIdentityServiceCreator
     {
-        IIdentityService Create(string connectioString, IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context);
+        IIdentityService Create(string connectioString, IOwinContext context);
     }
 }

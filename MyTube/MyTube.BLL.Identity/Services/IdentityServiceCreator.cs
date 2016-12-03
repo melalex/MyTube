@@ -16,15 +16,15 @@ namespace MyTube.BLL.Identity.Services
 {
     public class IdentityServiceCreator : IIdentityServiceCreator
     {
-        public IIdentityService Create(string connectioString, IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
+        public IIdentityService Create(string connectioString, IOwinContext context)
         {
             IdentityUnitOfWork unitOfWork = new IdentityUnitOfWork(connectioString);
             ApplicationSignInManager signInManager = new ApplicationSignInManager(unitOfWork.UserManager, context.Authentication);
-            configureUserManager(unitOfWork.UserManager, options);
+            configureUserManager(unitOfWork.UserManager);
             return new IdentityService(unitOfWork, signInManager);
         }
 
-        private void configureUserManager(ApplicationUserManager manager, IdentityFactoryOptions<ApplicationSignInManager> options)
+        private void configureUserManager(ApplicationUserManager manager)
         {
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
@@ -48,12 +48,6 @@ namespace MyTube.BLL.Identity.Services
             manager.MaxFailedAccessAttemptsBeforeLockout = 5;
 
             manager.EmailService = new EmailService();
-            var dataProtectionProvider = options.DataProtectionProvider;
-            if (dataProtectionProvider != null)
-            {
-                manager.UserTokenProvider =
-                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
-            }
         }
     }
 }

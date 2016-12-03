@@ -12,15 +12,13 @@ namespace MyTube.BLL.Identity.Interfaces
 {
     public interface IIdentityService : IDisposable
     {
-        Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout);
+        Task<SignInStatus> PasswordSignInAsync(string email, string password, bool isPersistent, bool shouldLockout);
         Task SignInAsync(UserDTO user, bool isPersistent, bool rememberBrowser);
 
         Task<IdentityResult> CreateAsync(UserDTO user, string password);
         Task<IdentityResult> ConfirmEmailAsync(string userId, string token);
-        Task<UserDTO> FindByNameAsync(string name);
+        Task<UserDTO> FindByEmailAsync(string email);
         Task<bool> IsEmailConfirmedAsync(string userId);
         Task<IdentityResult> ResetPasswordAsync(string userId, string token, string newPassword);
-
-        Func<CookieValidateIdentityContext, Task> OnValidateIdentity();
     }
 }
