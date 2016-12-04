@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace MyTube.DAL.Repositories
 {
@@ -36,11 +37,11 @@ namespace MyTube.DAL.Repositories
             return Collection.AsQueryable().Where(predicate);
         }
 
-        public TDocument Get(string id)
+        public async Task<TDocument> Get(string id)
         {
             ObjectId documentId = new ObjectId(id);
             var filter = Builders<TDocument>.Filter.Eq(o => o.Id, documentId);
-            return Collection.Find(filter).Single();
+            return await Collection.Find(filter).FirstAsync();
         }
 
         public IEnumerable<TDocument> GetAll()

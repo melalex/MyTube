@@ -9,6 +9,8 @@ namespace MyTube.BLL.DTO
     public class SubscriptionDTO
     {
         public string Id { get; set; }
-        public DateTimeOffset SubscriptionDate { get; set; }
+        public string Publisher { get; set; }
+        public string Subscriber { get; set; }
+        public DateTimeOffset StartDate { get; set; }
     }
 }

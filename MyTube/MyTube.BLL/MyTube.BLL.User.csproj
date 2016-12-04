@@ -48,8 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessEntities\Channel.cs" />
-    <Compile Include="BusinessEntities\Video.cs" />
+    <Compile Include="BusinessEntities\ChannelProxy.cs" />
+    <Compile Include="BusinessEntities\VideoProxy.cs" />
     <Compile Include="DTO\CommentDTO.cs" />
     <Compile Include="DTO\NotificationDTO.cs" />
     <Compile Include="DTO\SubscriptionDTO.cs" />

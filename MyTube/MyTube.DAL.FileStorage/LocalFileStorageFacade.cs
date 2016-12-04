@@ -10,6 +10,9 @@ namespace MyTube.DAL.FileStorage
 {
     public class LocalFileStorageFacade : IStorageFacade
     {
+        private const string _defaultAvatarUri = "Images/Avatars/default_user_image.gif";
+        private const string _defaultPosterUri = "Images/Posters/default_poster_image.gif";
+
         private IFileRepository videoStorage;
         private IFileRepository avatarsStorage;
         private IFileRepository posterStorage;
@@ -21,42 +24,48 @@ namespace MyTube.DAL.FileStorage
             videoStorage = new LocalFileRepository(@"Videos");
         }
 
-        public string DefaultAvatarUri()
+        public string DefaultAvatarUri
         {
-            return "Images/Avatars/default_user_image.gif";
+            get
+            {
+                return _defaultAvatarUri;
+            }
         }
 
-        public string DefaultPosterUri()
+        public string DefaultPosterUri
         {
-            return "Images/Posters/default_poster_image.gif";
+            get
+            {
+                return _defaultPosterUri;
+            }
         }
 
-        public string SaveAvatar(byte[] fileContent, string fileName, string fileExtension)
+        public string SaveAvatar(byte[] fileContent, string fileName)
         {
-            return avatarsStorage.SaveFile(fileContent, fileName, fileExtension);
+            return avatarsStorage.SaveFile(fileContent, fileName);
         }
 
-        public string SavePoster(byte[] fileContent, string fileName, string fileExtension)
+        public string SavePoster(byte[] fileContent, string fileName)
         {
-            return posterStorage.SaveFile(fileContent, fileName, fileExtension);
+            return posterStorage.SaveFile(fileContent, fileName);
         }
 
-        public string SaveVideo(byte[] fileContent, string fileName, string fileExtension)
+        public string SaveVideo(byte[] fileContent, string fileName)
         {
-            return videoStorage.SaveFile(fileContent, fileName, fileExtension);
+            return videoStorage.SaveFile(fileContent, fileName);
         }
 
-        public void DeleteAvatar(Uri uri)
+        public void DeleteAvatar(string uri)
         {
             avatarsStorage.DeleteFile(uri);
         }
 
-        public void DeletePoster(Uri uri)
+        public void DeletePoster(string uri)
         {
             posterStorage.DeleteFile(uri);
         }
 
-        public void DeleteVideo(Uri uri)
+        public void DeleteVideo(string uri)
         {
             videoStorage.DeleteFile(uri);
         }

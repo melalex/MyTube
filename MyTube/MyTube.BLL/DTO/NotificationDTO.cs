@@ -11,5 +11,6 @@ namespace MyTube.BLL.DTO
         public string Id { get; set; }
         public string Text { get; set; }
         public string Link { get; set; }
+        public DateTimeOffset NotificationDateTime { get; set; }
     }
 }

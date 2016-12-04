@@ -17,18 +17,18 @@ namespace MyTube.DAL.FileStorage.Repositories
             this.storageFolder = storageFolder;
         }
 
-        public void DeleteFile(Uri uri)
+        public void DeleteFile(string uri)
         {
             throw new NotImplementedException();
         }
 
-        public string SaveFile(byte[] fileContent, string fileName, string fileExtension)
+        public string SaveFile(byte[] fileContent, string fileName)
         {
-            string path = $@"{Directory.GetCurrentDirectory()}\{storageFolder}\{fileName}.{fileExtension}";
+            string path = $@"{Directory.GetCurrentDirectory()}\{storageFolder}\{fileName}";
             FileInfo fileInfo = new FileInfo(path);
             fileInfo.Directory.Create();
             File.WriteAllBytes(path, fileContent);
-            return $@"{storageFolder.Replace('\\','/')}/{fileName}.{fileExtension}";
+            return $@"{storageFolder.Replace('\\','/')}/{fileName}";
         }
     }
 }

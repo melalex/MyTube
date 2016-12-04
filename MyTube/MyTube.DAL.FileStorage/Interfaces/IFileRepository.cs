@@ -8,7 +8,7 @@ namespace MyTube.DAL.FileStorage.Interfaces
 {
     public interface IFileRepository
     {
-        string SaveFile(byte[] fileContent, string fileName, string fileExtension);
-        void DeleteFile(Uri uri);
+        string SaveFile(byte[] fileContent, string fileName);
+        void DeleteFile(string uri);
     }
 }

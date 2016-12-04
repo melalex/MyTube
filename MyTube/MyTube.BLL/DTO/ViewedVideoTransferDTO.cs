@@ -10,8 +10,13 @@ namespace MyTube.BLL.DTO
     public class ViewedVideoTransferDTO
     {
         public string Id { get; set; }
-        public DateTimeOffset ViewDateTime { get; set; }
+
+        public string Viewer { get; set; }
+
+        public string ViewedVideo { get; set; }
+
         public ViewStatus Status { get; set; }
-        public string VideoId { get; set; }
+
+        public DateTimeOffset ShowDateTime { get; set; }
     }
 }

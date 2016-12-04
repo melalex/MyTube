@@ -59,6 +59,10 @@
     <Compile Include="Entities\Video.cs" />
     <Compile Include="Entities\ViewedVideoTransfer.cs" />
     <Compile Include="Entities\Entitie.cs" />
+    <Compile Include="Extensions\CommentRepositoryExtension.cs" />
+    <Compile Include="Extensions\HistoryRepositoryExtension.cs" />
+    <Compile Include="Extensions\NotificationRepositoryExtension.cs" />
+    <Compile Include="Extensions\SubscriptionRepositoryExtension.cs" />
     <Compile Include="Interfaces\IRepositotory.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Extensions\VideoRepositoryExtension.cs" />

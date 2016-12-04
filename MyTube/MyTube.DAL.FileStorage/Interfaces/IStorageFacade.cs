@@ -8,20 +8,20 @@ namespace MyTube.DAL.FileStorage.Interfaces
 {
     public interface IStorageFacade
     {
-        string DefaultAvatarUri();
+        string DefaultAvatarUri { get; }
 
-        string DefaultPosterUri();
+        string DefaultPosterUri { get; }
 
-        string SaveAvatar(byte[] fileContent, string fileName, string fileExtension);
+        string SaveAvatar(byte[] fileContent, string fileName);
 
-        string SavePoster(byte[] fileContent, string fileName, string fileExtension);
+        string SavePoster(byte[] fileContent, string fileName);
 
-        string SaveVideo(byte[] fileContent, string fileName, string fileExtension);
+        string SaveVideo(byte[] fileContent, string fileName);
 
-        void DeleteAvatar(Uri uri);
+        void DeleteAvatar(string uri);
 
-        void DeletePoster(Uri uri);
+        void DeletePoster(string uri);
 
-        void DeleteVideo(Uri uri);
+        void DeleteVideo(string uri);
     }
 }

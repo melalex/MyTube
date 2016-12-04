@@ -9,6 +9,7 @@ namespace MyTube.BLL.DTO
     public class CommentDTO
     {
         public string Id { get; set; }
+        public string VideoId { get; set; }
         public string CommentatorId { get; set; }
         public string CommentatorUsername { get; set; }
         public string CommentatorAvatarUri { get; set; }

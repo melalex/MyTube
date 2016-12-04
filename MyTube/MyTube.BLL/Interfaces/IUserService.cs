@@ -18,13 +18,13 @@ namespace MyTube.BLL.Interfaces
     public interface IUserService
     {
         Task<string> CreateChannel(string userName, byte[] avatar = null);
-        Task<Channel> GetChannel(string id);
-        Task EditChannel(string channelId, string userName, byte[] avatar = null);
+        ChannelProxy GetChannel(string id);
+        Task EditChannel(ChannelProxy channel, string userName, byte[] avatar = null);
 
         Task<string> CreateVideo(string name, string description, string category, List<string> tags, byte[] video);
-        Task<Video> GetVideo(string id);
-        Task<IEnumerable<Video>> GetSimilarVideos(Video video);
-        Task<IEnumerable<Video>> GetPopularVideos();
+        Task<VideoProxy> GetVideo(string id);
+        Task<IEnumerable<VideoProxy>> GetSimilarVideos(VideoProxy video);
+        Task<IEnumerable<VideoProxy>> GetPopularVideos();
         Task AddComment(string videoId, string commentatorId, string text);
         Task EstimateVideo(string video, string channel, ViewStatus status, bool isRollback = false);
 
