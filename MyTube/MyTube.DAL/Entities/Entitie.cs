@@ -16,7 +16,7 @@ namespace MyTube.DAL.Entities
         public ObjectId Id { get; set; }
 
         [BsonIgnore]
-        public string IDString
+        public string IdString
         {
             get
             {

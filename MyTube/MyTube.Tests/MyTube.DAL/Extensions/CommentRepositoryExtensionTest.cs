@@ -52,6 +52,8 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Dislikes = 228,
                 Views = 100,
             };
+            await unitOfWork.Videos.CreateAsync(video1);
+
             Comment comment1 = new Comment
             {
                 Comentator = channel1.DBRef,
@@ -73,7 +75,6 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 CommentDateTime = DateTimeOffset.Now,
                 Text = "comment3",
             };
-            await unitOfWork.Videos.CreateAsync(video1);
             await unitOfWork.Comments.CreateAsync(comment1);
             await unitOfWork.Comments.CreateAsync(comment2);
             await unitOfWork.Comments.CreateAsync(comment3);
@@ -132,6 +133,8 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Dislikes = 228,
                 Views = 100,
             };
+
+            await unitOfWork.Videos.CreateAsync(video1);
             Comment comment1 = new Comment
             {
                 Comentator = channel1.DBRef,
@@ -153,19 +156,29 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 CommentDateTime = DateTimeOffset.Now,
                 Text = "comment3",
             };
-            await unitOfWork.Videos.CreateAsync(video1);
             await unitOfWork.Comments.CreateAsync(comment1);
             await unitOfWork.Comments.CreateAsync(comment2);
             await unitOfWork.Comments.CreateAsync(comment3);
 
-            // Act
-            await unitOfWork.Comments.DeleteCommentsFromVideoAsync(video1);
-            var result = await unitOfWork.Comments.GetCommentsFromVideoAsync(video1, 0, 20);
+            try
+            {
+                // Act
+                await unitOfWork.Comments.DeleteCommentsFromVideoAsync(video1);
+                var result = await unitOfWork.Comments.GetCommentsFromVideoAsync(video1, 0, 20);
 
-            // Assert
-            long count = result.Count();
-            Assert.AreEqual(count, 0);
-
+                // Assert
+                long count = result.Count();
+                Assert.AreEqual(count, 0);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                await unitOfWork.Channels.DeleteAsync(channel1.IdString);
+                await unitOfWork.Videos.DeleteAsync(video1.IdString);
+            }
         }
     }
 }

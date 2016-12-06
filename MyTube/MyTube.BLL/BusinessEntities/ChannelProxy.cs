@@ -28,7 +28,7 @@ namespace MyTube.BLL.BusinessEntities
         {
             get
             {
-                return channel.IDString;
+                return channel.IdString;
             }
         }
         public string Username
@@ -57,7 +57,7 @@ namespace MyTube.BLL.BusinessEntities
         public async Task<IEnumerable<SubscriptionDTO>> SubscribersAsync(int skip, int limit)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<Subscription, SubscriptionDTO>()
-                    .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IDString))
+                    .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IdString))
                     .ForMember(s => s.StartDate, s => s.MapFrom(scr => scr.StartDate)));
 
             var result = await database.Subscriptions.GetSubscribersAsync(channel, skip, limit);
@@ -67,7 +67,7 @@ namespace MyTube.BLL.BusinessEntities
         public async Task<IEnumerable<SubscriptionDTO>> SubscriptionsAsync(int skip, int limit)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<Subscription, SubscriptionDTO>()
-                    .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IDString))
+                    .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IdString))
                     .ForMember(s => s.StartDate, s => s.MapFrom(scr => scr.StartDate)));
 
             var result = await database.Subscriptions.GetSubscribtionsAsync(channel, skip, limit);
@@ -77,7 +77,7 @@ namespace MyTube.BLL.BusinessEntities
         public async Task<IEnumerable<NotificationDTO>> NotificationsAsync(int skip, int limit)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<Notification, NotificationDTO>()
-                    .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IDString)));
+                    .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IdString)));
 
             var result = await database.Notifications.GetNotificationFromChannelAsync(channel, skip, limit);
             return Mapper.Map<IEnumerable<Notification>, List<NotificationDTO>>(result);
@@ -86,7 +86,7 @@ namespace MyTube.BLL.BusinessEntities
         public async Task<IEnumerable<ViewedVideoTransferDTO>> HistoryAsync(int skip, int limit)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<ViewedVideoTransfer, ViewedVideoTransferDTO>()
-                    .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IDString))
+                    .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IdString))
                     .ForMember(s => s.Viewer, s => s.MapFrom(scr => scr.ViewerIdString))
                     .ForMember(s => s.ViewedVideo, s => s.MapFrom(scr => scr.ViewedVideoIdString))
                     .ForMember(s => s.Status, s => s.MapFrom(scr => (Interfaces.ViewStatus)scr.Status)));

@@ -38,6 +38,8 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 AvatarUri = "http://www.bierobon.org/iis/review1.htm"
             };
             await unitOfWork.Channels.CreateAsync(channel1);
+            await unitOfWork.Channels.CreateAsync(channel2);
+
             Subscription subscription1 = new Subscription
             {
                 Publisher = channel1.DBRef,
@@ -85,6 +87,8 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 AvatarUri = "http://www.bierobon.org/iis/review1.htm"
             };
             await unitOfWork.Channels.CreateAsync(channel1);
+            await unitOfWork.Channels.CreateAsync(channel2);
+
             Subscription subscription1 = new Subscription
             {
                 Publisher = channel1.DBRef,
@@ -132,6 +136,8 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 AvatarUri = "http://www.bierobon.org/iis/review1.htm"
             };
             await unitOfWork.Channels.CreateAsync(channel1);
+            await unitOfWork.Channels.CreateAsync(channel2);
+
             Subscription subscription1 = new Subscription
             {
                 Publisher = channel1.DBRef,
@@ -143,7 +149,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
             try
             {
                 // Act
-                var result = await unitOfWork.Subscriptions.IsSubscriberAsync(channel1.IDString, channel2.IDString);
+                var result = await unitOfWork.Subscriptions.IsSubscriberAsync(channel1.IdString, channel2.IdString);
 
                 // Assert
                 Assert.IsTrue(result);
@@ -178,6 +184,8 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 AvatarUri = "http://www.bierobon.org/iis/review1.htm"
             };
             await unitOfWork.Channels.CreateAsync(channel1);
+            await unitOfWork.Channels.CreateAsync(channel2);
+
             Subscription subscription1 = new Subscription
             {
                 Publisher = channel1.DBRef,
@@ -189,7 +197,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
             try
             {
                 // Act
-                var result = await unitOfWork.Subscriptions.IsSubscriberAsync(channel2.IDString, channel1.IDString);
+                var result = await unitOfWork.Subscriptions.IsSubscriberAsync(channel2.IdString, channel1.IdString);
 
                 // Assert
                 Assert.IsFalse(result);

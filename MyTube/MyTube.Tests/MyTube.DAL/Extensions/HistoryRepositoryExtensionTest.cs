@@ -60,6 +60,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Viewer = channel1.DBRef,
                 ViewedVideo = video1.DBRef,
             };
+            await unitOfWork.ViewedVideoTransfers.CreateAsync(transfer);
 
             try
             {
@@ -121,11 +122,12 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Viewer = channel1.DBRef,
                 ViewedVideo = video1.DBRef,
             };
+            await unitOfWork.ViewedVideoTransfers.CreateAsync(transfer);
 
             try
             {
                 // Act
-                var result = await unitOfWork.ViewedVideoTransfers.GetByChannelVideoAsync(channel1.IDString, video1.IDString);
+                var result = await unitOfWork.ViewedVideoTransfers.GetByChannelVideoAsync(channel1.IdString, video1.IdString);
 
                 // Assert
                 Assert.IsNotNull(result);
@@ -178,7 +180,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
             try
             {
                 // Act
-                var result = await unitOfWork.ViewedVideoTransfers.GetByChannelVideoAsync(channel1.IDString, video1.IDString);
+                var result = await unitOfWork.ViewedVideoTransfers.GetByChannelVideoAsync(channel1.IdString, video1.IdString);
 
                 // Assert
                 Assert.IsNull(result);

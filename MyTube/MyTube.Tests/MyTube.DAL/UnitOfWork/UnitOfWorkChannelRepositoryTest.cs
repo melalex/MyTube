@@ -136,14 +136,15 @@ namespace MyTube.Tests.MyTube.DAL
                 Username = "belalex",
                 AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
+            await unitOfWork.Channels.CreateAsync(channel1);
+            await unitOfWork.Channels.CreateAsync(channel2);
+            await unitOfWork.Channels.CreateAsync(channel3);
+            await unitOfWork.Channels.CreateAsync(channel4);
 
             try
             {
                 // Act
-                await unitOfWork.Channels.CreateAsync(channel1);
-                await unitOfWork.Channels.CreateAsync(channel2);
-                await unitOfWork.Channels.CreateAsync(channel3);
-                await unitOfWork.Channels.CreateAsync(channel4);
+                
                 var result = unitOfWork.Channels.Find((Channel channel) => channel.Username == "melalex");
                 long count = result.Count();
 

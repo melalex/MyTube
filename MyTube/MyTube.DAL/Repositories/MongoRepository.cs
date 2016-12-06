@@ -23,7 +23,7 @@ namespace MyTube.DAL.Repositories
         public async Task<string> CreateAsync(TDocument item)
         {
             await Collection.InsertOneAsync(item);
-            return item.IDString;
+            return item.IdString;
         }
 
         public async Task DeleteAsync(string id)

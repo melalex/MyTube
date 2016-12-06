@@ -31,15 +31,15 @@ namespace MyTube.DAL.Extensions
             this IRepositotory<ViewedVideoTransfer> history, string channel, string video
             )
         {
-            var filter = Builders<ViewedVideoTransfer>.Filter.And(
-                Builders<ViewedVideoTransfer>.Filter.Eq(
-                    s => s.Viewer, new MongoDBRef(Channel.collectionName, channel)
-                    ),
-                Builders<ViewedVideoTransfer>.Filter.Eq(
-                    s => s.ViewedVideo, new MongoDBRef(Video.collectionName, video)
-                    )
+            var filter1 = Builders<ViewedVideoTransfer>.Filter.Eq(
+                s => s.Viewer,
+                new MongoDBRef(Channel.collectionName, new ObjectId(channel))
                 );
-            return await history.Collection.Find(filter).SingleOrDefaultAsync();
+            var filter2 = Builders<ViewedVideoTransfer>.Filter.Eq(
+                s => s.ViewedVideo,
+                new MongoDBRef(Video.collectionName, new ObjectId(video))
+                );
+            return await history.Collection.Find(filter1 & filter2).SingleOrDefaultAsync();
         }
     }
 }

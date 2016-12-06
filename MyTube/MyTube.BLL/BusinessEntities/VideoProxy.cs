@@ -42,7 +42,7 @@ namespace MyTube.BLL.BusinessEntities
         {
             get
             {
-                return video.IDString;
+                return video.IdString;
             }
         }
 
@@ -162,11 +162,11 @@ namespace MyTube.BLL.BusinessEntities
                 Channel commentator = await database.Channels.Get(x.ComentatorIdString);
                 return new CommentDTO
                 {
-                    Id = x.IDString,
+                    Id = x.IdString,
                     VideoId = this.Id,
                     CommentatorAvatarUri = commentator.AvatarUri,
                     CommentatorUsername = commentator.Username,
-                    CommentatorId = commentator.IDString,
+                    CommentatorId = commentator.IdString,
                     CommentDateTime = x.CommentDateTime,
                     CommentText = x.Text,
                 };

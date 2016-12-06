@@ -45,12 +45,16 @@ namespace MyTube.DAL.Extensions
             this IRepositotory<Subscription> subscription, string publisher, string subscriber
             )
         {
-            var filter = Builders<Subscription>.Filter.And(
-                Builders<Subscription>.Filter.Eq(s => s.PublisherIdString, publisher),
-                Builders<Subscription>.Filter.Eq(s => s.SubscriberIdString, subscriber)
+            var filter1 = Builders<Subscription>.Filter.Eq(
+                s => s.Publisher,
+                new MongoDBRef(Channel.collectionName, new ObjectId(publisher))
+                );
+            var filter2 = Builders<Subscription>.Filter.Eq(
+                s => s.Subscriber,
+                new MongoDBRef(Channel.collectionName, new ObjectId(subscriber))
                 );
 
-            return await subscription.Collection.Find(filter).AnyAsync();
+            return await subscription.Collection.Find(filter1 & filter2).AnyAsync();
         }
     }
 }
