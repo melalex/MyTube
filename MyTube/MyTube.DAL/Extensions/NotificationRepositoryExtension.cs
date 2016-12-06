@@ -13,7 +13,7 @@ namespace MyTube.DAL.Extensions
 {
     public static class NotificationRepositoryExtension
     {
-        public static async Task<IEnumerable<Notification>> GetNotificationFromChannel(
+        public static async Task<IEnumerable<Notification>> GetNotificationFromChannelAsync(
             this IRepositotory<Notification> notification, Channel channel, int skip, int limit
             )
         {

@@ -13,7 +13,7 @@ namespace MyTube.DAL.Extensions
 {
     public static class SubscriptionRepositoryExtension
     {
-        public static async Task<IEnumerable<Subscription>> GetSubscribers(
+        public static async Task<IEnumerable<Subscription>> GetSubscribersAsync(
             this IRepositotory<Subscription> subscription, Channel channel, int skip, int limit
             )
         {
@@ -27,7 +27,7 @@ namespace MyTube.DAL.Extensions
             return await task.ToListAsync();
         }
 
-        public static async Task<IEnumerable<Subscription>> GetSubscribtions(
+        public static async Task<IEnumerable<Subscription>> GetSubscribtionsAsync(
             this IRepositotory<Subscription> subscription, Channel channel, int skip, int limit
             )
         {
@@ -41,7 +41,7 @@ namespace MyTube.DAL.Extensions
             return await task.ToListAsync();
         }
 
-        public static async Task<bool> IsSubscriber(
+        public static async Task<bool> IsSubscriberAsync(
             this IRepositotory<Subscription> subscription, string publisher, string subscriber
             )
         {

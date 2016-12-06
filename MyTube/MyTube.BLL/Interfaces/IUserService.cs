@@ -18,24 +18,24 @@ namespace MyTube.BLL.Interfaces
 
     public interface IUserService
     {
-        Task<string> CreateChannel(string userName, byte[] avatar = null);
-        Task<ChannelProxy> GetChannel(string id);
-        Task EditChannel(ChannelProxy channel, string userName, byte[] avatar = null);
+        Task<string> CreateChannelAsync(string userName, byte[] avatar = null);
+        Task<ChannelProxy> GetChannelAsync(string id);
+        Task EditChannelAsync(ChannelProxy channel, string userName, byte[] avatar = null);
 
-        Task<string> CreateVideo(
+        Task<string> CreateVideoAsync(
             string uploderId, string name, string description, string category, List<string> tags, byte[] video, byte[] poster
             );
-        Task<VideoProxy> GetVideo(string id);
-        Task<IEnumerable<VideoProxy>> GetSimilarVideos(VideoProxy video, int skip, int limit);
-        Task<IEnumerable<VideoProxy>> GetPopularVideos(int skip, int limit);
-        void AddComment(CommentDTO comment);
+        Task<VideoProxy> GetVideoAsync(string id);
+        Task<IEnumerable<VideoProxy>> GetSimilarVideosAsync(VideoProxy video, int skip, int limit);
+        Task<IEnumerable<VideoProxy>> GetPopularVideosAsync(int skip, int limit);
+        void AddCommentAsync(CommentDTO comment);
         void EstimateVideo(Video video, ViewedVideoTransferDTO transfer);
-        Task<ViewedVideoTransferDTO> GetVideoEstimation(string channel, string video);
+        Task<ViewedVideoTransferDTO> GetVideoEstimationAsync(string channel, string video);
         
-        Task Subscribe(SubscriptionDTO subscription);
-        Task Unsubscribe(string subscriptionId);
+        Task SubscribeAsync(SubscriptionDTO subscription);
+        Task UnsubscribeAsync(string subscriptionId);
 
-        Task ReportVideo(string videoId);
-        Task ReportComment(string CommentId);
+        Task ReportVideoAsync(string videoId);
+        Task ReportCommentAsync(string CommentId);
     }
 }

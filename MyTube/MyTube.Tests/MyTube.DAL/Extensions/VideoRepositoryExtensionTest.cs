@@ -112,7 +112,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
             try
             {
                 // Act
-                var result = await unitOfWork.Videos.SearchByString("searchStr", 0, 10);
+                var result = await unitOfWork.Videos.SearchByStringAsync("searchStr", 0, 10);
 
                 // Assert
                 long count = result.Count();
@@ -222,7 +222,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
             try
             {
                 // Act
-                var result = await unitOfWork.Videos.SearchBYTags(new List<string> { "tag1", "tag2" }, 0, 20);
+                var result = await unitOfWork.Videos.SearchBYTagsAsync(new List<string> { "tag1", "tag2" }, 0, 20);
 
                 // Assert
                 long count = result.Count();

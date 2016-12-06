@@ -13,7 +13,7 @@ namespace MyTube.DAL.Extensions
 {
     public static class VideoRepositoryExtension
     {
-        public static async Task<IEnumerable<Video>> SearchByString(
+        public static async Task<IEnumerable<Video>> SearchByStringAsync(
             this IRepositotory<Video> video, string searchString, int skip, int limit
             )
         {
@@ -27,7 +27,7 @@ namespace MyTube.DAL.Extensions
             return await task.ToListAsync();
         }
 
-        public static async Task<IEnumerable<Video>> SearchBYTags(
+        public static async Task<IEnumerable<Video>> SearchBYTagsAsync(
             this IRepositotory<Video> videos, List<string> tags, int skip, int limit
             )
         {          
@@ -46,7 +46,9 @@ namespace MyTube.DAL.Extensions
                 .ToListAsync();
         }
 
-        public static async Task<IEnumerable<Video>> GetPopularVideos(this IRepositotory<Video> videos, int skip, int limit)
+        public static async Task<IEnumerable<Video>> GetPopularVideosAsync(
+            this IRepositotory<Video> videos, int skip, int limit
+            )
         {
             Func<int, int, double> wilsonScore = (likes, dislikes) =>
             {

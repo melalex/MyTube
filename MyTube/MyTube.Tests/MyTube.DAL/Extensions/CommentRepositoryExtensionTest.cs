@@ -7,7 +7,11 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
     public class CommentRepositoryExtensionTest
     {
         [TestMethod]
-        public void TestMethod1()
+        public void CommentRepositoryExtension__GetCommentsFromVideo__Got()
+        {
+        }
+
+        public void CommentRepositoryExtension__DeleteCommentsFromVideo__Deleted()
         {
         }
     }

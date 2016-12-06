@@ -13,7 +13,7 @@ namespace MyTube.DAL.Extensions
 {
     public static class HistoryRepositoryExtension
     {
-        public static async Task<IEnumerable<ViewedVideoTransfer>> GetHistoryFromChannel(
+        public static async Task<IEnumerable<ViewedVideoTransfer>> GetHistoryFromChannelAsync(
             this IRepositotory<ViewedVideoTransfer> history, Channel channel, int skip, int limit
             )
         {
@@ -27,7 +27,7 @@ namespace MyTube.DAL.Extensions
             return await task.ToListAsync();
         }
 
-        public static async Task<ViewedVideoTransfer> GetByChannelVideo(
+        public static async Task<ViewedVideoTransfer> GetByChannelVideoAsync(
             this IRepositotory<ViewedVideoTransfer> history, string channel, string video
             )
         {

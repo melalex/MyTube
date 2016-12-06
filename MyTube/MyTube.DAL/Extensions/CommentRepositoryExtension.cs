@@ -13,7 +13,7 @@ namespace MyTube.DAL.Extensions
 {
     public static class CommentRepositoryExtension
     {
-        public static async Task<IEnumerable<Comment>> GetCommentsFromVideo(
+        public static async Task<IEnumerable<Comment>> GetCommentsFromVideoAsync(
             this IRepositotory<Comment> comments, Video video, int skip, int limit
             )
         {
@@ -27,7 +27,7 @@ namespace MyTube.DAL.Extensions
             return await task.ToListAsync();
         }
 
-        public static async Task DeleteCommentsFromVideo(this IRepositotory<Comment> comments, Video video)
+        public static async Task DeleteCommentsFromVideoAsync(this IRepositotory<Comment> comments, Video video)
         {
             var filter = Builders<Comment>.Filter.Eq(c => c.DestinationVideo, video.DBRef);
             await comments.Collection.DeleteManyAsync(filter);

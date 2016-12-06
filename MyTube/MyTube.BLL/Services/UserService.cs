@@ -32,7 +32,7 @@ namespace MyTube.BLL.Services
         }
 
         #region ChannelLogic
-        public async Task<string> CreateChannel(string userName, byte[] avatar = null)
+        public async Task<string> CreateChannelAsync(string userName, byte[] avatar = null)
         {
             string avatarUri = null;
             if (avatar != null)
@@ -52,13 +52,13 @@ namespace MyTube.BLL.Services
             return await dataStrore.Channels.CreateAsync(channel);
         }
 
-        public async Task<ChannelProxy> GetChannel(string id)
+        public async Task<ChannelProxy> GetChannelAsync(string id)
         {
             DAL.Entities.Channel channel = await dataStrore.Channels.Get(id);
             return new ChannelProxy(dataStrore, channel);
         }
 
-        public async Task EditChannel(ChannelProxy channel, string userName, byte[] avatar = null)
+        public async Task EditChannelAsync(ChannelProxy channel, string userName, byte[] avatar = null)
         {
             if (channel.AvatarUri != fileStore.DefaultAvatarUri)
             {
@@ -75,7 +75,7 @@ namespace MyTube.BLL.Services
         #endregion
 
         #region VideoLogic
-        public async Task<string> CreateVideo(
+        public async Task<string> CreateVideoAsync(
             string uploderId, string name, string description, string category, List<string> tags, byte[] video, byte[] poster
             )
         {
@@ -108,27 +108,27 @@ namespace MyTube.BLL.Services
             return createdVideoId;
         }
 
-        public async Task<VideoProxy> GetVideo(string id)
+        public async Task<VideoProxy> GetVideoAsync(string id)
         {
             Video video = await dataStrore.Videos.Get(id);
             return await VideoProxy.Create(dataStrore, video);
         }
 
-        public async Task<IEnumerable<VideoProxy>> GetSimilarVideos(VideoProxy video, int skip, int limit)
+        public async Task<IEnumerable<VideoProxy>> GetSimilarVideosAsync(VideoProxy video, int skip, int limit)
         {
-            IEnumerable<Video> similarVideos = await dataStrore.Videos.SearchBYTags(video.Tags, skip, limit);
+            IEnumerable<Video> similarVideos = await dataStrore.Videos.SearchBYTagsAsync(video.Tags, skip, limit);
             var tasks = similarVideos.Select(async v => await VideoProxy.Create(dataStrore, v));
             return await Task.WhenAll(tasks);
         }
 
-        public async Task<IEnumerable<VideoProxy>> GetPopularVideos(int skip, int limit)
+        public async Task<IEnumerable<VideoProxy>> GetPopularVideosAsync(int skip, int limit)
         {
-            var result = await dataStrore.Videos.GetPopularVideos(skip, limit);
+            var result = await dataStrore.Videos.GetPopularVideosAsync(skip, limit);
             var tasks = result.Select(async v => await VideoProxy.Create(dataStrore, v));
             return await Task.WhenAll(tasks);
         }
 
-        public async void AddComment(CommentDTO comment)
+        public async void AddCommentAsync(CommentDTO comment)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<CommentDTO, Comment>()
                         .ForMember(s => s.ComentatorIdString, s => s.MapFrom(scr => scr.CommentatorId))
@@ -139,16 +139,16 @@ namespace MyTube.BLL.Services
             await dataStrore.Comments.CreateAsync(Mapper.Map<CommentDTO, Comment>(comment));
         }
 
-        public async void DeleteVideo(VideoProxy video)
+        public async void DeleteVideoAsync(VideoProxy video)
         {
             fileStore.DeletePoster(video.PosterUri);
             fileStore.DeleteVideo(video.VideoUri);
-            await dataStrore.Comments.DeleteCommentsFromVideo(video.video);
+            await dataStrore.Comments.DeleteCommentsFromVideoAsync(video.video);
         }
 
-        public async void EstimateVideo(Video video, ViewedVideoTransferDTO transfer)
+        public async void EstimateVideoAsync(Video video, ViewedVideoTransferDTO transfer)
         {
-            ViewedVideoTransfer existingTransfer = await dataStrore.ViewedVideoTransfers.GetByChannelVideo(
+            ViewedVideoTransfer existingTransfer = await dataStrore.ViewedVideoTransfers.GetByChannelVideoAsync(
                 transfer.Viewer, transfer.ViewedVideo
                 );
 
@@ -199,7 +199,7 @@ namespace MyTube.BLL.Services
             await dataStrore.Videos.UpdateAsync(video);
         }
 
-        public async Task<ViewedVideoTransferDTO> GetVideoEstimation(string channel, string video)
+        public async Task<ViewedVideoTransferDTO> GetVideoEstimationAsync(string channel, string video)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<ViewedVideoTransfer, ViewedVideoTransferDTO>()
                         .ForMember(s => s.Viewer, s => s.MapFrom(scr => scr.ViewerIdString))
@@ -207,38 +207,38 @@ namespace MyTube.BLL.Services
                         .ForMember(s => s.Status, s => s.MapFrom(scr => (Interfaces.ViewStatus)scr.Status))
                         .ForMember(s => s.ShowDateTime, s => s.MapFrom(scr => scr.ShowDateTime))
                         );
-            ViewedVideoTransfer existingTransfer = await dataStrore.ViewedVideoTransfers.GetByChannelVideo(channel, video);
+            ViewedVideoTransfer existingTransfer = await dataStrore.ViewedVideoTransfers.GetByChannelVideoAsync(channel, video);
             return Mapper.Map<ViewedVideoTransfer, ViewedVideoTransferDTO>(existingTransfer);
         }
         #endregion
 
         #region SubscribtionLogic
-        public async Task Subscribe(SubscriptionDTO subscription)
+        public async Task SubscribeAsync(SubscriptionDTO subscription)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<SubscriptionDTO, Subscription>()
                         .ForMember(s => s.PublisherIdString, s => s.MapFrom(scr => scr.Publisher))
                         .ForMember(s => s.SubscriberIdString, s => s.MapFrom(scr => scr.Subscriber))
                         .ForMember(s => s.StartDate, s => s.MapFrom(scr => scr.StartDate)));
-            if (!await dataStrore.Subscriptions.IsSubscriber(subscription.Publisher, subscription.Subscriber)
+            if (!await dataStrore.Subscriptions.IsSubscriberAsync(subscription.Publisher, subscription.Subscriber)
                 && subscription.Publisher != subscription.Subscriber)
             {
                 await dataStrore.Subscriptions.CreateAsync(Mapper.Map<SubscriptionDTO, Subscription>(subscription));
             }
         }
 
-        public async Task Unsubscribe(string subscriptionId)
+        public async Task UnsubscribeAsync(string subscriptionId)
         {
             await dataStrore.Subscriptions.DeleteAsync(subscriptionId);
         }
         #endregion
 
         #region ReportLogic
-        public Task ReportVideo(string videoId)
+        public Task ReportVideoAsync(string videoId)
         {
             throw new NotImplementedException();
         }
 
-        public Task ReportComment(string CommentId)
+        public Task ReportCommentAsync(string CommentId)
         {
             throw new NotImplementedException();
         }

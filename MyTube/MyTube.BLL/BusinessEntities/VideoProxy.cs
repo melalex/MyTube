@@ -154,9 +154,9 @@ namespace MyTube.BLL.BusinessEntities
             }
         } 
 
-        public async Task<IEnumerable<CommentDTO>> Comments(int skip, int limit)
+        public async Task<IEnumerable<CommentDTO>> CommentsAsync(int skip, int limit)
         {
-            IEnumerable<Comment> comments = await database.Comments.GetCommentsFromVideo(video, skip, limit);
+            IEnumerable<Comment> comments = await database.Comments.GetCommentsFromVideoAsync(video, skip, limit);
             
             var tasks =  comments.Select(async x => {
                 Channel commentator = await database.Channels.Get(x.ComentatorIdString);
