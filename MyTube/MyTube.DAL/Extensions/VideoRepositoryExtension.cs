@@ -30,19 +30,11 @@ namespace MyTube.DAL.Extensions
         public static async Task<IEnumerable<Video>> SearchBYTagsAsync(
             this IRepositotory<Video> videos, List<string> tags, int skip, int limit
             )
-        {          
-                var similarVideos = from v in videos.Collection.AsQueryable()
-                                    let intersection = v.Tags.Intersect(tags)
-                                    where intersection.Any()
-                                    select new {
-                                        IntersectionCount = intersection.Count(),
-                                        SimilarVideo = v,
-                                    };
-                return await similarVideos
-                .OrderByDescending(x => x.IntersectionCount)
+        {
+            return await videos.Collection
+                .Find(v => v.Tags.Any(tag => tags.Contains(tag)))
                 .Skip(skip)
-                .Take(limit)
-                .Select(x => x.SimilarVideo)
+                .Limit(limit)
                 .ToListAsync();
         }
 

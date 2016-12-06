@@ -5,13 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using MyTube.DAL.FileStorage.Interfaces;
 using MyTube.DAL.FileStorage.Repositories;
+using NReco.VideoConverter;
+using System.IO;
 
 namespace MyTube.DAL.FileStorage
 {
     public class LocalFileStorageFacade : IStorageFacade
     {
         private const string _defaultAvatarUri = "Images/Avatars/default_user_image.gif";
-        private const string _defaultPosterUri = "Images/Posters/default_poster_image.gif";
+        private const string avatarsStoragePath = @"Images\Avatars";
+        private const string posterStoragePath = @"Images\Posters";
+        private const string videoStoragePath = @"Videos";
 
         private IFileRepository videoStorage;
         private IFileRepository avatarsStorage;
@@ -32,27 +36,45 @@ namespace MyTube.DAL.FileStorage
             }
         }
 
-        public string DefaultPosterUri
+        public Task<string> DefaultPosterUriAsync(string filePath)
         {
-            get
+            return new Task<string>(() =>
             {
-                return _defaultPosterUri;
-            }
+                string fileName = Path.GetFileNameWithoutExtension(filePath);
+                Stream posterStream = posterStorage.SaveFileStream(fileName, "jpg");
+                var ffMpeg = new FFMpegConverter();
+                ffMpeg.GetVideoThumbnail(filePath, posterStream);
+                return $@"{posterStoragePath.Replace('\\', '/')}/{fileName}.jpg";
+            });
         }
 
         public string SaveAvatar(byte[] fileContent, string fileName)
         {
-            return avatarsStorage.SaveFile(fileContent, fileName);
+#warning SaveAvatar is not working
+            Stream avatarStream = avatarsStorage.SaveFileStream(fileName, fileName);
+            return $@"{avatarsStoragePath.Replace('\\', '/')}/{fileName}.jpg";
         }
 
         public string SavePoster(byte[] fileContent, string fileName)
         {
-            return posterStorage.SaveFile(fileContent, fileName);
+#warning SavePoster is not working
+            return "";
         }
 
-        public string SaveVideo(byte[] fileContent, string fileName)
+        public Task<string> SaveVideoAsync(string filePath)
         {
-            return videoStorage.SaveFile(fileContent, fileName);
+            return new Task<string>(() =>
+            {
+                var ffMpeg = new FFMpegConverter();
+                string fileName = Path.GetFileNameWithoutExtension(filePath);
+                Stream streamMP4 = videoStorage.SaveFileStream(fileName, "mp4");
+                Stream streamOGG = videoStorage.SaveFileStream(fileName, "ogg");
+                Stream streamWEBM = videoStorage.SaveFileStream(fileName, "webm");
+                ffMpeg.ConvertMedia(filePath, streamMP4, Format.mp4);
+                ffMpeg.ConvertMedia(filePath, streamOGG, Format.ogg);
+                ffMpeg.ConvertMedia(filePath, streamWEBM, Format.webm);
+                return $@"{videoStoragePath.Replace('\\', '/')}/{fileName}";
+            });
         }
 
         public void DeleteAvatar(string uri)

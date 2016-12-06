@@ -22,13 +22,12 @@ namespace MyTube.DAL.FileStorage.Repositories
             throw new NotImplementedException();
         }
 
-        public string SaveFile(byte[] fileContent, string fileName)
+        public Stream SaveFileStream(string fileName, string extension)
         {
-            string path = $@"{Directory.GetCurrentDirectory()}\{storageFolder}\{fileName}";
+            string path = $@"{Directory.GetCurrentDirectory()}\{storageFolder}\{fileName}.{extension}";
             FileInfo fileInfo = new FileInfo(path);
             fileInfo.Directory.Create();
-            File.WriteAllBytes(path, fileContent);
-            return $@"{storageFolder.Replace('\\','/')}/{fileName}";
+            return File.Create(path);
         }
     }
 }
