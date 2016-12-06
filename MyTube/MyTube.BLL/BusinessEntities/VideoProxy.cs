@@ -26,7 +26,7 @@ namespace MyTube.BLL.BusinessEntities
             VideoProxy thisVideo = new VideoProxy();
             thisVideo.database = database;
 
-            DAL.Entities.Channel uploder = await database.Channels.Get(video.UploderIdString);
+            Channel uploder = await database.Channels.Get(video.UploderIdString);
             
             thisVideo.UploderAvatarUri = uploder.AvatarUri;
             thisVideo.UploderUsername = uploder.Username;
