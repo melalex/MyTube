@@ -11,11 +11,11 @@ using System.Collections.Generic;
 namespace MyTube.Tests.MyTube.DAL.UnitOfWork
 {
     [TestClass]
-    public class UnitOfWorkVideoRepository
+    public class UnitOfWorkVideoRepositoryTest
     {
         private MongoClient client;
 
-        public UnitOfWorkVideoRepository()
+        public UnitOfWorkVideoRepositoryTest()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MongoDb"].ConnectionString;
             client = new MongoClient(connectionString);
@@ -52,23 +52,32 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Views = 100,
             };
 
-            // Act
-            await unitOfWork.Videos.CreateAsync(video);
+            try
+            {
+                // Act
+                await unitOfWork.Videos.CreateAsync(video);
 
-            // Assert
-            var filter = Builders<Video>.Filter.Eq(o => o.Id, video.Id);
-            Video anotherVideo = videos.FindOneAndDelete(filter);
-            Assert.AreEqual(video.Name, anotherVideo.Name);
-            Assert.AreEqual(video.VideoUrl, anotherVideo.VideoUrl);
-            Assert.AreEqual(video.Description, anotherVideo.Description);
-            Assert.AreEqual(video.Uploder, anotherVideo.Uploder);
-            Assert.AreEqual(video.UploadDate, anotherVideo.UploadDate);
-            Assert.AreEqual(video.Category, anotherVideo.Category);
-            Assert.AreEqual(video.Likes, anotherVideo.Likes);
-            Assert.AreEqual(video.Dislikes, anotherVideo.Dislikes);
-            Assert.AreEqual(video.Views, anotherVideo.Views);
-
-            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
+                // Assert
+                var filter = Builders<Video>.Filter.Eq(o => o.Id, video.Id);
+                Video anotherVideo = videos.FindOneAndDelete(filter);
+                Assert.AreEqual(video.Name, anotherVideo.Name);
+                Assert.AreEqual(video.VideoUrl, anotherVideo.VideoUrl);
+                Assert.AreEqual(video.Description, anotherVideo.Description);
+                Assert.AreEqual(video.Uploder, anotherVideo.Uploder);
+                Assert.AreEqual(video.UploadDate, anotherVideo.UploadDate);
+                Assert.AreEqual(video.Category, anotherVideo.Category);
+                Assert.AreEqual(video.Likes, anotherVideo.Likes);
+                Assert.AreEqual(video.Dislikes, anotherVideo.Dislikes);
+                Assert.AreEqual(video.Views, anotherVideo.Views);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
+            }
         }
 
         [TestMethod]
@@ -103,15 +112,24 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             };
             await unitOfWork.Videos.CreateAsync(video);
 
-            // Act
-            await unitOfWork.Videos.DeleteAsync(video.Id.ToString());
+            try
+            {
+                // Act
+                await unitOfWork.Videos.DeleteAsync(video.Id.ToString());
 
-            // Assert
-            var filter = Builders<Video>.Filter.Eq(o => o.Id, video.Id);
-            long result = videos.Find(filter).Count();
-            Assert.AreEqual(result, 0);
-
-            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
+                // Assert
+                var filter = Builders<Video>.Filter.Eq(o => o.Id, video.Id);
+                long result = videos.Find(filter).Count();
+                Assert.AreEqual(result, 0);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
+            }
         }
 
         [TestMethod]
@@ -146,14 +164,23 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             };
             await unitOfWork.Videos.CreateAsync(video);
 
-            // Act
-            Video anotherVideo = unitOfWork.Videos.Get(video.Id.ToString());
+            try
+            {
+                // Act
+                Video anotherVideo = await unitOfWork.Videos.Get(video.Id.ToString());
 
-            // Assert
-            Assert.AreEqual(anotherVideo.Id, video.Id);
+                // Assert
+                Assert.AreEqual(anotherVideo.Id, video.Id);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
+            }
             videos.DeleteOne(a => a.Id == video.Id);
-
-            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
         }
 
         [TestMethod]
@@ -224,16 +251,26 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             await unitOfWork.Videos.CreateAsync(video2);
             await unitOfWork.Videos.CreateAsync(video3);
 
-            // Act
-            var result = unitOfWork.Videos.Find((Video video) => video.Category == "Category1");
+            try
+            {
+                // Act
+                var result = unitOfWork.Videos.Find((Video video) => video.Category == "Category1");
 
-            // Assert
-            long count = result.Count();
-            Assert.AreEqual(count, 2);
-            videos.DeleteOne(a => a.Id == video1.Id);
-            videos.DeleteOne(a => a.Id == video2.Id);
-            videos.DeleteOne(a => a.Id == video3.Id);
-            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
+                // Assert
+                long count = result.Count();
+                Assert.AreEqual(count, 2);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                videos.DeleteOne(a => a.Id == video1.Id);
+                videos.DeleteOne(a => a.Id == video2.Id);
+                videos.DeleteOne(a => a.Id == video3.Id);
+                await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
+            }
         }
 
         [TestMethod]
@@ -268,16 +305,25 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
             };
             await unitOfWork.Videos.CreateAsync(video);
 
-            // Act
-            video.Category = "Another";
-            await unitOfWork.Videos.UpdateAsync(video);
+            try
+            {
+                // Act
+                video.Category = "Another";
+                await unitOfWork.Videos.UpdateAsync(video);
 
-            // Assert
-            Video anotherVideo = unitOfWork.Videos.Get(video.Id.ToString());
-            Assert.AreEqual(video.Category, anotherVideo.Category);
-
-            videos.DeleteOne(a => a.Id == video.Id);
-            await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
+                // Assert
+                Video anotherVideo = await unitOfWork.Videos.Get(video.Id.ToString());
+                Assert.AreEqual(video.Category, anotherVideo.Category);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                videos.DeleteOne(a => a.Id == video.Id);
+                await unitOfWork.Channels.DeleteAsync(channel1.Id.ToString());
+            }
         }
     }
 }

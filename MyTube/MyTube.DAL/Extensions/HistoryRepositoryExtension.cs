@@ -13,8 +13,8 @@ namespace MyTube.DAL.Extensions
 {
     public static class HistoryRepositoryExtension
     {
-        public static async Task<IEnumerable<ViewedVideoTransfer>> GetNotificationFromChannel(
-            this IRepositotory<ViewedVideoTransfer> comments, Channel channel, int skip, int limit
+        public static async Task<IEnumerable<ViewedVideoTransfer>> GetHistoryFromChannel(
+            this IRepositotory<ViewedVideoTransfer> history, Channel channel, int skip, int limit
             )
         {
             var filter = Builders<ViewedVideoTransfer>.Filter.Eq(v => v.Viewer, channel.DBRef);
@@ -23,8 +23,23 @@ namespace MyTube.DAL.Extensions
                 Limit = limit,
                 Skip = skip,
             };
-            var task = await comments.Collection.FindAsync(filter, options);
+            var task = await history.Collection.FindAsync(filter, options);
             return await task.ToListAsync();
+        }
+
+        public static async Task<ViewedVideoTransfer> GetByChannelVideo(
+            this IRepositotory<ViewedVideoTransfer> history, string channel, string video
+            )
+        {
+            var filter = Builders<ViewedVideoTransfer>.Filter.And(
+                Builders<ViewedVideoTransfer>.Filter.Eq(
+                    s => s.Viewer, new MongoDBRef(Channel.collectionName, channel)
+                    ),
+                Builders<ViewedVideoTransfer>.Filter.Eq(
+                    s => s.ViewedVideo, new MongoDBRef(Video.collectionName, video)
+                    )
+                );
+            return await history.Collection.Find(filter).SingleOrDefaultAsync();
         }
     }
 }

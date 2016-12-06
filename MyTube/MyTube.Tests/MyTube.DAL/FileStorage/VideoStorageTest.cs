@@ -6,7 +6,7 @@ using MyTube.DAL.FileStorage;
 namespace MyTube.Tests.MyTube.DAL.FileStorage
 {
     [TestClass]
-    public class VideoStorage
+    public class VideoStorageTest
     {
         [TestMethod]
         public void FileStorage_Save_Saved()
@@ -17,12 +17,11 @@ namespace MyTube.Tests.MyTube.DAL.FileStorage
             LocalFileStorageFacade fileStorage = new LocalFileStorageFacade();
 
             // Act
-            Uri fileUri = fileStorage.SaveVideo(content, "123", "mp4");
+            string fileUri = fileStorage.SaveVideo(content, "123");
 
             // Assert
-            string nePath = fileUri.AbsolutePath;
-            Assert.IsTrue(File.Exists(nePath));
-            File.Delete(nePath);
+            Assert.IsTrue(File.Exists(fileUri));
+            File.Delete(fileUri);
         }
     }
 }

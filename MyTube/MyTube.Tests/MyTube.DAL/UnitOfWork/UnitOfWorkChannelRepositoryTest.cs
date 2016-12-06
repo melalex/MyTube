@@ -33,14 +33,25 @@ namespace MyTube.Tests.MyTube.DAL
                 AvatarUri = "http://www.pierobon.org/iis/review1.htm"              
             };
 
-            // Act
-            await unitOfWork.Channels.CreateAsync(chanel);
+            try
+            {
+                // Act
+                await unitOfWork.Channels.CreateAsync(chanel);
 
-            // Assert
-            var filter = Builders<Channel>.Filter.Eq(o => o.Id, chanel.Id);
-            long result = channels.Find(filter).Count();
-            Assert.AreEqual(result, 1);
-            channels.DeleteOne(a => a.Id == chanel.Id);
+                // Assert
+                var filter = Builders<Channel>.Filter.Eq(o => o.Id, chanel.Id);
+                long result = channels.Find(filter).Count();
+                Assert.AreEqual(result, 1);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                channels.DeleteOne(a => a.Id == chanel.Id);
+            }
+
         }
 
         [TestMethod]
@@ -79,14 +90,24 @@ namespace MyTube.Tests.MyTube.DAL
                 AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
 
-            // Act
-            await unitOfWork.Channels.CreateAsync(channel);
-            var filter = Builders<Channel>.Filter.Eq(o => o.Id, channel.Id);
-            Channel anotherChennel = unitOfWork.Channels.Get(channel.Id.ToString());
+            try
+            {
+                // Act
+                await unitOfWork.Channels.CreateAsync(channel);
+                var filter = Builders<Channel>.Filter.Eq(o => o.Id, channel.Id);
+                Channel anotherChennel = await unitOfWork.Channels.Get(channel.Id.ToString());
 
-            // Assert
-            Assert.AreEqual(anotherChennel.Id, channel.Id);
-            channels.DeleteOne(a => a.Id == channel.Id);
+                // Assert
+                Assert.AreEqual(anotherChennel.Id, channel.Id);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                channels.DeleteOne(a => a.Id == channel.Id);
+            }
         }
 
         [TestMethod]
@@ -116,20 +137,30 @@ namespace MyTube.Tests.MyTube.DAL
                 AvatarUri = "http://www.pierobon.org/iis/review1.htm"
             };
 
-            // Act
-            await unitOfWork.Channels.CreateAsync(channel1);
-            await unitOfWork.Channels.CreateAsync(channel2);
-            await unitOfWork.Channels.CreateAsync(channel3);
-            await unitOfWork.Channels.CreateAsync(channel4);
-            var result = unitOfWork.Channels.Find((Channel channel) => channel.Username == "melalex");
-            long count = result.Count();
+            try
+            {
+                // Act
+                await unitOfWork.Channels.CreateAsync(channel1);
+                await unitOfWork.Channels.CreateAsync(channel2);
+                await unitOfWork.Channels.CreateAsync(channel3);
+                await unitOfWork.Channels.CreateAsync(channel4);
+                var result = unitOfWork.Channels.Find((Channel channel) => channel.Username == "melalex");
+                long count = result.Count();
 
-            // Assert
-            Assert.AreEqual(count, 3);
-            channels.DeleteOne(a => a.Id == channel1.Id);
-            channels.DeleteOne(a => a.Id == channel2.Id);
-            channels.DeleteOne(a => a.Id == channel3.Id);
-            channels.DeleteOne(a => a.Id == channel4.Id);
+                // Assert
+                Assert.AreEqual(count, 3);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                channels.DeleteOne(a => a.Id == channel1.Id);
+                channels.DeleteOne(a => a.Id == channel2.Id);
+                channels.DeleteOne(a => a.Id == channel3.Id);
+                channels.DeleteOne(a => a.Id == channel4.Id);
+            }
         }
 
         [TestMethod]
@@ -145,17 +176,26 @@ namespace MyTube.Tests.MyTube.DAL
             };
             await unitOfWork.Channels.CreateAsync(channel1);
 
-            // Act
-            channel1.Username = "balex";
-            channel1.AvatarUri = "http://www.example.com";
-            await unitOfWork.Channels.UpdateAsync(channel1);
+            try
+            {
+                // Act
+                channel1.Username = "balex";
+                channel1.AvatarUri = "http://www.example.com";
+                await unitOfWork.Channels.UpdateAsync(channel1);
 
-            // Assert
-            Channel anotherChennel = unitOfWork.Channels.Get(channel1.Id.ToString());
-            Assert.AreEqual(channel1.Username, anotherChennel.Username);
-            Assert.AreEqual(channel1.AvatarUri, anotherChennel.AvatarUri);
-
-            channels.DeleteOne(a => a.Id == channel1.Id);
+                // Assert
+                Channel anotherChennel = await unitOfWork.Channels.Get(channel1.Id.ToString());
+                Assert.AreEqual(channel1.Username, anotherChennel.Username);
+                Assert.AreEqual(channel1.AvatarUri, anotherChennel.AvatarUri);
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                channels.DeleteOne(a => a.Id == channel1.Id);
+            }
         }
     }
 }

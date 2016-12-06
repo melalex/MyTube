@@ -30,7 +30,8 @@ namespace MyTube.BLL.Interfaces
         Task<IEnumerable<VideoProxy>> GetPopularVideos(int skip, int limit);
         void AddComment(CommentDTO comment);
         void EstimateVideo(Video video, ViewedVideoTransferDTO transfer);
-
+        Task<ViewedVideoTransferDTO> GetVideoEstimation(string channel, string video);
+        
         Task Subscribe(SubscriptionDTO subscription);
         Task Unsubscribe(string subscriptionId);
 

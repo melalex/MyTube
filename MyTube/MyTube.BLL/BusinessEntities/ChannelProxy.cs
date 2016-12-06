@@ -58,7 +58,7 @@ namespace MyTube.BLL.BusinessEntities
         {
             Mapper.Initialize(cfg => cfg.CreateMap<Subscription, SubscriptionDTO>()
                     .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IDString))
-                    .ForMember(s => s.SubscriptionDate, s => s.MapFrom(scr => scr.StartDate)));
+                    .ForMember(s => s.StartDate, s => s.MapFrom(scr => scr.StartDate)));
 
             var result = await database.Subscriptions.GetSubscribers(channel, skip, limit);
             return Mapper.Map<IEnumerable<Subscription>, List<SubscriptionDTO>>(result);
@@ -68,7 +68,7 @@ namespace MyTube.BLL.BusinessEntities
         {
             Mapper.Initialize(cfg => cfg.CreateMap<Subscription, SubscriptionDTO>()
                     .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IDString))
-                    .ForMember(s => s.SubscriptionDate, s => s.MapFrom(scr => scr.StartDate)));
+                    .ForMember(s => s.StartDate, s => s.MapFrom(scr => scr.StartDate)));
 
             var result = await database.Subscriptions.GetSubscribtions(channel, skip, limit);
             return Mapper.Map<IEnumerable<Subscription>, List<SubscriptionDTO>>(result);
@@ -91,7 +91,7 @@ namespace MyTube.BLL.BusinessEntities
                     .ForMember(s => s.ViewedVideo, s => s.MapFrom(scr => scr.ViewedVideoIdString))
                     .ForMember(s => s.Status, s => s.MapFrom(scr => (Interfaces.ViewStatus)scr.Status)));
     
-            var result = await database.ViewedVideoTransfers.GetNotificationFromChannel(channel, skip, limit);
+            var result = await database.ViewedVideoTransfers.GetHistoryFromChannel(channel, skip, limit);
             return Mapper.Map<IEnumerable<ViewedVideoTransfer>, List<ViewedVideoTransferDTO>>(result);
         }
     }

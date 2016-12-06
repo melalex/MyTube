@@ -90,7 +90,7 @@ namespace MyTube.BLL.Services
             {
                 posterUri = fileStore.DefaultPosterUri;
             }
-            Video newVideo = new DAL.Entities.Video
+            Video newVideo = new Video
             {
                 Name = name,
                 Description = description,
@@ -134,7 +134,8 @@ namespace MyTube.BLL.Services
                         .ForMember(s => s.ComentatorIdString, s => s.MapFrom(scr => scr.CommentatorId))
                         .ForMember(s => s.DestinationVideoIdString, s => s.MapFrom(scr => scr.VideoId))
                         .ForMember(s => s.CommentDateTime, s => s.MapFrom(scr => scr.CommentDateTime))
-                        .ForMember(s => s.Text, s => s.MapFrom(scr => scr.CommentText)));
+                        .ForMember(s => s.Text, s => s.MapFrom(scr => scr.CommentText))
+                        );
             await dataStrore.Comments.CreateAsync(Mapper.Map<CommentDTO, Comment>(comment));
         }
 
@@ -147,6 +148,40 @@ namespace MyTube.BLL.Services
 
         public async void EstimateVideo(Video video, ViewedVideoTransferDTO transfer)
         {
+            ViewedVideoTransfer existingTransfer = await dataStrore.ViewedVideoTransfers.GetByChannelVideo(
+                transfer.Viewer, transfer.ViewedVideo
+                );
+
+            if (existingTransfer != null)
+            {
+                Mapper.Initialize(cfg => cfg.CreateMap<ViewedVideoTransferDTO, ViewedVideoTransfer>()
+                            .ForMember(s => s.ViewerIdString, s => s.MapFrom(scr => scr.Viewer))
+                            .ForMember(s => s.ViewedVideoIdString, s => s.MapFrom(scr => scr.ViewedVideo))
+                            .ForMember(s => s.Status, s => s.MapFrom(scr => (DAL.Entities.ViewStatus)scr.Status))
+                            .ForMember(s => s.ShowDateTime, s => s.MapFrom(scr => scr.ShowDateTime))
+                            );
+                await dataStrore.ViewedVideoTransfers.CreateAsync(
+                    Mapper.Map<ViewedVideoTransferDTO, ViewedVideoTransfer>(transfer)
+                    );
+            }
+            else
+            {
+                switch (existingTransfer.Status)
+                {
+                    case DAL.Entities.ViewStatus.DISLIKE:
+                        video.Dislikes--;
+                        video.Views--;
+                        break;
+                    case DAL.Entities.ViewStatus.LIKE:
+                        video.Likes--;
+                        video.Views--;
+                        break;
+                    default:
+                        video.Views--;
+                        break;
+                }
+            }
+
             switch (transfer.Status)
             {
                 case Interfaces.ViewStatus.DISLIKE:
@@ -161,13 +196,19 @@ namespace MyTube.BLL.Services
                     video.Views++;
                     break;
             }
-            Mapper.Initialize(cfg => cfg.CreateMap<ViewedVideoTransferDTO, ViewedVideoTransfer>()
-                        .ForMember(s => s.ViewerIdString, s => s.MapFrom(scr => scr.Viewer))
-                        .ForMember(s => s.ViewedVideoIdString, s => s.MapFrom(scr => scr.ViewedVideo))
-                        .ForMember(s => s.Status, s => s.MapFrom(scr => (DAL.Entities.ViewStatus)scr.Status))
-                        .ForMember(s => s.ShowDateTime, s => s.MapFrom(scr => scr.ShowDateTime)));
-            await dataStrore.ViewedVideoTransfers.CreateAsync(Mapper.Map<ViewedVideoTransferDTO, ViewedVideoTransfer>(transfer));
             await dataStrore.Videos.UpdateAsync(video);
+        }
+
+        public async Task<ViewedVideoTransferDTO> GetVideoEstimation(string channel, string video)
+        {
+            Mapper.Initialize(cfg => cfg.CreateMap<ViewedVideoTransfer, ViewedVideoTransferDTO>()
+                        .ForMember(s => s.Viewer, s => s.MapFrom(scr => scr.ViewerIdString))
+                        .ForMember(s => s.ViewedVideo, s => s.MapFrom(scr => scr.ViewerIdString))
+                        .ForMember(s => s.Status, s => s.MapFrom(scr => (Interfaces.ViewStatus)scr.Status))
+                        .ForMember(s => s.ShowDateTime, s => s.MapFrom(scr => scr.ShowDateTime))
+                        );
+            ViewedVideoTransfer existingTransfer = await dataStrore.ViewedVideoTransfers.GetByChannelVideo(channel, video);
+            return Mapper.Map<ViewedVideoTransfer, ViewedVideoTransferDTO>(existingTransfer);
         }
         #endregion
 

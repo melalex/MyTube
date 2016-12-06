@@ -104,10 +104,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyTube.DAL\Extensions\VideoRepositoryExtension.cs" />
-    <Compile Include="MyTube.DAL\FileStorage\VideoStorage.cs" />
-    <Compile Include="MyTube.DAL\UnitOfWork\UnitOfWorkChannelRepository.cs" />
-    <Compile Include="MyTube.DAL\UnitOfWork\UnitOfWorkVideoRepository.cs" />
+    <Compile Include="MyTube.DAL\Extensions\CommentRepositoryExtensionTest.cs" />
+    <Compile Include="MyTube.DAL\Extensions\HistoryRepositoryExtensionTest.cs" />
+    <Compile Include="MyTube.DAL\Extensions\NotificationRepositoryExtensionTest.cs" />
+    <Compile Include="MyTube.DAL\Extensions\SubscriptionRepositoryExtensionTest.cs" />
+    <Compile Include="MyTube.DAL\Extensions\VideoRepositoryExtensionTest.cs" />
+    <Compile Include="MyTube.DAL\FileStorage\VideoStorageTest.cs" />
+    <Compile Include="MyTube.DAL\UnitOfWork\UnitOfWorkChannelRepositoryTest.cs" />
+    <Compile Include="MyTube.DAL\UnitOfWork\UnitOfWorkVideoRepositoryTest.cs" />
     <Compile Include="MyTube.DAL\DBRefsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MyTube.WEB\Controllers\HomeControllerTest.cs" />

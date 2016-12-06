@@ -13,7 +13,9 @@ namespace MyTube.DAL.Extensions
 {
     public static class VideoRepositoryExtension
     {
-        public static async Task<IEnumerable<Video>> SearchByString(this IRepositotory<Video> video, string searchString, int skip, int limit)
+        public static async Task<IEnumerable<Video>> SearchByString(
+            this IRepositotory<Video> video, string searchString, int skip, int limit
+            )
         {
             var filter = Builders<Video>.Filter.Text(searchString);
             var options = new FindOptions<Video>
@@ -25,7 +27,9 @@ namespace MyTube.DAL.Extensions
             return await task.ToListAsync();
         }
 
-        public static async Task<IEnumerable<Video>> SearchBYTags(this IRepositotory<Video> videos, List<string> tags, int skip, int limit)
+        public static async Task<IEnumerable<Video>> SearchBYTags(
+            this IRepositotory<Video> videos, List<string> tags, int skip, int limit
+            )
         {          
                 var similarVideos = from v in videos.Collection.AsQueryable()
                                     let intersection = v.Tags.Intersect(tags)

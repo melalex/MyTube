@@ -14,7 +14,7 @@ namespace MyTube.DAL.Extensions
     public static class NotificationRepositoryExtension
     {
         public static async Task<IEnumerable<Notification>> GetNotificationFromChannel(
-            this IRepositotory<Notification> comments, Channel channel, int skip, int limit
+            this IRepositotory<Notification> notification, Channel channel, int skip, int limit
             )
         {
             var filter = Builders<Notification>.Filter.Eq(n => n.DestinationChannel, channel.DBRef);
@@ -23,7 +23,7 @@ namespace MyTube.DAL.Extensions
                 Limit = limit,
                 Skip = skip,
             };
-            var task = await comments.Collection.FindAsync(filter, options);
+            var task = await notification.Collection.FindAsync(filter, options);
             return await task.ToListAsync();
         }
     }
