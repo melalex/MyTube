@@ -178,7 +178,8 @@ namespace MyTube.BLL.Services
                         .ForMember(s => s.PublisherIdString, s => s.MapFrom(scr => scr.Publisher))
                         .ForMember(s => s.SubscriberIdString, s => s.MapFrom(scr => scr.Subscriber))
                         .ForMember(s => s.StartDate, s => s.MapFrom(scr => scr.StartDate)));
-            if (!await dataStrore.Subscriptions.IsSubscriber(subscription.Publisher, subscription.Subscriber))
+            if (!await dataStrore.Subscriptions.IsSubscriber(subscription.Publisher, subscription.Subscriber)
+                && subscription.Publisher != subscription.Subscriber)
             {
                 await dataStrore.Subscriptions.CreateAsync(Mapper.Map<SubscriptionDTO, Subscription>(subscription));
             }

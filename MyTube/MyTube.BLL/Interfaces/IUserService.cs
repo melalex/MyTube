@@ -1,5 +1,6 @@
 ﻿using MyTube.BLL.BusinessEntities;
 using MyTube.BLL.DTO;
+using MyTube.DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,17 +19,19 @@ namespace MyTube.BLL.Interfaces
     public interface IUserService
     {
         Task<string> CreateChannel(string userName, byte[] avatar = null);
-        ChannelProxy GetChannel(string id);
+        Task<ChannelProxy> GetChannel(string id);
         Task EditChannel(ChannelProxy channel, string userName, byte[] avatar = null);
 
-        Task<string> CreateVideo(string name, string description, string category, List<string> tags, byte[] video);
+        Task<string> CreateVideo(
+            string uploderId, string name, string description, string category, List<string> tags, byte[] video, byte[] poster
+            );
         Task<VideoProxy> GetVideo(string id);
-        Task<IEnumerable<VideoProxy>> GetSimilarVideos(VideoProxy video);
-        Task<IEnumerable<VideoProxy>> GetPopularVideos();
-        Task AddComment(string videoId, string commentatorId, string text);
-        Task EstimateVideo(string video, string channel, ViewStatus status, bool isRollback = false);
+        Task<IEnumerable<VideoProxy>> GetSimilarVideos(VideoProxy video, int skip, int limit);
+        Task<IEnumerable<VideoProxy>> GetPopularVideos(int skip, int limit);
+        void AddComment(CommentDTO comment);
+        void EstimateVideo(Video video, ViewedVideoTransferDTO transfer);
 
-        Task Subscribe(string publisher, string subscriber);
+        Task Subscribe(SubscriptionDTO subscription);
         Task Unsubscribe(string subscriptionId);
 
         Task ReportVideo(string videoId);
