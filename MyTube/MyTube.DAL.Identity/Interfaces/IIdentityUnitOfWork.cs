@@ -1,4 +1,5 @@
-﻿using MyTube.DAL.Identity.Identity;
+﻿using MyTube.DAL.Identity.Entities;
+using MyTube.DAL.Identity.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace MyTube.DAL.Identity.Interfaces
         ApplicationUserManager UserManager { get; }
         ApplicationRoleManager RoleManager { get; }
         Task SaveAsync();
+        Task<IEnumerable<ApplicationUser>> GetUsersByRole(string roleName, int skip, int limit);
+        Task<int> GetCountOfUsersByRole(string roleName);
     }
 }

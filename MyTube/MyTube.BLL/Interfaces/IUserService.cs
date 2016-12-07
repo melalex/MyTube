@@ -23,8 +23,15 @@ namespace MyTube.BLL.Interfaces
         Task EditChannelAsync(ChannelProxy channel, string userName, byte[] avatar = null);
 
         Task<string> CreateVideoAsync(
-            string uploderId, string name, string description, string category, List<string> tags, byte[] video, byte[] poster
+            string uploderId,
+            string name, 
+            string description,
+            string category,
+            List<string> tags, 
+            string videoPath, 
+            byte[] poster
             );
+
         Task<VideoProxy> GetVideoAsync(string id);
         Task<IEnumerable<VideoProxy>> GetSimilarVideosAsync(VideoProxy video, int skip, int limit);
         Task<IEnumerable<VideoProxy>> GetPopularVideosAsync(int skip, int limit);

@@ -54,6 +54,7 @@
     <Compile Include="DTO\NotificationDTO.cs" />
     <Compile Include="DTO\SubscriptionDTO.cs" />
     <Compile Include="DTO\ViewedVideoTransferDTO.cs" />
+    <Compile Include="Infrastructure\ExecutorSelector.cs" />
     <Compile Include="Infrastructure\ServiceModule.cs" />
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

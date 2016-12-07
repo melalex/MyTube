@@ -12,6 +12,7 @@ using MyTube.DAL.Extensions;
 using AutoMapper;
 using MyTube.DAL.Entities;
 using MyTube.BLL.DTO;
+using MyTube.BLL.Infrastructure;
 
 namespace MyTube.BLL.Services
 {
@@ -20,6 +21,19 @@ namespace MyTube.BLL.Services
         private IUnitOfWork dataStrore;
         private IStorageFacade fileStore;
         private IIdentityUnitOfWork identityStore;
+        private ExecutorSelector _currentExecutor = null;
+
+        private ExecutorSelector currentExecutor
+        {
+            get
+            {
+                if (_currentExecutor == null)
+                {
+                    _currentExecutor = new ExecutorSelector(identityStore);
+                }
+                return _currentExecutor;
+            }
+        }
 
         public UserService(IUnitOfWork dataStrore, IStorageFacade fileStore, IIdentityUnitOfWork identityStore)
         {
@@ -76,11 +90,17 @@ namespace MyTube.BLL.Services
 
         #region VideoLogic
         public async Task<string> CreateVideoAsync(
-            string uploderId, string name, string description, string category, List<string> tags, byte[] video, byte[] poster
+            string uploderId,
+            string name,
+            string description,
+            string category,
+            List<string> tags, 
+            string videoPath, 
+            byte[] poster
             )
         {
             string fileName = Guid.NewGuid().ToString();
-            string videoUri = fileStore.SaveVideo(video, name);
+            string videoUri = await fileStore.SaveVideoAsync(videoPath);
             string posterUri = null;
             if (poster != null)
             {
@@ -88,7 +108,7 @@ namespace MyTube.BLL.Services
             }
             else
             {
-                posterUri = fileStore.DefaultPosterUri;
+                posterUri = await fileStore.DefaultPosterUriAsync(videoPath);
             }
             Video newVideo = new Video
             {
@@ -233,14 +253,17 @@ namespace MyTube.BLL.Services
         #endregion
 
         #region ReportLogic
-        public Task ReportVideoAsync(string videoId)
+        public async Task ReportAsync(string link)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task ReportCommentAsync(string CommentId)
-        {
-            throw new NotImplementedException();
+            string executorId = await currentExecutor.selectExecutorAsync();
+            Notification reportNotification = new Notification
+            {
+                DestinationChannelIdString = executorId,
+                Link = link,
+                NotificationDateTime = DateTimeOffset.Now,
+                Text = "Report"
+            };
+            await dataStrore.Notifications.CreateAsync(reportNotification);
         }
         #endregion
     }
