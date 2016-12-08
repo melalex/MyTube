@@ -7,8 +7,8 @@
     <div class="modal-body">
         @using (Html.BeginForm())
         {
-            @Html.ValidationSummary()
-
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.LabelFor(model => model.Username, new { @class = "control-label" })
                 <div>
@@ -29,7 +29,7 @@
                 @Html.LabelFor(m => m.Password, new { @class = "control-label" })
                 <div>
                     @Html.ValidationMessageFor(model => model.Password)
-                    @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                 </div>
             </div>
 
@@ -37,12 +37,12 @@
                 @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
                 <div>
                     @Html.ValidationMessageFor(model => model.ConfirmPassword)
-                    @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
                 </div>
             </div>
             
             <div class="form-group">
-                @Html.ActionLink("Sign up", "Register", "Account", new { area = "" }, new { @class = "btn btn-default btn-block", id = "signInBtn" })
+                @Html.ActionLink("Sign up", "Register", "Account", new { area = "" }, new { @class = "btn btn-default btn-block", id = "registerBtn" })
             </div>
         }
 

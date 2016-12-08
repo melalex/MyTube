@@ -5,8 +5,11 @@
         <h1>Login</h1>
     </div>
     <div class="modal-body">
-        @using (Html.BeginForm())
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "loginForm" }))
         {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
             <div class="form-group">
                 @Html.LabelFor(model => model.Email, new { @class = "control-label" })
                 <div>
@@ -19,7 +22,7 @@
                 @Html.LabelFor(model => model.Email, new { @class = "control-label" })
                 <div>
                     @Html.ValidationMessageFor(model => model.Password)
-                    @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
                 </div>
             </div>
 
@@ -34,7 +37,7 @@
             </div>
             
             <div class="form-group">
-                @Html.ActionLink("Sign in", "Login", "Account", new { area = "" }, new { @class = "btn btn-default btn-block", id = "signInBtn" })
+                @Html.ActionLink("Sign in", "Login", "Account", new { area = "" }, new { @class = "btn btn-default btn-block", id = "loginBtn" })
             </div>
 
             <div class="form-group">

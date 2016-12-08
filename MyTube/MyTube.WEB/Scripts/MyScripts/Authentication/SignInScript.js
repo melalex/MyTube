@@ -14,7 +14,20 @@ function showSignInModal(event)
             backdrop: 'static',
             keyboard: false  // to prevent closing with Esc button (if you want this too)
         });
+        $("#loginBtn").click(login);
     });
-    $("#signInBtn").click(showSignInModal);
 }
 
+function login(event)
+{
+    event.preventDefault();
+    $.ajax({
+        url: this.href,
+        type: "POST",
+        data: $("#loginForm").serialize(),
+        datatype: "json",
+        success: function (result) {
+            $("#dialogContent").html(result);
+        }
+    })
+}
