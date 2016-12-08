@@ -21,17 +21,17 @@ namespace MyTube.BLL.Services
         private IUnitOfWork dataStrore;
         private IStorageFacade fileStore;
         private IIdentityUnitOfWork identityStore;
-        private ExecutorSelector _currentExecutor = null;
+        private ExecutorSelector _execution = null;
 
-        private ExecutorSelector currentExecutor
+        private ExecutorSelector Execution
         {
             get
             {
-                if (_currentExecutor == null)
+                if (_execution == null)
                 {
-                    _currentExecutor = new ExecutorSelector(identityStore);
+                    _execution = new ExecutorSelector(identityStore);
                 }
-                return _currentExecutor;
+                return _execution;
             }
         }
 
@@ -253,9 +253,9 @@ namespace MyTube.BLL.Services
         #endregion
 
         #region ReportLogic
-        public async Task ReportAsync(string link)
+        public async Task ReportAsync(string link, string message)
         {
-            string executorId = await currentExecutor.selectExecutorAsync();
+            string executorId = await Execution.selectExecutorAsync();
             Notification reportNotification = new Notification
             {
                 DestinationChannelIdString = executorId,

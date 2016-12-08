@@ -1,0 +1,50 @@
+﻿@model MyTube.WEB.Models.RegisterViewModel
+
+<div class="modal-container">
+    <div class="modal-header">
+        <h1>Register</h1>
+    </div>
+    <div class="modal-body">
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary()
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Username, new { @class = "control-label" })
+                <div>
+                    @Html.ValidationMessageFor(model => model.Username)
+                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                <div>
+                    @Html.ValidationMessageFor(model => model.Email)
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+                <div>
+                    @Html.ValidationMessageFor(model => model.Password)
+                    @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
+                <div>
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                    @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                </div>
+            </div>
+            
+            <div class="form-group">
+                @Html.ActionLink("Sign up", "Register", "Account", new { area = "" }, new { @class = "btn btn-default btn-block", id = "signInBtn" })
+            </div>
+        }
+
+    </div>
+</div>

@@ -42,19 +42,18 @@ namespace MyTube.DAL.Extensions
             this IRepositotory<Video> videos, int skip, int limit
             )
         {
-            Func<int, int, double> wilsonScore = (likes, dislikes) =>
+            Func<int, int, double> wilsonScore = (likes, views) =>
             {
-                int n = likes + dislikes;
-                if (n == 0)
+                if (views == 0)
                     return 0;
                 double z = 1.96;
-                double phat = 1.0 * likes / n;
-                return (phat + z * z / (2 * n) - z * Math.Sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) / (1 + z * z / n);
+                double phat = 1.0 * likes / views;
+                return (phat + z * z / (2 * views) - z * Math.Sqrt((phat * (1 - phat) + z * z / (4 * views)) / views)) / (1 + z * z / views);
             };
             return await videos
                 .Collection
                 .AsQueryable()
-                .OrderBy(v => wilsonScore(v.Likes, v.Dislikes))
+                .OrderBy(v => wilsonScore(v.Likes, v.Views))
                 .Skip(skip)
                 .Take(limit)
                 .ToListAsync();

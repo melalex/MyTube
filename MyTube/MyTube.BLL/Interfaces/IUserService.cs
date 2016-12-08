@@ -42,7 +42,6 @@ namespace MyTube.BLL.Interfaces
         Task SubscribeAsync(SubscriptionDTO subscription);
         Task UnsubscribeAsync(string subscriptionId);
 
-        Task ReportVideoAsync(string videoId);
-        Task ReportCommentAsync(string CommentId);
+        Task ReportAsync(string link, string message);
     }
 }

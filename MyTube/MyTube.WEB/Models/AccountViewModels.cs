@@ -66,8 +66,8 @@ namespace MyTube.WEB.Models
     {
         [Required]
         [StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
-        [Display(Name = "Nickname")]
-        public string Nickname { get; set; }
+        [Display(Name = "Username")]
+        public string Username { get; set; }
 
         [Required]
         [EmailAddress]

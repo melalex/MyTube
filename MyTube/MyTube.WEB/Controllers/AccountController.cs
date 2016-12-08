@@ -46,7 +46,7 @@ namespace MyTube.WEB.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return PartialView();
         }
 
         //
@@ -58,7 +58,7 @@ namespace MyTube.WEB.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return PartialView(model);
             }
 
             // This doesn't count login failures towards account lockout
@@ -68,14 +68,10 @@ namespace MyTube.WEB.Controllers
             {
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    return PartialView(model);
             }
         }
 
@@ -84,7 +80,7 @@ namespace MyTube.WEB.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            return PartialView();
         }
 
         //
@@ -96,7 +92,7 @@ namespace MyTube.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new UserDTO { UserName = model.Nickname, Email = model.Email };
+                var user = new UserDTO { UserName = model.Username, Email = model.Email };
                 var result = await ApplicationIdentityService.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -114,7 +110,7 @@ namespace MyTube.WEB.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return PartialView(model);
         }
 
         //

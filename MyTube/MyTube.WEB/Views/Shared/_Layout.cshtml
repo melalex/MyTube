@@ -22,9 +22,13 @@
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
-            @Html.Partial("_LoginPartial")
+            @Html.Partial("_AuthenticationPartial")
         </div>
     </div>
+    <div id="modDialog" class="modal fade">
+        <div id="dialogContent" class="modal-dialog"></div>
+    </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -35,6 +39,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/Authentication")
     @RenderSection("scripts", required: false)
 </body>
 </html>

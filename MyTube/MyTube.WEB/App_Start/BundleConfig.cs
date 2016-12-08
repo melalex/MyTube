@@ -26,6 +26,10 @@ namespace MyTube.WEB
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/Authentication").Include(
+                      "~/Scripts/MyScripts/Authentication/SignInScript.js",
+                      "~/Scripts/MyScripts/Authentication/SignUpScript.js"));
         }
     }
 }

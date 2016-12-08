@@ -1,0 +1,47 @@
+﻿@model MyTube.WEB.Models.LoginViewModel
+
+<div class="modal-container">
+    <div class="modal-header">
+        <h1>Login</h1>
+    </div>
+    <div class="modal-body">
+        @using (Html.BeginForm())
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                <div>
+                    @Html.ValidationMessageFor(model => model.Email)
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                <div>
+                    @Html.ValidationMessageFor(model => model.Password)
+                    @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    @Html.LabelFor(model => model.RememberMe, new { @class = "col-md-6 control-label" })
+                    <div class="col-md-6">
+                        @Html.ValidationMessageFor(model => model.RememberMe)
+                        @Html.EditorFor(model => model.RememberMe, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                @Html.ActionLink("Sign in", "Login", "Account", new { area = "" }, new { @class = "btn btn-default btn-block", id = "signInBtn" })
+            </div>
+
+            <div class="form-group">
+                @Html.ActionLink("Forgot Password", "Login", "Account", new { area = "" }, new { id = "forgotPassword" })
+            </div>
+        }
+
+    </div>
+</div>
+

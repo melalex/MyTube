@@ -86,8 +86,8 @@ namespace MyTube.DAL.Identity.Repositories
             {
                 if (disposing)
                 {
-                    userManager.Dispose();
-                    roleManager.Dispose();
+                    userManager?.Dispose();
+                    roleManager?.Dispose();
                 }
                 this.disposed = true;
             }
