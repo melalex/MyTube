@@ -10,7 +10,7 @@ namespace MyTube.BLL.Identity.DTO
     {
         public string Id { get; set; }
         public string Email { get; set; }
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public IList<string> Roles { get; set; }
         public string CannelId { get; set; } 
         public bool IsReadOnly { get; set; }

@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using MyTube.WEB.Models;
 using MyTube.BLL.Identity.Interfaces;
 using MyTube.BLL.Identity.DTO;
+using MyTube.BLL.Interfaces;
 
 namespace MyTube.WEB.Controllers
 {
@@ -18,14 +19,17 @@ namespace MyTube.WEB.Controllers
     public class AccountController : Controller
     {
         private IIdentityService _identityService;
+        private IUserService userService;
 
-        public AccountController()
+        public AccountController(IUserService userService)
         {
+            this.userService = userService;
         }
 
-        public AccountController(IIdentityService identityService)
+        public AccountController(IIdentityService identityService, IUserService userService)
         {
             ApplicationIdentityService = identityService;
+            this.userService = userService;
         }
 
         public IIdentityService ApplicationIdentityService
@@ -92,7 +96,8 @@ namespace MyTube.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new UserDTO { UserName = model.Username, Email = model.Email };
+                var channelId = await userService.CreateChannelAsync(model.Username);
+                var user = new UserDTO { Id = channelId, Username = model.Username, Email = model.Email };
                 var result = await ApplicationIdentityService.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

@@ -5,14 +5,14 @@
         <h1>Register</h1>
     </div>
     <div class="modal-body">
-        @using (Html.BeginForm())
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "registerForm" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.LabelFor(model => model.Username, new { @class = "control-label" })
                 <div>
-                    @Html.ValidationMessageFor(model => model.Username)
+                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
                     @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
                 </div>
             </div>
@@ -20,7 +20,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Email, new { @class = "control-label" })
                 <div>
-                    @Html.ValidationMessageFor(model => model.Email)
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                 </div>
             </div>
@@ -28,7 +28,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Password, new { @class = "control-label" })
                 <div>
-                    @Html.ValidationMessageFor(model => model.Password)
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                     @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                 </div>
             </div>
@@ -36,7 +36,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label" })
                 <div>
-                    @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
                     @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
                 </div>
             </div>

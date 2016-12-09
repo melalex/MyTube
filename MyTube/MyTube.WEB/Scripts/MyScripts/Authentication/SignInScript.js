@@ -3,8 +3,7 @@
     $("#signIn").click(showSignInModal);
 })
 
-function showSignInModal(event)
-{
+function showSignInModal(event) {
     event.preventDefault();
     $.get(this.href, function (data) {
         $('#dialogContent').html(data);
@@ -18,8 +17,7 @@ function showSignInModal(event)
     });
 }
 
-function login(event)
-{
+function login(event) {
     event.preventDefault();
     $.ajax({
         url: this.href,

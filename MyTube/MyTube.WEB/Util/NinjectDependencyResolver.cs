@@ -1,5 +1,7 @@
 ﻿using MyTube.BLL.Identity.Interfaces;
 using MyTube.BLL.Identity.Services;
+using MyTube.BLL.Interfaces;
+using MyTube.BLL.Services;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -28,6 +30,7 @@ namespace MyTube.WEB.Util
         private void AddBindings()
         {
             kernel.Bind<IIdentityServiceCreator>().To<IdentityServiceCreator>();
+            kernel.Bind<IUserService>().To<UserService>();
         }
     }
 }

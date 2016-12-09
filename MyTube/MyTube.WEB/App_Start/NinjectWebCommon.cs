@@ -14,6 +14,8 @@ namespace MyTube.WEB.App_Start
     using BLL.Identity.Services;
     using System.Web.Mvc;
     using Util;
+    using Ninject.Modules;
+    using BLL.Infrastructure;
 
     public static class NinjectWebCommon 
     {
@@ -43,7 +45,8 @@ namespace MyTube.WEB.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel();
+            var modules = new NinjectModule[] { new ServiceModule("DefaultMongoDBConnection", "DefaultConnection") };
+            var kernel = new StandardKernel(modules);
             try
             {
                 kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
