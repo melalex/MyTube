@@ -12,28 +12,26 @@ namespace MyTube.DAL.FileStorage
 {
     public class LocalFileStorageFacade : IStorageFacade
     {
-        private const string _defaultAvatarUri = "Images/Avatars/default_user_image.gif";
-        private const string avatarsStoragePath = @"Images\Avatars";
-        private const string posterStoragePath = @"Images\Posters";
-        private const string videoStoragePath = @"Videos";
+        public string DefaultAvatarUri { get; private set; }
+
+        private string storageFolder;
+
+        private const string defaultAvatarPath = @"\Images\Avatars\default_user_image.gif";
+        private const string avatarsStoragePath = @"\Images\Avatars";
+        private const string posterStoragePath = @"\Images\Posters";
+        private const string videoStoragePath = @"\Videos";
 
         private IFileRepository videoStorage;
         private IFileRepository avatarsStorage;
         private IFileRepository posterStorage;
 
-        public LocalFileStorageFacade()
+        public void SetStorageFolder(string storageFolder)
         {
-            avatarsStorage = new LocalFileRepository(@"Images\Avatars");
-            posterStorage = new LocalFileRepository(@"Images\Posters");
-            videoStorage = new LocalFileRepository(@"Videos");
-        }
-
-        public string DefaultAvatarUri
-        {
-            get
-            {
-                return _defaultAvatarUri;
-            }
+            this.storageFolder = storageFolder;
+            DefaultAvatarUri = (storageFolder + defaultAvatarPath).Replace('\\', '/');
+            avatarsStorage = new LocalFileRepository(storageFolder + avatarsStoragePath);
+            posterStorage = new LocalFileRepository(storageFolder + posterStoragePath);
+            videoStorage = new LocalFileRepository(storageFolder + videoStoragePath);
         }
 
         public Task<string> DefaultPosterUriAsync(string filePath)
@@ -44,7 +42,7 @@ namespace MyTube.DAL.FileStorage
                 Stream posterStream = posterStorage.SaveFileStream(fileName, "jpg");
                 var ffMpeg = new FFMpegConverter();
                 ffMpeg.GetVideoThumbnail(filePath, posterStream);
-                return $@"{posterStoragePath.Replace('\\', '/')}/{fileName}.jpg";
+                return $@"/{posterStoragePath.Replace('\\', '/')}/{fileName}.jpg";
             });
         }
 
@@ -73,7 +71,7 @@ namespace MyTube.DAL.FileStorage
                 ffMpeg.ConvertMedia(filePath, streamMP4, Format.mp4);
                 ffMpeg.ConvertMedia(filePath, streamOGG, Format.ogg);
                 ffMpeg.ConvertMedia(filePath, streamWEBM, Format.webm);
-                return $@"{videoStoragePath.Replace('\\', '/')}/{fileName}";
+                return $@"/{videoStoragePath.Replace('\\', '/')}/{fileName}";
             });
         }
 

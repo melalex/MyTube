@@ -24,7 +24,7 @@ namespace MyTube.DAL.Identity.Repositories
             database = new ApplicationDbContext(connectionString);
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetUsersByRole(string roleName, int skip, int limit)
+        public async Task<IEnumerable<string>> GetUsersIdsByRole(string roleName, int skip, int limit)
         {
             var role = await RoleManager.FindByNameAsync(roleName);
             return await database.Users
@@ -32,6 +32,7 @@ namespace MyTube.DAL.Identity.Repositories
                 .Contains(role.Id))
                 .Skip(skip)
                 .Take(limit)
+                .Select(u => u.Id)
                 .ToListAsync();
         }
 

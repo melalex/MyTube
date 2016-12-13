@@ -30,6 +30,15 @@ namespace MyTube.WEB
             bundles.Add(new ScriptBundle("~/bundles/Authentication").Include(
                       "~/Scripts/MyScripts/Authentication/SignInScript.js",
                       "~/Scripts/MyScripts/Authentication/SignUpScript.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/ContentLoader").Include(
+                      "~/Scripts/MyScripts/Loaders/ContentLoaderScript.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/HomePageLoader").Include(
+                      "~/Scripts/MyScripts/Loaders/HomePageLoaderScript.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/AuthenticatedProfileZoneLoader").Include(
+                      "~/Scripts/MyScripts/Loaders/AuthenticatedProfileZoneLoaderScript.js"));
         }
     }
 }

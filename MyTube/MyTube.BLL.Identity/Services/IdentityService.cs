@@ -25,9 +25,6 @@ namespace MyTube.BLL.Identity.Services
         {
             this.database = database;
             this.signInManager = signInManager;
-
-            Mapper.Initialize(cfg => cfg.CreateMap<ApplicationUser, UserDTO>());
-            Mapper.Initialize(cfg => cfg.CreateMap<UserDTO, ApplicationUser>());
         }
 
         public async Task<IdentityResult> ConfirmEmailAsync(string userId, string token)
@@ -37,13 +34,26 @@ namespace MyTube.BLL.Identity.Services
 
         public async Task<IdentityResult> CreateAsync(UserDTO user, string password)
         {
+            Mapper.Initialize(cfg => cfg.CreateMap<UserDTO, ApplicationUser>());
+
             ApplicationUser appUser = Mapper.Map<UserDTO, ApplicationUser>(user);
             return await database.UserManager.CreateAsync(appUser, password);
         }
 
         public async Task<UserDTO> FindByEmailAsync(string email)
         {
+            Mapper.Initialize(cfg => cfg.CreateMap<ApplicationUser, UserDTO>());
+
             ApplicationUser appUser = await database.UserManager.FindByEmailAsync(email);
+            UserDTO user = Mapper.Map<ApplicationUser, UserDTO>(appUser);
+            return user;
+        }
+
+        public async Task<UserDTO> FindByIdAsync(string id)
+        {
+            Mapper.Initialize(cfg => cfg.CreateMap<ApplicationUser, UserDTO>());
+
+            ApplicationUser appUser = await database.UserManager.FindByIdAsync(id);
             UserDTO user = Mapper.Map<ApplicationUser, UserDTO>(appUser);
             return user;
         }
@@ -65,8 +75,34 @@ namespace MyTube.BLL.Identity.Services
 
         public async Task SignInAsync(UserDTO user, bool isPersistent, bool rememberBrowser)
         {
+            Mapper.Initialize(cfg => cfg.CreateMap<UserDTO, ApplicationUser>());
+
             ApplicationUser appUser = Mapper.Map<UserDTO, ApplicationUser>(user);
             await signInManager.SignInAsync(appUser, isPersistent, rememberBrowser);
+        }
+
+        public async Task<IdentityResult> EditUserAsync(string userId, string newEmail, string newUsername, string newPassword, string oldPassword)
+        {
+            var appUser = await database.UserManager.FindByIdAsync(userId);
+            bool isValidPassword = await database.UserManager.CheckPasswordAsync(appUser, oldPassword);
+            if (isValidPassword)
+            {
+                if (appUser.Email != newEmail)
+                {
+                    appUser.EmailConfirmed = false;
+                    appUser.Email = newEmail;
+                }
+                appUser.UserName = newUsername;
+                string newPassworHash = database.UserManager.PasswordHasher.HashPassword(newPassword);
+                appUser.PasswordHash = newPassworHash;
+                await database.UserManager.UpdateAsync(appUser);
+                return IdentityResult.Success;
+            }
+            else
+            {
+                string[] errors = new string[] { "Incorrect password" };
+                return IdentityResult.Failed(errors); 
+            }
         }
 
         public void Dispose()

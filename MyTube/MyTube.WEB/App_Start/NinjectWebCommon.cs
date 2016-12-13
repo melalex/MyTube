@@ -45,7 +45,10 @@ namespace MyTube.WEB.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var modules = new NinjectModule[] { new ServiceModule("DefaultMongoDBConnection", "DefaultConnection") };
+            var modules = new NinjectModule[] 
+            {
+                new ServiceModule("DefaultMongoDBConnection", "DefaultConnection")
+            };
             var kernel = new StandardKernel(modules);
             try
             {

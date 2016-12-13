@@ -8,6 +8,8 @@ namespace MyTube.DAL.FileStorage.Interfaces
 {
     public interface IStorageFacade
     {
+        void SetStorageFolder(string storageFolder);
+
         string DefaultAvatarUri { get; }
 
         Task<string> DefaultPosterUriAsync(string filePath);

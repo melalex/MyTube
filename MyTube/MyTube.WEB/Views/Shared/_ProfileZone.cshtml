@@ -1,0 +1,11 @@
+﻿@using Microsoft.AspNet.Identity
+
+@if (Request.IsAuthenticated)
+{
+    @Html.Action("AuthenticatedProfileZone", "Profile")  
+}
+else
+{
+    @Html.ActionLink("Sign in", "Login", "Account", new { area = "" }, new { @class = "btn btn-default", id = "signIn" })
+    @Html.ActionLink("Sign up", "Register", "Account", new { area = "" }, new { @class = "btn btn-success", id = "signUp" })
+}

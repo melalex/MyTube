@@ -18,9 +18,11 @@ namespace MyTube.BLL.Interfaces
 
     public interface IUserService
     {
-        Task<string> CreateChannelAsync(string userName, byte[] avatar = null);
+        Task<string> CreateChannelAsync(string userName);
         Task<ChannelProxy> GetChannelAsync(string id);
-        Task EditChannelAsync(ChannelProxy channel, string userName, byte[] avatar = null);
+        Task EditChannelUsernameAsync(string channelId, string username);
+        Task EditChannelAvatarAsync(string channelId, string avatarPath);
+
 
         Task<string> CreateVideoAsync(
             string uploderId,
@@ -29,7 +31,7 @@ namespace MyTube.BLL.Interfaces
             string category,
             List<string> tags, 
             string videoPath, 
-            byte[] poster
+            string posterPath
             );
 
         Task<VideoProxy> GetVideoAsync(string id);

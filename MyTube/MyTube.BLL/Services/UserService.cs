@@ -40,39 +40,37 @@ namespace MyTube.BLL.Services
             this.dataStrore = dataStrore;
             this.fileStore = fileStore;
             this.identityStore = identityStore;
+        }
 
-            Mapper.Initialize(cfg => cfg.CreateMap<ChannelProxy, DAL.Entities.Channel>()
-            .ForMember("IDString", opt => opt.MapFrom(c => c.Id)));
+        public void SetStorageFolder(string storageFolder)
+        {
+            fileStore.SetStorageFolder(storageFolder);
         }
 
         #region ChannelLogic
-        public async Task<string> CreateChannelAsync(string userName, byte[] avatar = null)
+        public async Task<string> CreateChannelAsync(string userName)
         {
-            string avatarUri = null;
-            if (avatar != null)
-            {
-                string name = Guid.NewGuid().ToString();
-                avatarUri = fileStore.SaveAvatar(avatar, name);
-            }
-            else
-            {
-                avatarUri = fileStore.DefaultAvatarUri;
-            }
-            DAL.Entities.Channel channel = new DAL.Entities.Channel
+            Channel channel = new Channel
             {
                 Username = userName,
-                AvatarUri = avatarUri,
+                AvatarUri = fileStore.DefaultAvatarUri,
             };
             return await dataStrore.Channels.CreateAsync(channel);
         }
 
         public async Task<ChannelProxy> GetChannelAsync(string id)
         {
-            DAL.Entities.Channel channel = await dataStrore.Channels.Get(id);
+            Channel channel = await dataStrore.Channels.Get(id);
             return new ChannelProxy(dataStrore, channel);
         }
 
-        public async Task EditChannelAsync(ChannelProxy channel, string userName, byte[] avatar = null)
+        public async Task EditChannelUsernameAsync(string channelId, string username)
+        {
+            channel.Username = userName;
+            await dataStrore.Channels.UpdateAsync(channel.channel);         
+        }
+
+        public async Task EditChannelAvatarAsync(string channelId, string avatarPath)
         {
             if (channel.AvatarUri != fileStore.DefaultAvatarUri)
             {
@@ -84,7 +82,7 @@ namespace MyTube.BLL.Services
                 channel.AvatarUri = fileStore.SaveAvatar(avatar, name);
             }
             channel.Username = userName;
-            await dataStrore.Channels.UpdateAsync(channel.channel);         
+            await dataStrore.Channels.UpdateAsync(channel.channel);
         }
         #endregion
 
@@ -94,15 +92,15 @@ namespace MyTube.BLL.Services
             string name,
             string description,
             string category,
-            List<string> tags, 
-            string videoPath, 
-            byte[] poster
+            List<string> tags,
+            string videoPath,
+            string posterPath
             )
         {
             string fileName = Guid.NewGuid().ToString();
             string videoUri = await fileStore.SaveVideoAsync(videoPath);
             string posterUri = null;
-            if (poster != null)
+            if (posterPath != null)
             {
                 posterUri = fileStore.SavePoster(poster, name);
             }

@@ -24,7 +24,7 @@ namespace MyTube.DAL.FileStorage.Repositories
 
         public Stream SaveFileStream(string fileName, string extension)
         {
-            string path = $@"{Directory.GetCurrentDirectory()}\{storageFolder}\{fileName}.{extension}";
+            string path = $@"{storageFolder}\{fileName}.{extension}";
             FileInfo fileInfo = new FileInfo(path);
             fileInfo.Directory.Create();
             return File.Create(path);

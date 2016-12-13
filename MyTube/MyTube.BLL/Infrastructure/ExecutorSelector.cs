@@ -24,8 +24,8 @@ namespace MyTube.BLL.Infrastructure
         {
             int currentExecutor = Interlocked.Increment(ref previosExecutor);
             int moderatorsCount = await database.GetCountOfUsersByRole(moderatorRole);
-            var moderators = await database.GetUsersByRole(moderatorRole, currentExecutor % moderatorsCount, 1);
-            return moderators.FirstOrDefault()?.CannelId;
+            var moderators = await database.GetUsersIdsByRole(moderatorRole, currentExecutor % moderatorsCount, 1);
+            return moderators.FirstOrDefault();
         }
     }
 }

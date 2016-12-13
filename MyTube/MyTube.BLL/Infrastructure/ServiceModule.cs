@@ -21,7 +21,7 @@ namespace MyTube.BLL.Infrastructure
         public ServiceModule(string mongoConnection, string identityConnection)
         {
             mongoConnectionString = mongoConnection;
-            identityConnectionString = identityConnection; 
+            identityConnectionString = identityConnection;
         }
         public override void Load()
         {

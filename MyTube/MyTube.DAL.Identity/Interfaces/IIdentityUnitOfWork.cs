@@ -13,7 +13,7 @@ namespace MyTube.DAL.Identity.Interfaces
         ApplicationUserManager UserManager { get; }
         ApplicationRoleManager RoleManager { get; }
         Task SaveAsync();
-        Task<IEnumerable<ApplicationUser>> GetUsersByRole(string roleName, int skip, int limit);
+        Task<IEnumerable<string>> GetUsersIdsByRole(string roleName, int skip, int limit);
         Task<int> GetCountOfUsersByRole(string roleName);
     }
 }

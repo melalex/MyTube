@@ -1,0 +1,27 @@
+﻿@model MyTube.BLL.BusinessEntities.ChannelProxy
+
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+{
+    @Html.AntiForgeryToken()
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a href="#" class="btn btn-default">
+                Upload
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <span class="glyphicon-bell"></span>
+            </a>
+        </li>
+        <li>
+            <a href="" class="nav-link dropdown-toggle" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="" class="profile-image img-circle" />
+            </a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Profile", "Edit", "Profile")</li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+            </ul>
+        </li>
+    </ul>
+}

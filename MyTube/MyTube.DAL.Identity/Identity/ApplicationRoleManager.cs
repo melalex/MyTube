@@ -13,6 +13,8 @@ namespace MyTube.DAL.Identity.Identity
     {
         public ApplicationRoleManager(RoleStore<ApplicationRole> store)
                     : base(store)
-        { }
+        {
+
+        }
     }
 }

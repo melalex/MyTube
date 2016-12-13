@@ -30,7 +30,9 @@ namespace MyTube.WEB.Util
         private void AddBindings()
         {
             kernel.Bind<IIdentityServiceCreator>().To<IdentityServiceCreator>();
-            kernel.Bind<IUserService>().To<UserService>();
+            kernel.Bind<IUserService>().To<UserService>().OnActivation(x => 
+                x.SetStorageFolder(HttpContext.Current.Server.MapPath(@"~\Files"))
+            );
         }
     }
 }

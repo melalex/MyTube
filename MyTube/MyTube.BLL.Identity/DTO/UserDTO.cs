@@ -12,7 +12,6 @@ namespace MyTube.BLL.Identity.DTO
         public string Email { get; set; }
         public string Username { get; set; }
         public IList<string> Roles { get; set; }
-        public string CannelId { get; set; } 
         public bool IsReadOnly { get; set; }
         public bool EmailConfirmed { get; set; }
     }
