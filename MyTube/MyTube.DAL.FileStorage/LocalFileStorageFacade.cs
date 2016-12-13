@@ -46,17 +46,28 @@ namespace MyTube.DAL.FileStorage
             });
         }
 
-        public string SaveAvatar(byte[] fileContent, string fileName)
+        public async Task<string> SaveAvatar(string filePath)
         {
-#warning SaveAvatar is not working
-            Stream avatarStream = avatarsStorage.SaveFileStream(fileName, fileName);
-            return $@"{avatarsStoragePath.Replace('\\', '/')}/{fileName}.jpg";
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            string fileExtension = Path.GetExtension(filePath);
+            using (Stream avatarStream = avatarsStorage.SaveFileStream(fileName, fileExtension))
+            using (Stream sourceAvatarStream = File.Open(filePath, FileMode.Open))
+            {
+                await sourceAvatarStream.CopyToAsync(avatarStream);
+            }
+            return $@"/Files/{avatarsStoragePath.Replace('\\', '/')}/{fileName}.{fileExtension}";
         }
 
-        public string SavePoster(byte[] fileContent, string fileName)
+        public async Task<string> SavePoster(string filePath)
         {
-#warning SavePoster is not working
-            return "";
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            string fileExtension = Path.GetExtension(filePath);
+            using (Stream posterStream = avatarsStorage.SaveFileStream(fileName, fileExtension))
+            using (Stream sourcePosterStream = File.Open(filePath, FileMode.Open))
+            {
+                await sourcePosterStream.CopyToAsync(posterStream);
+            }
+            return $@"/Files/{posterStoragePath.Replace('\\', '/')}/{fileName}.{fileExtension}";
         }
 
         public Task<string> SaveVideoAsync(string filePath)
@@ -65,29 +76,34 @@ namespace MyTube.DAL.FileStorage
             {
                 var ffMpeg = new FFMpegConverter();
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
-                Stream streamMP4 = videoStorage.SaveFileStream(fileName, "mp4");
-                Stream streamOGG = videoStorage.SaveFileStream(fileName, "ogg");
-                Stream streamWEBM = videoStorage.SaveFileStream(fileName, "webm");
-                ffMpeg.ConvertMedia(filePath, streamMP4, Format.mp4);
-                ffMpeg.ConvertMedia(filePath, streamOGG, Format.ogg);
-                ffMpeg.ConvertMedia(filePath, streamWEBM, Format.webm);
-                return $@"/{videoStoragePath.Replace('\\', '/')}/{fileName}";
+                using (Stream streamMP4 = videoStorage.SaveFileStream(fileName, "mp4"))
+                using (Stream streamOGG = videoStorage.SaveFileStream(fileName, "ogg"))
+                using (Stream streamWEBM = videoStorage.SaveFileStream(fileName, "webm"))
+                {
+                    ffMpeg.ConvertMedia(filePath, streamMP4, Format.mp4);
+                    ffMpeg.ConvertMedia(filePath, streamOGG, Format.ogg);
+                    ffMpeg.ConvertMedia(filePath, streamWEBM, Format.webm);
+                    return $@"/Files/{videoStoragePath.Replace('\\', '/')}/{fileName}";
+                }
             });
         }
 
         public void DeleteAvatar(string uri)
         {
-            avatarsStorage.DeleteFile(uri);
+            string fileName = uri.Split('/').LastOrDefault();
+            avatarsStorage.DeleteFile(fileName);
         }
 
         public void DeletePoster(string uri)
         {
-            posterStorage.DeleteFile(uri);
+            string fileName = uri.Split('/').LastOrDefault();
+            posterStorage.DeleteFile(fileName);
         }
 
         public void DeleteVideo(string uri)
         {
-            videoStorage.DeleteFile(uri);
+            string fileName = uri.Split('/').LastOrDefault();
+            videoStorage.DeleteFile(fileName);
         }
     }
 }

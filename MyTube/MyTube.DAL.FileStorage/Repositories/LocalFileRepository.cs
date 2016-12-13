@@ -17,9 +17,14 @@ namespace MyTube.DAL.FileStorage.Repositories
             this.storageFolder = storageFolder;
         }
 
-        public void DeleteFile(string uri)
+        public void DeleteFile(string fileName)
         {
-            throw new NotImplementedException();
+            string path = Path.Combine(storageFolder, fileName);
+            
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }            
         }
 
         public Stream SaveFileStream(string fileName, string extension)

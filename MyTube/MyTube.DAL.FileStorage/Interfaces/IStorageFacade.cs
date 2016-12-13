@@ -14,9 +14,9 @@ namespace MyTube.DAL.FileStorage.Interfaces
 
         Task<string> DefaultPosterUriAsync(string filePath);
 
-        string SaveAvatar(byte[] fileContent, string fileName);
+        Task<string> SaveAvatar(string filePath);
 
-        string SavePoster(byte[] fileContent, string fileName);
+        Task<string> SavePoster(string filePath);
 
         Task<string> SaveVideoAsync(string filePath);
 

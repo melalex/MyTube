@@ -66,23 +66,18 @@ namespace MyTube.BLL.Services
 
         public async Task EditChannelUsernameAsync(string channelId, string username)
         {
-            channel.Username = userName;
-            await dataStrore.Channels.UpdateAsync(channel.channel);         
+            await dataStrore.Channels.UpdateUsernameAsync(channelId, username);         
         }
 
         public async Task EditChannelAvatarAsync(string channelId, string avatarPath)
         {
+            Channel channel = await dataStrore.Channels.Get(channelId);
             if (channel.AvatarUri != fileStore.DefaultAvatarUri)
             {
                 fileStore.DeleteAvatar(channel.AvatarUri);
             }
-            if (avatar != null)
-            {
-                string name = Guid.NewGuid().ToString();
-                channel.AvatarUri = fileStore.SaveAvatar(avatar, name);
-            }
-            channel.Username = userName;
-            await dataStrore.Channels.UpdateAsync(channel.channel);
+            string avatarUri = fileStore.SaveAvatar();
+            await dataStrore.Channels.UpdateAvatarAsync(channelId, avatarUri);
         }
         #endregion
 
