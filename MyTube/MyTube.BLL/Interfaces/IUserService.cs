@@ -29,7 +29,7 @@ namespace MyTube.BLL.Interfaces
             string name, 
             string description,
             string category,
-            List<string> tags, 
+            string[] tags, 
             string videoPath, 
             string posterPath
             );

@@ -87,13 +87,12 @@ namespace MyTube.BLL.Services
             string name,
             string description,
             string category,
-            List<string> tags,
+            string[] tags,
             string videoPath,
             string posterPath = null
             )
         {
-            string fileName = Guid.NewGuid().ToString();
-            string videoUri = await fileStore.SaveVideoAsync(videoPath);
+            string videoUri = fileStore.SaveVideoAsync(videoPath);
             string posterUri = null;
             if (posterPath != null)
             {
@@ -101,14 +100,14 @@ namespace MyTube.BLL.Services
             }
             else
             {
-                posterUri = await fileStore.DefaultPosterUriAsync(videoPath);
+                posterUri = fileStore.DefaultPosterUriAsync(videoPath);
             }
             Video newVideo = new Video
             {
                 Name = name,
                 Description = description,
                 Category = category,
-                Tags = tags,
+                Tags = new List<string>(tags),
                 VideoUrl = videoUri,
                 PosterUrl = posterUri,
                 Likes = 0,

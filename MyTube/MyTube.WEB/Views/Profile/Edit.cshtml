@@ -50,7 +50,7 @@
         }
     </div>
     <div class="col-md-6">
-        <img src="@Model.AvatarUri" alt="Avatar" class="img-responsive">
+        <img src="@Model.AvatarUri" alt="Avatar" class="img-responsive avatar-edit">
         @using (Html.BeginForm("EditAvatar", "Profile", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()

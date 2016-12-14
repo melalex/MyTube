@@ -12,13 +12,13 @@ namespace MyTube.DAL.FileStorage.Interfaces
 
         string DefaultAvatarUri { get; }
 
-        Task<string> DefaultPosterUriAsync(string filePath);
+        string DefaultPosterUriAsync(string filePath);
 
         Task<string> SaveAvatar(string filePath);
 
         Task<string> SavePoster(string filePath);
 
-        Task<string> SaveVideoAsync(string filePath);
+        string SaveVideoAsync(string filePath);
 
         void DeleteAvatar(string uri);
 

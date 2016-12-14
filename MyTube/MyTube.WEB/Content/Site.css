@@ -46,3 +46,14 @@ textarea {
     padding-bottom: 0px !important;
     padding-top: 0px !important;
 }
+
+.avatar-edit{
+    max-height: 100px !important;
+    width: auto !important;
+}
+
+.auth-items {
+    vertical-align: middle !important;
+    padding-top: 9px !important;
+    padding-bottom: 9px !important;
+}

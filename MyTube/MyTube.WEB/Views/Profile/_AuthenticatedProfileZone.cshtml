@@ -5,12 +5,10 @@
     @Html.AntiForgeryToken()
     <ul class="nav navbar-nav navbar-right">
         <li>
-            <a href="#" class="btn btn-default avatar">
-                Upload
-            </a>
+            @Html.ActionLink("Upload", "UploadVideo", "Video", null, new { @class = "btn btn-default auth-items" })
         </li>
         <li>
-            <a href="#" class="avatar">
+            <a href="#" class="auth-items">
                 <span class="glyphicon-bell"></span>
             </a>
         </li>

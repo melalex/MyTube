@@ -224,12 +224,15 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\VideoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account\AccountViewModels.cs" />
     <Compile Include="Models\FileUploader.cs" />
+    <Compile Include="Models\GlobalVariables.cs" />
     <Compile Include="Models\Profile\EditProfileViewModel.cs" />
+    <Compile Include="Models\Video\VideoUploadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Util\NinjectDependencyResolver.cs" />
@@ -281,6 +284,7 @@
     <Content Include="Views\Profile\_AuthenticatedProfileZone.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Profile\Edit.cshtml" />
+    <Content Include="Views\Video\UploadVideo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

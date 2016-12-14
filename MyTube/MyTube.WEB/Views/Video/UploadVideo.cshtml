@@ -1,0 +1,66 @@
+﻿@model MyTube.WEB.Models.Video.VideoUploadViewModel
+
+
+@{
+    ViewBag.Title = "Upload Video";
+}
+
+<h2>Upload Video</h2>
+
+@using (Html.BeginForm("UploadVideo", "Video", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+        <div>
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Video, new { @class = "control-label" })
+        <div>
+            @Html.ValidationMessageFor(model => model.Video, "", new { @class = "text-danger" })
+            <input type="file" name="Video" accept="video/*" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Poster, new { @class = "control-label" })
+        <div>
+            @Html.ValidationMessageFor(model => model.Poster, "", new { @class = "text-danger" })
+            <input type="file" name="Poster" accept="image/*" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Category, new { @class = "control-label" })
+        <div>
+            @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+            @Html.DropDownListFor(m => m.SelectedCategory, Model.Category)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Tags, new { @class = "control-label" })
+        <div>
+            @Html.ValidationMessageFor(model => model.Tags, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.Tags, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Description, new { @class = "control-label" })
+        <div>
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Upload" class="btn btn-default" />
+    </div>
+}
+
