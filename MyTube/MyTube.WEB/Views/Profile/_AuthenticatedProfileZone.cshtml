@@ -5,18 +5,18 @@
     @Html.AntiForgeryToken()
     <ul class="nav navbar-nav navbar-right">
         <li>
-            <a href="#" class="btn btn-default">
+            <a href="#" class="btn btn-default avatar">
                 Upload
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="#" class="avatar">
                 <span class="glyphicon-bell"></span>
             </a>
         </li>
         <li>
-            <a href="" class="nav-link dropdown-toggle" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="" class="profile-image img-circle" />
+            <a href="" class="nav-link dropdown-toggle avatar" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="@Url.Content(@Model.AvatarUri)" class="profile-image img-circle avatar" />
             </a>
             <ul class="dropdown-menu">
                 <li>@Html.ActionLink("Profile", "Edit", "Profile")</li>

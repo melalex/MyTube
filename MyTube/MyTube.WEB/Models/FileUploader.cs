@@ -8,7 +8,7 @@ namespace MyTube.WEB.Models
 {
     public static class FileUpload
     {
-        private static string FilesPath = HttpContext.Current.Server.MapPath("~\\Temp");
+        private static string FilesPath = Path.Combine(HttpContext.Current.Server.MapPath(@"~\Uploads"), "Temp");
 
         public static string UploadFile(HttpPostedFileBase file)
         {
@@ -22,7 +22,7 @@ namespace MyTube.WEB.Models
                 return null;
             }
 
-            string fileName = DateTime.Now.Millisecond + file.FileName;
+            string fileName = DateTime.Now.Ticks + '_' + file.FileName;
             string fileExt = Path.GetExtension(file.FileName);
 
             if (null == fileExt)
@@ -42,9 +42,9 @@ namespace MyTube.WEB.Models
             return path;
         }
 
-        private static void RemoveFile(string path)
+        public static void RemoveFile(string path)
         {
-            if (File.Exists(Path.GetFullPath(path)))
+            if (path != null && File.Exists(Path.GetFullPath(path)))
             {
                 File.Delete(Path.GetFullPath(path));
             }

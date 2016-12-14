@@ -93,7 +93,8 @@ namespace MyTube.WEB.Controllers
                 string path = FileUpload.UploadFile(newAvatar);
                 if (path != null)
                 {
-
+                    string channelId = User.Identity.GetUserId();
+                    await userService.EditChannelAvatarAsync(channelId, path);
                     result = RedirectToAction("Index", "Home");
                 }
                 else
@@ -101,6 +102,7 @@ namespace MyTube.WEB.Controllers
                     ModelState.AddModelError("Image", "User invalid");
                     result = RedirectToAction("Edit");
                 }
+                FileUpload.RemoveFile(path);
             }
             else
             {

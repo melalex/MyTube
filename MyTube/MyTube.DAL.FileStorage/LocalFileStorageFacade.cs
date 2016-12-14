@@ -16,10 +16,10 @@ namespace MyTube.DAL.FileStorage
 
         private string storageFolder;
 
-        private const string defaultAvatarPath = @"\Images\Avatars\default_user_image.gif";
-        private const string avatarsStoragePath = @"\Images\Avatars";
-        private const string posterStoragePath = @"\Images\Posters";
-        private const string videoStoragePath = @"\Videos";
+        private string defaultAvatarPath = String.Format("{0}Images{0}Avatars{0}default_user_image.gif", Path.DirectorySeparatorChar);
+        private string avatarsStoragePath = String.Format("{0}Images{0}Avatars", Path.DirectorySeparatorChar);
+        private string posterStoragePath = String.Format("{0}Images{0}Posters", Path.DirectorySeparatorChar);
+        private string videoStoragePath = Path.DirectorySeparatorChar + "Videos";
 
         private IFileRepository videoStorage;
         private IFileRepository avatarsStorage;
@@ -28,7 +28,7 @@ namespace MyTube.DAL.FileStorage
         public void SetStorageFolder(string storageFolder)
         {
             this.storageFolder = storageFolder;
-            DefaultAvatarUri = (storageFolder + defaultAvatarPath).Replace('\\', '/');
+            DefaultAvatarUri = (storageFolder + defaultAvatarPath).Replace(Path.DirectorySeparatorChar, '/');
             avatarsStorage = new LocalFileRepository(storageFolder + avatarsStoragePath);
             posterStorage = new LocalFileRepository(storageFolder + posterStoragePath);
             videoStorage = new LocalFileRepository(storageFolder + videoStoragePath);
@@ -42,7 +42,7 @@ namespace MyTube.DAL.FileStorage
                 Stream posterStream = posterStorage.SaveFileStream(fileName, "jpg");
                 var ffMpeg = new FFMpegConverter();
                 ffMpeg.GetVideoThumbnail(filePath, posterStream);
-                return $@"/{posterStoragePath.Replace('\\', '/')}/{fileName}.jpg";
+                return $@"/Uploads/Files{posterStoragePath.Replace(Path.DirectorySeparatorChar, '/')}/{fileName}.jpg";
             });
         }
 
@@ -55,7 +55,7 @@ namespace MyTube.DAL.FileStorage
             {
                 await sourceAvatarStream.CopyToAsync(avatarStream);
             }
-            return $@"/Files/{avatarsStoragePath.Replace('\\', '/')}/{fileName}.{fileExtension}";
+            return $@"/Uploads/Files{avatarsStoragePath.Replace(Path.DirectorySeparatorChar, '/')}/{fileName}{fileExtension}";
         }
 
         public async Task<string> SavePoster(string filePath)
@@ -67,7 +67,7 @@ namespace MyTube.DAL.FileStorage
             {
                 await sourcePosterStream.CopyToAsync(posterStream);
             }
-            return $@"/Files/{posterStoragePath.Replace('\\', '/')}/{fileName}.{fileExtension}";
+            return $@"/Uploads/Files{posterStoragePath.Replace(Path.DirectorySeparatorChar, '/')}/{fileName}{fileExtension}";
         }
 
         public Task<string> SaveVideoAsync(string filePath)
@@ -76,14 +76,14 @@ namespace MyTube.DAL.FileStorage
             {
                 var ffMpeg = new FFMpegConverter();
                 string fileName = Path.GetFileNameWithoutExtension(filePath);
-                using (Stream streamMP4 = videoStorage.SaveFileStream(fileName, "mp4"))
-                using (Stream streamOGG = videoStorage.SaveFileStream(fileName, "ogg"))
-                using (Stream streamWEBM = videoStorage.SaveFileStream(fileName, "webm"))
+                using (Stream streamMP4 = videoStorage.SaveFileStream(fileName, ".mp4"))
+                using (Stream streamOGG = videoStorage.SaveFileStream(fileName, ".ogg"))
+                using (Stream streamWEBM = videoStorage.SaveFileStream(fileName, ".webm"))
                 {
                     ffMpeg.ConvertMedia(filePath, streamMP4, Format.mp4);
                     ffMpeg.ConvertMedia(filePath, streamOGG, Format.ogg);
                     ffMpeg.ConvertMedia(filePath, streamWEBM, Format.webm);
-                    return $@"/Files/{videoStoragePath.Replace('\\', '/')}/{fileName}";
+                    return $@"/Uploads/Files{videoStoragePath.Replace(Path.DirectorySeparatorChar, '/')}/{fileName}";
                 }
             });
         }

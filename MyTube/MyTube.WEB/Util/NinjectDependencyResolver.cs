@@ -5,6 +5,7 @@ using MyTube.BLL.Services;
 using Ninject;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -31,7 +32,7 @@ namespace MyTube.WEB.Util
         {
             kernel.Bind<IIdentityServiceCreator>().To<IdentityServiceCreator>();
             kernel.Bind<IUserService>().To<UserService>().OnActivation(x => 
-                x.SetStorageFolder(HttpContext.Current.Server.MapPath(@"~/Files"))
+                x.SetStorageFolder(Path.Combine(HttpContext.Current.Server.MapPath(@"~/Uploads"), "Files"))
             );
         }
     }

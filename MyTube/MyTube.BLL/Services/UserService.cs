@@ -76,7 +76,7 @@ namespace MyTube.BLL.Services
             {
                 fileStore.DeleteAvatar(channel.AvatarUri);
             }
-            string avatarUri = fileStore.SaveAvatar();
+            string avatarUri = await fileStore.SaveAvatar(avatarPath);
             await dataStrore.Channels.UpdateAvatarAsync(channelId, avatarUri);
         }
         #endregion
@@ -89,7 +89,7 @@ namespace MyTube.BLL.Services
             string category,
             List<string> tags,
             string videoPath,
-            string posterPath
+            string posterPath = null
             )
         {
             string fileName = Guid.NewGuid().ToString();
@@ -97,7 +97,7 @@ namespace MyTube.BLL.Services
             string posterUri = null;
             if (posterPath != null)
             {
-                posterUri = fileStore.SavePoster(poster, name);
+                posterUri = await fileStore.SavePoster(posterPath);
             }
             else
             {

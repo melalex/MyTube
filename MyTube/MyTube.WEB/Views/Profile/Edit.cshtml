@@ -51,10 +51,11 @@
     </div>
     <div class="col-md-6">
         <img src="@Model.AvatarUri" alt="Avatar" class="img-responsive">
-        @using (Html.BeginForm("EditAvatar", "Profile", FormMethod.Post, new { id = "editAvatarForm" }))
+        @using (Html.BeginForm("EditAvatar", "Profile", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
+            @Html.AntiForgeryToken()
             <div class="form-group">
-                <input type="file" name="productImg" accept="image/*" title="Upload image" />
+                <input type="file" name="newAvatar" accept="image/*" title="Upload image" />
                 @Html.ValidationMessage("Image")
             </div>
 
