@@ -1,0 +1,104 @@
+﻿@model MyTube.BLL.BusinessEntities.VideoProxy
+
+@{
+    ViewBag.Title = "Watch";
+}
+
+<div class="row padding-top-20">
+    <div class="col-md-8 white-content" style="padding-right:20px; border-right: 1px solid #ccc;">
+        <div class="embed-responsive embed-responsive-16by9">
+            <video class="embed-responsive-item" controls="controls" poster="@Url.Content(@Model.PosterUri)">
+                <source src="@Url.Content(@Model.VideoUri + ".mp4")" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+                <source src="@Url.Content(@Model.VideoUri + ".ogg")" type='video/ogg; codecs="theora, vorbis"'>
+                <source src="@Url.Content(@Model.VideoUri + ".webm")" type='video/webm; codecs="vp8, vorbis"'>
+                Video tag is un supported by your browser
+                <a href="@Url.Content(@Model.PosterUri + ".mp4")">Download video</a>.
+            </video>
+        </div>
+        <div class="row">
+            <div class="col-md-11">
+                <h1>@Model.Name</h1>
+            </div>
+            <div class="col-md-1 padding-top-20">
+                <a href="#" class="btn"><span class="glyphicon glyphicon-list"></span></a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <img src="@Url.Content(@Model.UploderAvatarUri)" class="profile-image avatar-show"/>
+            </div>
+            <div class="col-md-2">
+                <p><b>@Model.UploderUsername</b></p>
+                <a href="#" class="btn btn-default">Subscribe</a>
+            </div>
+            <div class="col-md-offset-10">
+                <p>@Model.Views Views</p>
+                <div class="row">
+                    <div class="col-md-1">
+                        <a href="#">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        <p>@Model.Likes</p>
+                    </div>
+
+                    <div class="col-md-offset-1 col-md-1">
+                        <a href="#">
+                            <span class="glyphicon glyphicon-thumbs-down"></span>
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        @Model.Dislikes
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>Uploaded: </dt>
+            <dd>@Model.Uploaded.ToString("d")</dd>
+
+            <dt>Category: </dt>
+            <dd><a href="#">@Model.VideoCategory</a></dd>
+
+            <dt>Tags: </dt>
+            <dd>
+                @foreach (string tag in Model.Tags)
+                {
+                    <a href="#">@tag</a>
+                }
+            </dd>
+
+            <dt>Description: </dt>
+            <dd>@Model.Description</dd>
+        </dl>
+        <hr />
+        <div class="padding-top-20">
+            @using (Html.BeginForm())
+            {
+                <div class="row">
+                    <div class="col-md-2">
+                        <img id="userAvatar" />
+                    </div>
+                    <div class="col-md-10">
+                        <textarea class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-11 col-md-1">
+                        <a href="#" class="btn btn-block btn-primary" id="sendComment">Send</a>
+                    </div>
+                </div>
+            }
+            <div id="comments" data-comments-request="@Url.Action("Comments", "Video", new { id = Model.Id })"></div>
+        </div>
+    </div>
+    <div id="similarVideos" class="col-md-4 white-content" data-similar-request="@Url.Action("Similar", "Video", new { id = Model.Id })" >
+    </div>
+</div>
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/VideoPageLoader")
+}

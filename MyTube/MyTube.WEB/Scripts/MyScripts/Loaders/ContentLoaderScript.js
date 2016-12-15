@@ -1,15 +1,10 @@
-﻿function LoadProfileZone() {
-    var profileZone = $("#profileZone");
-    var url = profileZone.data("profilezone-request-url");
-    profileZone.load(url);
+﻿function LoadPopularVideos(url) {
+
 }
 
-function LoadProfileZoneWithCallbach(callback) {
-    var profileZone = $("#profileZone");
-    var url = profileZone.data("profilezone-request-url");
-    profileZone.load(url, callback);
-}
-
-function LoadPopularVideos(url) {
-
+function LoadSimilarVideos()
+{
+    var destination = $("#similarVideos");
+    var url = destination.data("similar-request");
+    destination.load(url);
 }

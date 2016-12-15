@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Video/css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
@@ -31,7 +32,7 @@
         <div id="dialogContent" class="modal-dialog"></div>
     </div>
 
-    <div class="container body-content">
+    <div class="container body-content white-content">
         @RenderBody()
         <hr />
         <footer>

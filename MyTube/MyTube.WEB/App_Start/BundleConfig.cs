@@ -27,6 +27,9 @@ namespace MyTube.WEB
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
+            bundles.Add(new StyleBundle("~/Video/css").Include(
+                      "~/Content/MyStyles/Video.css"));
+            
             bundles.Add(new ScriptBundle("~/bundles/Authentication").Include(
                       "~/Scripts/MyScripts/Authentication/SignInScript.js",
                       "~/Scripts/MyScripts/Authentication/SignUpScript.js"));
@@ -37,8 +40,8 @@ namespace MyTube.WEB
             bundles.Add(new ScriptBundle("~/bundles/HomePageLoader").Include(
                       "~/Scripts/MyScripts/Loaders/HomePageLoaderScript.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/AuthenticatedProfileZoneLoader").Include(
-                      "~/Scripts/MyScripts/Loaders/AuthenticatedProfileZoneLoaderScript.js"));
+            bundles.Add(new ScriptBundle("~/bundles/VideoPageLoader").Include(
+                      "~/Scripts/MyScripts/Loaders/VideoPageLoaderScript.js"));
         }
     }
 }

@@ -16,7 +16,7 @@ namespace MyTube.BLL.BusinessEntities
     {
         private IUnitOfWork database;
 
-        public ChannelProxy(IUnitOfWork database, DAL.Entities.Channel channel)
+        public ChannelProxy(IUnitOfWork database, Channel channel)
         {
             this.database = database;
             this.channel = channel;

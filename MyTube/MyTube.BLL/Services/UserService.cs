@@ -60,8 +60,13 @@ namespace MyTube.BLL.Services
 
         public async Task<ChannelProxy> GetChannelAsync(string id)
         {
+            ChannelProxy result = null;
             Channel channel = await dataStrore.Channels.Get(id);
-            return new ChannelProxy(dataStrore, channel);
+            if (channel != null)
+            {
+                result = new ChannelProxy(dataStrore, channel);
+            }
+            return result;
         }
 
         public async Task EditChannelUsernameAsync(string channelId, string username)
@@ -122,14 +127,20 @@ namespace MyTube.BLL.Services
 
         public async Task<VideoProxy> GetVideoAsync(string id)
         {
+            VideoProxy result = null;
             Video video = await dataStrore.Videos.Get(id);
-            return await VideoProxy.Create(dataStrore, video);
+            if (video != null)
+            {
+                result = await VideoProxy.Create(dataStrore, video);
+            }
+            return result;
         }
 
         public async Task<IEnumerable<VideoProxy>> GetSimilarVideosAsync(VideoProxy video, int skip, int limit)
         {
             IEnumerable<Video> similarVideos = await dataStrore.Videos.SearchBYTagsAsync(video.Tags, skip, limit);
-            var tasks = similarVideos.Select(async v => await VideoProxy.Create(dataStrore, v));
+            var tasks = similarVideos.Where(v => v.IdString != video.Id)
+                .Select(async v => await VideoProxy.Create(dataStrore, v));
             return await Task.WhenAll(tasks);
         }
 
@@ -138,6 +149,31 @@ namespace MyTube.BLL.Services
             var result = await dataStrore.Videos.GetPopularVideosAsync(skip, limit);
             var tasks = result.Select(async v => await VideoProxy.Create(dataStrore, v));
             return await Task.WhenAll(tasks);
+        }
+
+        public async Task<IEnumerable<CommentDTO>> GetCommentsAsync(string videoId, int skip, int limit)
+        {
+            IEnumerable<Comment> comments = await dataStrore.Comments.GetCommentsFromVideoAsync(videoId, skip, limit);
+
+            var tasks = comments.Select(async x => {
+                Channel commentator = await dataStrore.Channels.Get(x.ComentatorIdString);
+                return new CommentDTO
+                {
+                    Id = x.IdString,
+                    VideoId = videoId,
+                    CommentatorAvatarUri = commentator.AvatarUri,
+                    CommentatorUsername = commentator.Username,
+                    CommentatorId = commentator.IdString,
+                    CommentDateTime = x.CommentDateTime,
+                    CommentText = x.Text,
+                };
+            }).ToList();
+            return await Task.WhenAll(tasks);
+        }
+
+        public async Task<long> GetCommentsCountAsync(string videoId)
+        {
+            return await dataStrore.Comments.CommentsCountFromVideoAsync(videoId);
         }
 
         public async void AddCommentAsync(CommentDTO comment)
@@ -155,7 +191,7 @@ namespace MyTube.BLL.Services
         {
             fileStore.DeletePoster(video.PosterUri);
             fileStore.DeleteVideo(video.VideoUri);
-            await dataStrore.Comments.DeleteCommentsFromVideoAsync(video.video);
+            await dataStrore.Comments.DeleteCommentsFromVideoAsync(video.Id);
         }
 
         public async void EstimateVideoAsync(Video video, ViewedVideoTransferDTO transfer)

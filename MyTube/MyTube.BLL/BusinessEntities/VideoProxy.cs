@@ -14,17 +14,18 @@ namespace MyTube.BLL.BusinessEntities
     {
         private IUnitOfWork database;
 
-        internal DAL.Entities.Video video { get; private set; }
+        internal Video video { get; private set; }
 
         private VideoProxy()
         {
             
         }
 
-        public static async Task<VideoProxy> Create(IUnitOfWork database, DAL.Entities.Video video)
+        public static async Task<VideoProxy> Create(IUnitOfWork database, Video video)
         {
             VideoProxy thisVideo = new VideoProxy();
             thisVideo.database = database;
+            thisVideo.video = video;
 
             Channel uploder = await database.Channels.Get(video.UploderIdString);
             
@@ -55,6 +56,14 @@ namespace MyTube.BLL.BusinessEntities
             set
             {
                 video.Name = value;
+            }
+        }
+
+        public DateTimeOffset Uploaded
+        {
+            get
+            {
+                return video.UploadDate;
             }
         }
 

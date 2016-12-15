@@ -240,6 +240,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\MyStyles\Video.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -260,9 +261,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\MyScripts\Authentication\SignInScript.js" />
     <Content Include="Scripts\MyScripts\Authentication\SignUpScript.js" />
-    <Content Include="Scripts\MyScripts\Loaders\AuthenticatedProfileZoneLoaderScript.js" />
     <Content Include="Scripts\MyScripts\Loaders\ContentLoaderScript.js" />
     <Content Include="Scripts\MyScripts\Loaders\HomePageLoaderScript.js" />
+    <Content Include="Scripts\MyScripts\Loaders\VideoPageLoaderScript.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
@@ -285,10 +286,13 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Profile\Edit.cshtml" />
     <Content Include="Views\Video\UploadVideo.cshtml" />
+    <Content Include="Views\Video\Watch.cshtml" />
+    <Content Include="Views\Video\Similar.cshtml" />
+    <Content Include="Views\Video\Comments.cshtml" />
+    <Content Include="Views\Shared\_Pagination.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\MyStyles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
