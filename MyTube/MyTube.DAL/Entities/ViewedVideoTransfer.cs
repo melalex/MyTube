@@ -39,7 +39,7 @@ namespace MyTube.DAL.Entities
             }
             set
             {
-                Viewer = new MongoDBRef(Channel.collectionName, value);
+                Viewer = new MongoDBRef(Channel.collectionName, new ObjectId(value));
             }
         }
 
@@ -52,7 +52,7 @@ namespace MyTube.DAL.Entities
             }
             set
             {
-                ViewedVideo = new MongoDBRef(Video.collectionName, value);
+                ViewedVideo = new MongoDBRef(Video.collectionName, new ObjectId(value));
             }
         }
 

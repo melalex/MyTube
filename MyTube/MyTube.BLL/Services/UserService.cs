@@ -179,6 +179,8 @@ namespace MyTube.BLL.Services
         public async Task AddCommentAsync(CommentDTO comment)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<CommentDTO, Comment>()
+                        .ForMember(s => s.Id, s => s.Ignore())
+                        .ForMember(s => s.IdString, s => s.MapFrom(scr => scr.Id))
                         .ForMember(s => s.ComentatorIdString, s => s.MapFrom(scr => scr.CommentatorId))
                         .ForMember(s => s.DestinationVideoIdString, s => s.MapFrom(scr => scr.VideoId))
                         .ForMember(s => s.CommentDateTime, s => s.MapFrom(scr => scr.CommentDateTime))
@@ -203,6 +205,8 @@ namespace MyTube.BLL.Services
             if (existingTransfer != null)
             {
                 Mapper.Initialize(cfg => cfg.CreateMap<ViewedVideoTransferDTO, ViewedVideoTransfer>()
+                            .ForMember(s => s.Id, s => s.Ignore())
+                            .ForMember(s => s.IdString, s => s.MapFrom(scr => scr.Id))
                             .ForMember(s => s.ViewerIdString, s => s.MapFrom(scr => scr.Viewer))
                             .ForMember(s => s.ViewedVideoIdString, s => s.MapFrom(scr => scr.ViewedVideo))
                             .ForMember(s => s.Status, s => s.MapFrom(scr => (DAL.Entities.ViewStatus)scr.Status))
@@ -250,6 +254,7 @@ namespace MyTube.BLL.Services
         public async Task<ViewedVideoTransferDTO> GetVideoEstimationAsync(string channel, string video)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<ViewedVideoTransfer, ViewedVideoTransferDTO>()
+                        .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IdString))
                         .ForMember(s => s.Viewer, s => s.MapFrom(scr => scr.ViewerIdString))
                         .ForMember(s => s.ViewedVideo, s => s.MapFrom(scr => scr.ViewerIdString))
                         .ForMember(s => s.Status, s => s.MapFrom(scr => (Interfaces.ViewStatus)scr.Status))
@@ -264,6 +269,8 @@ namespace MyTube.BLL.Services
         public async Task SubscribeAsync(SubscriptionDTO subscription)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<SubscriptionDTO, Subscription>()
+                        .ForMember(s => s.Id, s => s.Ignore())
+                        .ForMember(s => s.IdString, s => s.MapFrom(scr => scr.Id))
                         .ForMember(s => s.PublisherIdString, s => s.MapFrom(scr => scr.Publisher))
                         .ForMember(s => s.SubscriberIdString, s => s.MapFrom(scr => scr.Subscriber))
                         .ForMember(s => s.StartDate, s => s.MapFrom(scr => scr.StartDate)));

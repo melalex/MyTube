@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace MyTube.DAL.Entities
             }
             set
             {
-                DestinationChannel = new MongoDBRef(Channel.collectionName, value);
+                DestinationChannel = new MongoDBRef(Channel.collectionName, new ObjectId(value));
             }
         }
 

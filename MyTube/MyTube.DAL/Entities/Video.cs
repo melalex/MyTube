@@ -46,7 +46,7 @@ namespace MyTube.DAL.Entities
             }
             set
             {
-                Uploder = new MongoDBRef(Channel.collectionName, value);
+                Uploder = new MongoDBRef(Channel.collectionName, new ObjectId(value));
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace MyTube.DAL.Entities
             }
             set
             {
-                Publisher = new MongoDBRef(Channel.collectionName, value);
+                Publisher = new MongoDBRef(Channel.collectionName, new ObjectId(value));
             }
         }
 
@@ -41,7 +42,7 @@ namespace MyTube.DAL.Entities
             }
             set
             {
-                Subscriber = new MongoDBRef(Channel.collectionName, value);
+                Subscriber = new MongoDBRef(Channel.collectionName, new ObjectId(value));
             }
         }
 

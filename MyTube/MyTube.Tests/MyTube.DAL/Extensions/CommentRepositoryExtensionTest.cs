@@ -83,7 +83,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
             try
             {
                 // Act
-                var result = await unitOfWork.Comments.GetCommentsFromVideoAsync(video1, 0, 20);
+                var result = await unitOfWork.Comments.GetCommentsFromVideoAsync(video1.IdString, 0, 20);
 
                 // Assert
                 long count = result.Count();
@@ -163,8 +163,8 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
             try
             {
                 // Act
-                await unitOfWork.Comments.DeleteCommentsFromVideoAsync(video1);
-                var result = await unitOfWork.Comments.GetCommentsFromVideoAsync(video1, 0, 20);
+                await unitOfWork.Comments.DeleteCommentsFromVideoAsync(video1.IdString);
+                var result = await unitOfWork.Comments.GetCommentsFromVideoAsync(video1.IdString, 0, 20);
 
                 // Assert
                 long count = result.Count();

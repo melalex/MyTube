@@ -14,7 +14,7 @@
         </li>
         <li>
             <a href="" class="nav-link dropdown-toggle avatar" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="@Url.Content(@Model.AvatarUri)" class="profile-image img-circle avatar" />
+                <img id="channelAvatar" src="@Url.Content(@Model.AvatarUri)" class="profile-image img-circle avatar" />
             </a>
             <ul class="dropdown-menu">
                 <li>@Html.ActionLink("Profile", "Edit", "Profile")</li>

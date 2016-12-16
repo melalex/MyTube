@@ -82,15 +82,15 @@
                 {
                     @Html.AntiForgeryToken()
                     <div class="row">
-                        <div class="col-md-2">
-                            <img id="userAvatar" />
+                        <div class="col-md-1">
+                            <img id="userAvatar" class="avatar-show"/>
                         </div>
-                        <div class="col-md-10">
-                            <textarea id="comment" name="comment" class="form-control"></textarea>
+                        <div class="col-md-11">
+                            <textarea id="comment" name="comment" class="form-control" style="min-width: 100%;"></textarea>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-offset-11 col-md-1">
+                    <div class="row" style="padding-top: 10px;">
+                        <div class="col-md-offset-10 col-md-2">
                             <a href="@Url.Action("AddComment", "Video", new { id = @Model.Id })" class="btn btn-block btn-primary" id="sendComment">Send</a>
                         </div>
                     </div>

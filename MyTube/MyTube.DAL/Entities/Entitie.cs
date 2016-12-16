@@ -24,7 +24,10 @@ namespace MyTube.DAL.Entities
             }
             set
             {
-                Id = new ObjectId(value);
+                if (value != null)
+                {
+                    Id = new ObjectId(value);
+                }
             }
         }
     }

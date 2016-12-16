@@ -18,4 +18,6 @@ $(function () {
     LoadComments();
     LoadSimilarVideos();
     $("#sendComment").click(AddComment);
+    var avaterSrc = $("#channelAvatar").attr("src");
+    $("#userAvatar").attr("src", avaterSrc);
 });

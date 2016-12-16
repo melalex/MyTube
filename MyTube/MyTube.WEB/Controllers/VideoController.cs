@@ -67,6 +67,11 @@ namespace MyTube.WEB.Controllers
         // GET: Video/Watch/id
         public async Task<ActionResult> Watch(string id)
         {
+            if (id == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             VideoProxy video = await userService.GetVideoAsync(id);
             
             if (video == null)
@@ -100,6 +105,9 @@ namespace MyTube.WEB.Controllers
         }
 
         // POST: Video/AddComment/id
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddComment(string id, string comment)
         {
             CommentDTO newComment = new CommentDTO
