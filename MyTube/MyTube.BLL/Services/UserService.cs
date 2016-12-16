@@ -176,7 +176,7 @@ namespace MyTube.BLL.Services
             return await dataStrore.Comments.CommentsCountFromVideoAsync(videoId);
         }
 
-        public async void AddCommentAsync(CommentDTO comment)
+        public async Task AddCommentAsync(CommentDTO comment)
         {
             Mapper.Initialize(cfg => cfg.CreateMap<CommentDTO, Comment>()
                         .ForMember(s => s.ComentatorIdString, s => s.MapFrom(scr => scr.CommentatorId))

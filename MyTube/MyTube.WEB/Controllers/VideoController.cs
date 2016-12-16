@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using MyTube.BLL.BusinessEntities;
+using MyTube.BLL.DTO;
 using MyTube.BLL.Interfaces;
 using MyTube.WEB.Models;
 using MyTube.WEB.Models.Video;
@@ -84,13 +85,32 @@ namespace MyTube.WEB.Controllers
             return PartialView(similarVideos);
         }
 
-        public async Task<ActionResult> Comments(string id, int page)
+        // GET: Video/Comments/parametr/page
+        public async Task<ActionResult> Comments(string parametr, int page)
         {
-            var comments = await userService.GetCommentsAsync(id, (page - 1) * commentsOnPage, commentsOnPage);
-            long commentCount = await userService.GetCommentsCountAsync(id);
+            var comments = await userService.GetCommentsAsync(parametr, (page - 1) * commentsOnPage, commentsOnPage);
+            long commentCount = await userService.GetCommentsCountAsync(parametr);
+            ViewBag.CommentCount = commentCount;
             ViewBag.PageCount = Math.Ceiling(1.0 * commentCount / commentsOnPage);
             ViewBag.Page = page;
+            ViewBag.Action = "Comments";
+            ViewBag.Controller = "Video";
+            ViewBag.Parametr = parametr;
             return PartialView(comments);
+        }
+
+        // POST: Video/AddComment/id
+        public async Task<ActionResult> AddComment(string id, string comment)
+        {
+            CommentDTO newComment = new CommentDTO
+            {
+                CommentatorId = User.Identity.GetUserId(),
+                CommentDateTime = DateTimeOffset.Now,
+                CommentText = comment,
+                VideoId = id,
+            };
+            await userService.AddCommentAsync(newComment);
+            return Json(new { status = "OK" });
         }
     }
 }

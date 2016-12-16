@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<MyTube.BLL.DTO.CommentDTO>
 
+<h3>@ViewBag.CommentCount comments</h3>
+
 @foreach (MyTube.BLL.DTO.CommentDTO comment in Model)
 {
     <div class="row">

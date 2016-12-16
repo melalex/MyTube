@@ -1,4 +1,5 @@
-﻿@model MyTube.BLL.BusinessEntities.VideoProxy
+﻿@using Microsoft.AspNet.Identity
+@model MyTube.BLL.BusinessEntities.VideoProxy
 
 @{
     ViewBag.Title = "Watch";
@@ -75,23 +76,27 @@
         </dl>
         <hr />
         <div class="padding-top-20">
-            @using (Html.BeginForm())
+            @if (Request.IsAuthenticated)
             {
-                <div class="row">
-                    <div class="col-md-2">
-                        <img id="userAvatar" />
+                using (Html.BeginForm(null, null, FormMethod.Post, new { id = "commentForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img id="userAvatar" />
+                        </div>
+                        <div class="col-md-10">
+                            <textarea id="comment" name="comment" class="form-control"></textarea>
+                        </div>
                     </div>
-                    <div class="col-md-10">
-                        <textarea class="form-control"></textarea>
+                    <div class="row">
+                        <div class="col-md-offset-11 col-md-1">
+                            <a href="@Url.Action("AddComment", "Video", new { id = @Model.Id })" class="btn btn-block btn-primary" id="sendComment">Send</a>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-offset-11 col-md-1">
-                        <a href="#" class="btn btn-block btn-primary" id="sendComment">Send</a>
-                    </div>
-                </div>
+                }
             }
-            <div id="comments" data-comments-request="@Url.Action("Comments", "Video", new { id = Model.Id })"></div>
+            <div id="paginationDestination" data-pagination-request="@Url.Action("Comments", "Video", new { parametr = Model.Id, page = 1 })"></div>
         </div>
     </div>
     <div id="similarVideos" class="col-md-4 white-content" data-similar-request="@Url.Action("Similar", "Video", new { id = Model.Id })" >
