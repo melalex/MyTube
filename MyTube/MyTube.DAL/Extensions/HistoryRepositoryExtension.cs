@@ -41,5 +41,40 @@ namespace MyTube.DAL.Extensions
                 );
             return await history.Collection.Find(filter1 & filter2).SingleOrDefaultAsync();
         }
+
+        public static async Task DeleteHistory(
+            this IRepositotory<ViewedVideoTransfer> history, string video
+            )
+        {
+            var filter = Builders<ViewedVideoTransfer>.Filter.Eq(
+                s => s.ViewedVideo,
+                new MongoDBRef(Video.collectionName, new ObjectId(video))
+                );
+            await history.Collection.DeleteManyAsync(filter);
+        }
+
+        public static async Task<bool> IsWatched(
+            this IRepositotory<ViewingHistory> history, string ip, string video
+            )
+        {
+            var filter1 = Builders<ViewingHistory>.Filter.Eq(s => s.UserHostAddress, ip);
+            var filter2 = Builders<ViewingHistory>.Filter.Eq(
+                s => s.DestinationVideo,
+                new MongoDBRef(Video.collectionName, new ObjectId(video))
+                );
+            long count = await history.Collection.Find(filter1 & filter2).CountAsync();
+            return count > 0;
+        }
+
+        public static async Task DeleteHistory(
+            this IRepositotory<ViewingHistory> history, string video
+            )
+        {
+            var filter = Builders<ViewingHistory>.Filter.Eq(
+                s => s.DestinationVideo,
+                new MongoDBRef(Video.collectionName, new ObjectId(video))
+                );
+            await history.Collection.DeleteManyAsync(filter);
+        }
     }
 }

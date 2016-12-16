@@ -125,13 +125,22 @@ namespace MyTube.BLL.Services
             return createdVideoId;
         }
 
-        public async Task<VideoProxy> GetVideoAsync(string id)
+        public async Task<VideoProxy> GetVideoAsync(string id, string UserHostAddress = null)
         {
             VideoProxy result = null;
             Video video = await dataStrore.Videos.Get(id);
             if (video != null)
             {
                 result = await VideoProxy.Create(dataStrore, video);
+                if (UserHostAddress != null)
+                {
+                    bool isWatched = await dataStrore.ViewingHistories.IsWatched(UserHostAddress, id);
+                    if (!isWatched)
+                    {
+                        dataStrore.Videos.AddView(id);
+                        result.Views++;
+                    }
+                }
             }
             return result;
         }
@@ -193,16 +202,26 @@ namespace MyTube.BLL.Services
         {
             fileStore.DeletePoster(video.PosterUri);
             fileStore.DeleteVideo(video.VideoUri);
+            await dataStrore.ViewedVideoTransfers.DeleteHistory(video.Id);
+            await dataStrore.ViewingHistories.DeleteHistory(video.Id);
             await dataStrore.Comments.DeleteCommentsFromVideoAsync(video.Id);
+            await dataStrore.Videos.DeleteAsync(video.Id);
         }
 
-        public async void EstimateVideoAsync(Video video, ViewedVideoTransferDTO transfer)
+        public async void EstimateVideoAsync(ViewedVideoTransferDTO transfer)
         {
+            if (transfer.Status == Interfaces.ViewStatus.IGNORE)
+            {
+                return;
+            }
+
             ViewedVideoTransfer existingTransfer = await dataStrore.ViewedVideoTransfers.GetByChannelVideoAsync(
                 transfer.Viewer, transfer.ViewedVideo
                 );
 
-            if (existingTransfer != null)
+            Interfaces.ViewStatus existingViewStatus = Interfaces.ViewStatus.IGNORE;
+
+            if (existingTransfer == null)
             {
                 Mapper.Initialize(cfg => cfg.CreateMap<ViewedVideoTransferDTO, ViewedVideoTransfer>()
                             .ForMember(s => s.Id, s => s.Ignore())
@@ -218,37 +237,25 @@ namespace MyTube.BLL.Services
             }
             else
             {
-                switch (existingTransfer.Status)
-                {
-                    case DAL.Entities.ViewStatus.DISLIKE:
-                        video.Dislikes--;
-                        video.Views--;
-                        break;
-                    case DAL.Entities.ViewStatus.LIKE:
-                        video.Likes--;
-                        video.Views--;
-                        break;
-                    default:
-                        video.Views--;
-                        break;
-                }
+                existingViewStatus = (Interfaces.ViewStatus)existingTransfer.Status;
             }
-
-            switch (transfer.Status)
+            
+            if (existingViewStatus == Interfaces.ViewStatus.LIKE && transfer.Status == Interfaces.ViewStatus.DISLIKE)
             {
-                case Interfaces.ViewStatus.DISLIKE:
-                    video.Dislikes++;
-                    video.Views++;
-                    break;
-                case Interfaces.ViewStatus.LIKE:
-                    video.Likes++;
-                    video.Views++;
-                    break;
-                default:
-                    video.Views++;
-                    break;
+                dataStrore.Videos.RemoveLikeAndAddDislike(transfer.ViewedVideo);
             }
-            await dataStrore.Videos.UpdateAsync(video);
+            else if (existingViewStatus == Interfaces.ViewStatus.DISLIKE && transfer.Status == Interfaces.ViewStatus.LIKE)
+            {
+                dataStrore.Videos.RemoveDislikeAndAddLike(transfer.ViewedVideo);
+            }
+            else if (transfer.Status == Interfaces.ViewStatus.LIKE)
+            {
+                dataStrore.Videos.AddLike(transfer.ViewedVideo);
+            }
+            else if (transfer.Status == Interfaces.ViewStatus.DISLIKE)
+            {
+                dataStrore.Videos.AddDislike(transfer.ViewedVideo);
+            }
         }
 
         public async Task<ViewedVideoTransferDTO> GetVideoEstimationAsync(string channel, string video)

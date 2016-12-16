@@ -72,7 +72,7 @@ namespace MyTube.WEB.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            VideoProxy video = await userService.GetVideoAsync(id);
+            VideoProxy video = await userService.GetVideoAsync(id, Request.UserHostAddress);
             
             if (video == null)
             {

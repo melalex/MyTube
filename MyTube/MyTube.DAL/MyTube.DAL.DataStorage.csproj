@@ -59,6 +59,7 @@
     <Compile Include="Entities\Video.cs" />
     <Compile Include="Entities\Entitie.cs" />
     <Compile Include="Entities\ViewedVideoTransfer.cs" />
+    <Compile Include="Entities\ViewingHistory.cs" />
     <Compile Include="Extensions\ChannelRepositoryExtension.cs" />
     <Compile Include="Extensions\CommentRepositoryExtension.cs" />
     <Compile Include="Extensions\HistoryRepositoryExtension.cs" />

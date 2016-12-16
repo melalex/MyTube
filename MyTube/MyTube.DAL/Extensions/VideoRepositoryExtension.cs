@@ -59,5 +59,54 @@ namespace MyTube.DAL.Extensions
                 .Take(limit)
                 .ToListAsync();
         }
+
+        public static async void AddView(this IRepositotory<Video> videos, string video)
+        {
+            var filter = Builders<Video>.Filter.Eq(v => v.Id, new ObjectId(video));
+            var update = Builders<Video>.Update.Inc(v => v.Views, 1);
+            await videos.Collection.FindOneAndUpdateAsync(filter, update);
+        }
+
+        public static async void AddLike(this IRepositotory<Video> videos, string video)
+        {
+            var filter = Builders<Video>.Filter.Eq(v => v.Id, new ObjectId(video));
+            var update = Builders<Video>.Update.Inc(v => v.Likes, 1);
+            await videos.Collection.FindOneAndUpdateAsync(filter, update);
+        }
+
+        public static async void RemoveLike(this IRepositotory<Video> videos, string video)
+        {
+            var filter = Builders<Video>.Filter.Eq(v => v.Id, new ObjectId(video));
+            var update = Builders<Video>.Update.Inc(v => v.Likes, -1);
+            await videos.Collection.FindOneAndUpdateAsync(filter, update);
+        }
+
+        public static async void RemoveLikeAndAddDislike(this IRepositotory<Video> videos, string video)
+        {
+            var filter = Builders<Video>.Filter.Eq(v => v.Id, new ObjectId(video));
+            var update = Builders<Video>.Update.Inc(v => v.Likes, -1).Inc(v => v.Dislikes, 1);
+            await videos.Collection.FindOneAndUpdateAsync(filter, update);
+        }
+
+        public static async void AddDislike(this IRepositotory<Video> videos, string video)
+        {
+            var filter = Builders<Video>.Filter.Eq(v => v.Id, new ObjectId(video));
+            var update = Builders<Video>.Update.Inc(v => v.Dislikes, 1);
+            await videos.Collection.FindOneAndUpdateAsync(filter, update);
+        }
+
+        public static async void RemoveDislike(this IRepositotory<Video> videos, string video)
+        {
+            var filter = Builders<Video>.Filter.Eq(v => v.Id, new ObjectId(video));
+            var update = Builders<Video>.Update.Inc(v => v.Dislikes, -1);
+            await videos.Collection.FindOneAndUpdateAsync(filter, update);
+        }
+
+        public static async void RemoveDislikeAndAddLike(this IRepositotory<Video> videos, string video)
+        {
+            var filter = Builders<Video>.Filter.Eq(v => v.Id, new ObjectId(video));
+            var update = Builders<Video>.Update.Inc(v => v.Dislikes, -1).Inc(v => v.Likes, 1);
+            await videos.Collection.FindOneAndUpdateAsync(filter, update);
+        }
     }
 }

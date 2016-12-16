@@ -21,6 +21,7 @@ namespace MyTube.DAL.Repositories
         private MongoRepository<Notification> _notifications = null;
         private MongoRepository<Subscription> _subscriptions = null;
         private MongoRepository<ViewedVideoTransfer> _viewedVideoTransfers = null;
+        private MongoRepository<ViewingHistory> _viewingHistories = null;
 
         public MongoUnitOfWork(MongoClient mongoClient)
         {
@@ -96,6 +97,18 @@ namespace MyTube.DAL.Repositories
                     _viewedVideoTransfers = new MongoRepository<ViewedVideoTransfer>(database, ViewedVideoTransfer.collectionName);
                 }
                 return _viewedVideoTransfers;
+            }
+        }
+
+        public IRepositotory<ViewingHistory> ViewingHistories
+        {
+            get
+            {
+                if (_viewingHistories == null)
+                {
+                    _viewingHistories = new MongoRepository<ViewingHistory>(database, ViewingHistory.collectionName);
+                }
+                return _viewingHistories;
             }
         }
     }

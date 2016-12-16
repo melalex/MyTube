@@ -34,13 +34,13 @@ namespace MyTube.BLL.Interfaces
             string posterPath
             );
 
-        Task<VideoProxy> GetVideoAsync(string id);
+        Task<VideoProxy> GetVideoAsync(string id, string UserHostAddress = null);
         Task<IEnumerable<VideoProxy>> GetSimilarVideosAsync(VideoProxy video, int skip, int limit);
         Task<IEnumerable<VideoProxy>> GetPopularVideosAsync(int skip, int limit);
         Task<IEnumerable<CommentDTO>> GetCommentsAsync(string videoId, int skip, int limit);
         Task<long> GetCommentsCountAsync(string videoId);
         Task AddCommentAsync(CommentDTO comment);
-        void EstimateVideoAsync(Video video, ViewedVideoTransferDTO transfer);
+        void EstimateVideoAsync(ViewedVideoTransferDTO transfer);
         Task<ViewedVideoTransferDTO> GetVideoEstimationAsync(string channel, string video);
         
         Task SubscribeAsync(SubscriptionDTO subscription);
