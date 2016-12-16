@@ -20,9 +20,10 @@ namespace MyTube.WEB
             );
 
             routes.MapRoute(
-                name: "Comments",
-                url: "{controller}/{action}/{id}/{page}",
-                defaults: new { controller = "Video", action = "Comments", page = 1 }
+                name: "Pagination",
+                url: "{controller}/{action}/{parametr}/{page}",
+                defaults: new { page = 1 },
+                constraints: new { page = @"\d+" }
             );
         }
     }
