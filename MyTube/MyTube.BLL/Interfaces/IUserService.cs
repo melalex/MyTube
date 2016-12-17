@@ -60,6 +60,8 @@ namespace MyTube.BLL.Interfaces
         Task UnsubscribeAsync(string publisher, string subscriber);
         Task<long> SubscribersCountAsync(string channel);
         Task<bool> IsSubscriberAsync(string publisher, string subscriber);
+        Task<IEnumerable<ChannelProxy>> SubscriptionsAsync(string channel, int skip, int limit);
+        Task<long> SubscriptionsCountAsync(string channel);
 
 
 

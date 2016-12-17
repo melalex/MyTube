@@ -231,6 +231,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account\AccountViewModels.cs" />
+    <Compile Include="Models\Channel\ChannelThumbnailViewModel.cs" />
     <Compile Include="Models\Channel\ChannelViewModel.cs" />
     <Compile Include="Models\FileUploader.cs" />
     <Compile Include="Models\GlobalVariables.cs" />
@@ -298,6 +299,8 @@
     <Content Include="Views\Channel\Videos.cshtml" />
     <Content Include="Views\Shared\_VideoThumbnail.cshtml" />
     <Content Include="Views\Search\Search.cshtml" />
+    <Content Include="Views\Channel\Subscriptions.cshtml" />
+    <Content Include="Views\Shared\_ChannelThumbnail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

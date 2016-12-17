@@ -70,7 +70,7 @@ namespace MyTube.BLL.BusinessEntities
                     .ForMember(s => s.Id, s => s.MapFrom(scr => scr.IdString))
                     .ForMember(s => s.StartDate, s => s.MapFrom(scr => scr.StartDate)));
 
-            var result = await database.Subscriptions.GetSubscribtionsAsync(channel, skip, limit);
+            var result = await database.Subscriptions.GetSubscribtionsAsync(channel.IdString, skip, limit);
             return Mapper.Map<IEnumerable<Subscription>, List<SubscriptionDTO>>(result);
         }
 

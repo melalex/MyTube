@@ -28,10 +28,13 @@ namespace MyTube.DAL.Extensions
         }
 
         public static async Task<IEnumerable<Subscription>> GetSubscribtionsAsync(
-            this IRepositotory<Subscription> subscription, Channel channel, int skip, int limit
+            this IRepositotory<Subscription> subscription, string channel, int skip, int limit
             )
         {
-            var filter = Builders<Subscription>.Filter.Eq(s => s.Subscriber, channel.DBRef);
+            var filter = Builders<Subscription>.Filter.Eq(
+                s => s.Subscriber,
+                new MongoDBRef(Channel.collectionName, new ObjectId(channel))
+                );
             var options = new FindOptions<Subscription>
             {
                 Limit = limit,
@@ -39,6 +42,17 @@ namespace MyTube.DAL.Extensions
             };
             var task = await subscription.Collection.FindAsync(filter, options);
             return await task.ToListAsync();
+        }
+
+        public static async Task<long> GetSubscribtionsCountAsync(
+            this IRepositotory<Subscription> subscription, string channel
+            )
+        {
+            var filter = Builders<Subscription>.Filter.Eq(
+                s => s.Subscriber,
+                new MongoDBRef(Channel.collectionName, new ObjectId(channel))
+                );
+            return await subscription.Collection.Find(filter).CountAsync();
         }
 
         public static async Task UnSubscribeAsync(

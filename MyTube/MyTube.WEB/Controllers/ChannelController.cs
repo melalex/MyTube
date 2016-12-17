@@ -37,7 +37,7 @@ namespace MyTube.WEB.Controllers
             return View(channel);
         }
 
-        // GET: Channel/Videos/parametr/page
+        // GET: Channel/Videos/page
         public async Task<ActionResult> Videos(string parametr, int page)
         {
             var videos = await userService.GetVideosFromChannelAsync(parametr, (page - 1) * videosOnPage, videosOnPage);
@@ -49,6 +49,34 @@ namespace MyTube.WEB.Controllers
             ViewBag.Controller = "Channel";
             ViewBag.Parametr = parametr;
             return PartialView(videos);
+        }
+
+        // GET: Channel/Subscriptions/page
+        [Authorize]
+        public async Task<ActionResult> Subscriptions(int page = 1)
+        {
+            string currentUser = User.Identity.GetUserId();
+            var subscriptions = await userService.SubscriptionsAsync(currentUser, (page - 1) * videosOnPage, videosOnPage);
+
+            var tasks = subscriptions.Select(async s => 
+            {
+                return new ChannelThumbnailViewModel
+                {
+                    Channel = s,
+                    SubscribersCount = await userService.SubscribersCountAsync(s.Id),
+                    VideosCount = await userService.GetVideosFromChannelCountAsync(s.Id),
+                };
+            }).ToList();
+            var subscriptionsViewModels = await Task.WhenAll(tasks);
+
+            long subscriptionsCount = await userService.SubscriptionsCountAsync(currentUser);
+            ViewBag.SubscriptionsCount = subscriptionsCount;
+            ViewBag.PageCount = Math.Ceiling(1.0 * subscriptionsCount / videosOnPage);
+            ViewBag.Page = page;
+            ViewBag.Action = "Subscriptions";
+            ViewBag.Controller = "Channel";
+            ViewBag.Parametr = null;
+            return View(subscriptions);
         }
 
         // POST: Channel/Subscribe/id

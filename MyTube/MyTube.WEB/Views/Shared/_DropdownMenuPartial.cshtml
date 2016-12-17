@@ -5,11 +5,41 @@
             <span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span>
         </a>
         <ul class="dropdown-menu">
-            <li><a href="#">Inbox</a></li>
-            <li><a href="#">Drafts</a></li>
-            <li><a href="#">Sent Items</a></li>
+            <li>
+                <a href="@Url.Action("Index", "Home")">
+                    <span class="glyphicon glyphicon-home"></span> Main
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Popular", "Search", new { page = 1 })">
+                    <span class="glyphicon glyphicon-fire"></span> In Tread
+                </a>
+            </li>
+            
+            @if (Request.IsAuthenticated)
+            {
+                <li>
+                    <a href="@Url.Action("ChannelProfile", "Channel", new { id = User.Identity.GetUserId() })">
+                        <span class="glyphicon glyphicon-user"></span> My Channel
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Subscriptions", "Channel", new { page = 1 })">
+                        <span class="glyphicon glyphicon-film"></span> Subscribtions
+                    </a>
+                </li>
+            }
+
             <li class="divider"></li>
-            <li><a href="#">Trash</a></li>
+            <li class="dropdown-header">Categories</li>
+            
+            @foreach (string category in MyTube.WEB.Models.GlobalVariables.Categories)
+            {
+                <li>
+                    @Html.ActionLink(category, "Category", "Search", new { parametr = category, page = 1 }, null)
+                </li>
+            }
+
         </ul>
     </li>
 </ul>

@@ -1,0 +1,16 @@
+﻿@model IEnumerable<MyTube.WEB.Models.Channel.ChannelThumbnailViewModel>
+
+@{
+    ViewBag.Title = "Subscriptions";
+}
+
+<h2>@ViewBag.SubscriptionsCount subscriptions</h2>
+
+<div class="row">
+    @foreach (MyTube.WEB.Models.Channel.ChannelThumbnailViewModel channel in Model)
+    {
+        @Html.Partial("_ChannelThumbnail", channel)
+    }
+</div>
+
+@Html.Partial("_Pagination")

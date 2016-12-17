@@ -371,6 +371,21 @@ namespace MyTube.BLL.Services
         {
             return await dataStrore.Subscriptions.IsSubscriberAsync(publisher, subscriber);
         }
+
+        public async Task<IEnumerable<ChannelProxy>> SubscriptionsAsync(string channel, int skip, int limit)
+        {
+            var subscriptions = await dataStrore.Subscriptions.GetSubscribtionsAsync(channel, skip, limit);
+            var tasks = subscriptions.Select(async x => 
+            {
+                return await GetChannelAsync(x.PublisherIdString);
+            }).ToList();
+            return await Task.WhenAll(tasks);
+        }
+
+        public async Task<long> SubscriptionsCountAsync(string channel)
+        {
+            return await dataStrore.Subscriptions.GetSubscribtionsCountAsync(channel);
+        }
         #endregion
 
         #region ReportLogic

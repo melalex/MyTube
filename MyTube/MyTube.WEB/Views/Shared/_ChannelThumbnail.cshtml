@@ -1,0 +1,12 @@
+﻿@model MyTube.WEB.Models.Channel.ChannelThumbnailViewModel
+
+<div class="col-lg-3 col-md-4 co-xs-6 thumb">
+    <a href="@Url.Action("ChannelProfile", "Channel", new { id = Model.Channel.Id })" class="thumbnail color-text">
+        <img src="@Url.Content(Model.Channel.AvatarUri)" class="img-show" />
+        <h3>@Model.Channel.Username</h3>
+        <p>
+            @Model.VideosCount videos<br />
+            @Model.SubscribersCount subscribers
+        </p>
+    </a>
+</div>
