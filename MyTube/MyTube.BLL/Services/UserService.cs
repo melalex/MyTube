@@ -125,24 +125,42 @@ namespace MyTube.BLL.Services
             return createdVideoId;
         }
 
-        public async Task<VideoProxy> GetVideoAsync(string id, string UserHostAddress = null)
+        public async Task<VideoProxy> GetVideoAsync(string id, string userHostAddress = null)
         {
             VideoProxy result = null;
             Video video = await dataStrore.Videos.Get(id);
             if (video != null)
             {
                 result = await VideoProxy.Create(dataStrore, video);
-                if (UserHostAddress != null)
+                if (userHostAddress != null)
                 {
-                    bool isWatched = await dataStrore.ViewingHistories.IsWatched(UserHostAddress, id);
+                    bool isWatched = await dataStrore.ViewingHistories.IsWatched(userHostAddress, id);
                     if (!isWatched)
                     {
                         dataStrore.Videos.AddView(id);
                         result.Views++;
+                        ViewingHistory item = new ViewingHistory
+                        {
+                            UserHostAddress = userHostAddress,
+                            DestinationVideoIdString = id,
+                        };
+                        dataStrore.ViewingHistories.CreateAsync(item);
                     }
                 }
             }
             return result;
+        }
+
+        public async Task<IEnumerable<VideoProxy>> GetVideosFromChannelAsync(string channel, int skip, int limit)
+        {
+            var videos = await dataStrore.Videos.GetVideosFromChannelAsync(channel, skip, limit);
+            var tasks = videos.Select(async x => await VideoProxy.Create(dataStrore, x)).ToList();
+            return await Task.WhenAll(tasks);
+        }
+
+        public async Task<long> GetVideosFromChannelCountAsync(string channel)
+        {
+            return await dataStrore.Videos.GetVideosFromChannelCountAsync(channel);
         }
 
         public async Task<IEnumerable<VideoProxy>> GetSimilarVideosAsync(VideoProxy video, int skip, int limit)
@@ -208,7 +226,7 @@ namespace MyTube.BLL.Services
             await dataStrore.Videos.DeleteAsync(video.Id);
         }
 
-        public async void EstimateVideoAsync(ViewedVideoTransferDTO transfer)
+        public async Task EstimateVideoAsync(ViewedVideoTransferDTO transfer)
         {
             if (transfer.Status == Interfaces.ViewStatus.IGNORE)
             {
@@ -221,22 +239,28 @@ namespace MyTube.BLL.Services
 
             Interfaces.ViewStatus existingViewStatus = Interfaces.ViewStatus.IGNORE;
 
-            if (existingTransfer == null)
-            {
-                Mapper.Initialize(cfg => cfg.CreateMap<ViewedVideoTransferDTO, ViewedVideoTransfer>()
+            Mapper.Initialize(cfg => cfg.CreateMap<ViewedVideoTransferDTO, ViewedVideoTransfer>()
                             .ForMember(s => s.Id, s => s.Ignore())
+                            .ForMember(s => s.ViewedVideo, s => s.Ignore())
+                            .ForMember(s => s.Viewer, s => s.Ignore())
                             .ForMember(s => s.IdString, s => s.MapFrom(scr => scr.Id))
                             .ForMember(s => s.ViewerIdString, s => s.MapFrom(scr => scr.Viewer))
                             .ForMember(s => s.ViewedVideoIdString, s => s.MapFrom(scr => scr.ViewedVideo))
                             .ForMember(s => s.Status, s => s.MapFrom(scr => (DAL.Entities.ViewStatus)scr.Status))
                             .ForMember(s => s.ShowDateTime, s => s.MapFrom(scr => scr.ShowDateTime))
                             );
+
+            if (existingTransfer == null)
+            {
                 await dataStrore.ViewedVideoTransfers.CreateAsync(
                     Mapper.Map<ViewedVideoTransferDTO, ViewedVideoTransfer>(transfer)
                     );
             }
             else
             {
+                await dataStrore.ViewedVideoTransfers.UpdateAsync(
+                    Mapper.Map<ViewedVideoTransferDTO, ViewedVideoTransfer>(transfer)
+                    );
                 existingViewStatus = (Interfaces.ViewStatus)existingTransfer.Status;
             }
             
@@ -248,11 +272,11 @@ namespace MyTube.BLL.Services
             {
                 dataStrore.Videos.RemoveDislikeAndAddLike(transfer.ViewedVideo);
             }
-            else if (transfer.Status == Interfaces.ViewStatus.LIKE)
+            else if (existingViewStatus == Interfaces.ViewStatus.IGNORE && transfer.Status == Interfaces.ViewStatus.LIKE)
             {
                 dataStrore.Videos.AddLike(transfer.ViewedVideo);
             }
-            else if (transfer.Status == Interfaces.ViewStatus.DISLIKE)
+            else if (existingViewStatus == Interfaces.ViewStatus.IGNORE && transfer.Status == Interfaces.ViewStatus.DISLIKE)
             {
                 dataStrore.Videos.AddDislike(transfer.ViewedVideo);
             }
@@ -277,6 +301,8 @@ namespace MyTube.BLL.Services
         {
             Mapper.Initialize(cfg => cfg.CreateMap<SubscriptionDTO, Subscription>()
                         .ForMember(s => s.Id, s => s.Ignore())
+                        .ForMember(s => s.Publisher, s => s.Ignore())
+                        .ForMember(s => s.Subscriber, s => s.Ignore())
                         .ForMember(s => s.IdString, s => s.MapFrom(scr => scr.Id))
                         .ForMember(s => s.PublisherIdString, s => s.MapFrom(scr => scr.Publisher))
                         .ForMember(s => s.SubscriberIdString, s => s.MapFrom(scr => scr.Subscriber))
@@ -288,9 +314,19 @@ namespace MyTube.BLL.Services
             }
         }
 
-        public async Task UnsubscribeAsync(string subscriptionId)
+        public async Task UnsubscribeAsync(string publisher, string subscriber)
         {
-            await dataStrore.Subscriptions.DeleteAsync(subscriptionId);
+            await dataStrore.Subscriptions.UnSubscribeAsync(publisher, subscriber);
+        }
+
+        public async Task<long> SubscribersCountAsync(string channel)
+        {
+            return await dataStrore.Subscriptions.GetSubscribersCountAsync(channel);
+        }
+
+        public async Task<bool> IsSubscriberAsync(string publisher, string subscriber)
+        {
+            return await dataStrore.Subscriptions.IsSubscriberAsync(publisher, subscriber);
         }
         #endregion
 

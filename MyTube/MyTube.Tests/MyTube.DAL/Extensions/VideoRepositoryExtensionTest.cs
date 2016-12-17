@@ -40,7 +40,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Name = "searchStr",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -57,7 +57,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description searchStr asd",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -74,7 +74,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -92,7 +92,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -151,7 +151,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Name = "searchStr",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -168,7 +168,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description searchStr asd",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -185,7 +185,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -203,7 +203,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {

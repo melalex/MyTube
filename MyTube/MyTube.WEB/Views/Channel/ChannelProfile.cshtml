@@ -1,0 +1,49 @@
+﻿@model MyTube.WEB.Models.Channel.ChannelViewModel
+
+@{
+    ViewBag.Title = "Channel Profile";
+}
+
+<h2>Channel Profile</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <img src="@Model.Channel.AvatarUri" class="img-show" />
+    </div>
+    <div class="col-md-9">
+        <h1>@Model.Channel.Username</h1>
+        <p id="subscribersCount" data-subscribers-count="@Model.SubscribersCount">@Model.SubscribersCount subscribers</p>
+
+        @if (!Model.IsMyChannel && !Model.IsSubscriber)
+        {
+            using (Html.BeginForm(null, null, FormMethod.Post, new { id = "subscribeForm" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <a id="subscribe" href="@Url.Action("Subscribe", "Videos", new { id = Model.Channel.Id })" class="btn btn-default" data-alt-request="@Url.Action("Unsubscribe", "Videos", new { id = Model.Channel.Id })">
+                    Subscribe
+                </a>
+            }
+        }
+        else if (!Model.IsMyChannel)
+        {
+            using (Html.BeginForm(null, null, FormMethod.Post, new { id = "unsubscribeForm" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <a id="unsubscribe" href="@Url.Action("Unsubscribe", "Videos", new { id = Model.Channel.Id })" class="btn btn-default" data-alt-request="@Url.Action("Subscribe", "Videos", new { id = Model.Channel.Id })">
+                    Unsubscribe
+                </a>
+            }
+        }
+
+    </div>
+</div>
+
+<div id="paginationDestination" data-pagination-request="@Url.Action("Comments", "Video", new { parametr = Model.Channel.Id, page = 1 })"></div>
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/ChannelPageLoader");
+}

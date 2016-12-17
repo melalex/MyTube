@@ -20,7 +20,7 @@ namespace MyTube.DAL.Entities
 
         public string Description { get; set; }
 
-        public MongoDBRef Uploder { get; set; }
+        public MongoDBRef Uploader { get; set; }
 
         public DateTimeOffset UploadDate { get; set; }
 
@@ -42,11 +42,11 @@ namespace MyTube.DAL.Entities
         {
             get
             {
-                return Uploder.Id.ToString();
+                return Uploader.Id.ToString();
             }
             set
             {
-                Uploder = new MongoDBRef(Channel.collectionName, new ObjectId(value));
+                Uploader = new MongoDBRef(Channel.collectionName, new ObjectId(value));
             }
         }
 

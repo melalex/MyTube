@@ -3,6 +3,7 @@ using MyTube.BLL.BusinessEntities;
 using MyTube.BLL.DTO;
 using MyTube.BLL.Interfaces;
 using MyTube.WEB.Models;
+using MyTube.WEB.Models.Channel;
 using MyTube.WEB.Models.Video;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,11 @@ namespace MyTube.WEB.Controllers
             {
                 throw new HttpException(404, "Video does not exist");
             }
-            
+
+            string currentUser = User.Identity.GetUserId();
+            ViewBag.IsMyChannel = currentUser == video.UploaderId;
+            ViewBag.IsSubscriber = await userService.IsSubscriberAsync(id, currentUser);
+
             return View(video);
         }
 
@@ -118,6 +123,23 @@ namespace MyTube.WEB.Controllers
                 VideoId = id,
             };
             await userService.AddCommentAsync(newComment);
+            return Json(new { status = "OK" });
+        }
+
+        // POST: Video/Estimate/id
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult Estimate(string id, int status)
+        {
+            ViewedVideoTransferDTO transfer = new ViewedVideoTransferDTO
+            {
+                Status = (ViewStatus)status,
+                ViewedVideo = id,
+                Viewer = User.Identity.GetUserId(),
+                ShowDateTime = DateTimeOffset.Now,
+            };
+            userService.EstimateVideoAsync(transfer);
             return Json(new { status = "OK" });
         }
     }

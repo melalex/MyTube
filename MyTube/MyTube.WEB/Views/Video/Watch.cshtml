@@ -26,31 +26,68 @@
         </div>
         <div class="row">
             <div class="col-md-1">
-                <img src="@Url.Content(@Model.UploderAvatarUri)" class="profile-image avatar-show"/>
+                <a href="@Url.Action("ChannelProfile", "Channel", new { id = Model.UploaderId })">
+                    <img src="@Url.Content(@Model.UploderAvatarUri)" class="profile-image avatar-show" />
+                </a>
             </div>
             <div class="col-md-2">
-                <p><b>@Model.UploderUsername</b></p>
-                <a href="#" class="btn btn-default">Subscribe</a>
+                <a href="@Url.Action("ChannelProfile", "Channel", new { id = Model.UploaderId })" class="color-text">
+                    <p><b>@Model.UploderUsername</b></p>
+                </a>
+
+                @if (!ViewBag.IsMyChannel && !ViewBag.IsSubscriber)
+                {
+                    using (Html.BeginForm(null, null, FormMethod.Post, new { id = "subscribeForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <a id="subscribe" href="@Url.Action("Subscribe", "Videos", new { id = Model.UploaderId })" class="btn btn-default" data-alt-request="@Url.Action("Unsubscribe", "Videos", new { id = Model.UploaderId })">
+                            Subscribe
+                        </a>
+                    }
+                }
+                else if (!ViewBag.IsMyChannel)
+                {
+                    using (Html.BeginForm(null, null, FormMethod.Post, new { id = "unsubscribeForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <a id="unsubscribe" href="@Url.Action("Unsubscribe", "Videos", new { id = Model.UploaderId })" class="btn btn-default" data-alt-request="@Url.Action("Subscribe", "Videos", new { id = Model.UploaderId })">
+                            Unsubscribe
+                        </a>
+                    }
+                }
+
             </div>
             <div class="col-md-offset-10">
                 <p>@Model.Views Views</p>
                 <div class="row">
                     <div class="col-md-1">
-                        <a href="#">
-                            <span class="glyphicon glyphicon-thumbs-up"></span>
-                        </a>
+                        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "likeForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input name="status" value="1" hidden="hidden"/>
+                            <a href="@Url.Action("Estimate", "Video", new { id = @Model.Id })" id="likeBtn">
+                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                            </a>
+                        }
                     </div>
                     <div class="col-md-1">
-                        <p>@Model.Likes</p>
+                        <p id="likes">@Model.Likes</p>
                     </div>
 
                     <div class="col-md-offset-1 col-md-1">
-                        <a href="#">
-                            <span class="glyphicon glyphicon-thumbs-down"></span>
-                        </a>
+                        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "dislikeForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input name="status" value="2" hidden="hidden" />
+                            <a href="@Url.Action("Estimate", "Video", new { id = @Model.Id })" id="dislikeBtn">
+                                <span class="glyphicon glyphicon-thumbs-down"></span>
+                            </a>
+                        }
                     </div>
                     <div class="col-md-1">
-                        @Model.Dislikes
+                        <p id="dislikes">@Model.Dislikes</p>
                     </div>
                 </div>
             </div>

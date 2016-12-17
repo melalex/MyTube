@@ -4,18 +4,21 @@
 
 @foreach (MyTube.BLL.DTO.CommentDTO comment in Model)
 {
-    <div class="row">
-        @comment.CommentatorAvatarUri
-        <div class="col-md-2">
-            <img src="@Url.Content(comment.CommentatorAvatarUri)"/>
+    <div class="row padding-top-20">
+        <div class="col-md-1">
+            <a href="@Url.Action("ChannelProfile", "Channel", new { id = comment.Id })">
+                <img src="@Url.Content(comment.CommentatorAvatarUri)" class="avatar-show" />
+            </a>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-11">
             <div class="row">
-                <div class="col-md-11">
-                    <h4>@comment.CommentatorUsername</h4>
+                <div class="col-md-9">
+                    <a href="@Url.Action("ChannelProfile", "Channel", new { id = comment.Id })" class="color-text">
+                        <h4 style="padding-top: 0px;">@comment.CommentatorUsername</h4>
+                    </a>
                 </div>
-                <div class="col-md-1">
-                    <h4>@comment.CommentDateTime.ToString(@"MM\/dd\/yyyy HH:mm")</h4>
+                <div class="col-md-3">
+                    <small>@comment.CommentDateTime.ToString(@"MM\/dd\/yyyy HH:mm")</small>
                 </div>
             </div>
             <p>@comment.CommentText</p>

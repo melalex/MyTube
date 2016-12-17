@@ -67,6 +67,14 @@ namespace MyTube.BLL.BusinessEntities
             }
         }
 
+        public string UploaderId
+        {
+            get
+            {
+                return video.UploderIdString;
+            }
+        }
+
         public string VideoUri
         {
             get

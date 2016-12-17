@@ -41,6 +41,22 @@ namespace MyTube.DAL.Extensions
             return await task.ToListAsync();
         }
 
+        public static async Task UnSubscribeAsync(
+            this IRepositotory<Subscription> subscription, string publisher, string subscriber
+            )
+        {
+            var filter1 = Builders<Subscription>.Filter.Eq(
+                s => s.Publisher,
+                new MongoDBRef(Channel.collectionName, new ObjectId(publisher))
+                );
+            var filter2 = Builders<Subscription>.Filter.Eq(
+                s => s.Subscriber,
+                new MongoDBRef(Channel.collectionName, new ObjectId(subscriber))
+                );
+
+            await subscription.Collection.DeleteManyAsync(filter1 & filter2);
+        }
+
         public static async Task<bool> IsSubscriberAsync(
             this IRepositotory<Subscription> subscription, string publisher, string subscriber
             )
@@ -55,6 +71,18 @@ namespace MyTube.DAL.Extensions
                 );
 
             return await subscription.Collection.Find(filter1 & filter2).AnyAsync();
+        }
+
+        public static async Task<long> GetSubscribersCountAsync(
+            this IRepositotory<Subscription> subscription, string publisher
+            )
+        {
+            var filter = Builders<Subscription>.Filter.Eq(
+                s => s.Publisher,
+                new MongoDBRef(Channel.collectionName, new ObjectId(publisher))
+                );
+
+            return await subscription.Collection.Find(filter).CountAsync();
         }
     }
 }

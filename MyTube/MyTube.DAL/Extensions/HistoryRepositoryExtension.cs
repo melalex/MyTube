@@ -62,8 +62,7 @@ namespace MyTube.DAL.Extensions
                 s => s.DestinationVideo,
                 new MongoDBRef(Video.collectionName, new ObjectId(video))
                 );
-            long count = await history.Collection.Find(filter1 & filter2).CountAsync();
-            return count > 0;
+            return await history.Collection.Find(filter1 & filter2).AnyAsync();
         }
 
         public static async Task DeleteHistory(

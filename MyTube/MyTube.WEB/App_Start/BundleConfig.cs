@@ -42,6 +42,10 @@ namespace MyTube.WEB
 
             bundles.Add(new ScriptBundle("~/bundles/VideoPageLoader").Include(
                       "~/Scripts/MyScripts/Loaders/VideoPageLoaderScript.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/ChannelPageLoader").Include(
+                      "~/Scripts/MyScripts/Loaders/ChannelPageLoaderScript.js"));
+
         }
     }
 }

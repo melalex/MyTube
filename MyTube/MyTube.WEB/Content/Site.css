@@ -40,6 +40,11 @@ textarea {
     overflow: hidden;
 }
 
+.img-show {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
 .avatar {
     max-height: 40px !important;
     width: auto !important;
@@ -78,4 +83,12 @@ textarea {
 
 .white-content {
     background-color: white !important;
+}
+
+.color-text {
+    color: #333333;
+}
+
+.thumb {
+    margin-bottom: 30px;
 }

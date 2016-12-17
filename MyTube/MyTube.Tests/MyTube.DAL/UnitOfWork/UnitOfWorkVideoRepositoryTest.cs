@@ -39,7 +39,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -63,7 +63,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Assert.AreEqual(video.Name, anotherVideo.Name);
                 Assert.AreEqual(video.VideoUrl, anotherVideo.VideoUrl);
                 Assert.AreEqual(video.Description, anotherVideo.Description);
-                Assert.AreEqual(video.Uploder, anotherVideo.Uploder);
+                Assert.AreEqual(video.Uploader, anotherVideo.Uploader);
                 Assert.AreEqual(video.UploadDate, anotherVideo.UploadDate);
                 Assert.AreEqual(video.Category, anotherVideo.Category);
                 Assert.AreEqual(video.Likes, anotherVideo.Likes);
@@ -98,7 +98,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -150,7 +150,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -201,7 +201,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -218,7 +218,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -235,7 +235,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
@@ -291,7 +291,7 @@ namespace MyTube.Tests.MyTube.DAL.UnitOfWork
                 Name = "Name",
                 VideoUrl = "VideoUrl",
                 Description = "Description",
-                Uploder = new MongoDBRef("Channels", channel1.Id),
+                Uploader = new MongoDBRef("Channels", channel1.Id),
                 UploadDate = UploadDate,
                 Tags = new List<string>
                 {
