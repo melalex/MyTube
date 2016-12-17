@@ -4,10 +4,10 @@
 
 @foreach (MyTube.BLL.BusinessEntities.VideoProxy video in Model)
 {
-    <a href="@Url.Action("Watch", "Video", new { id = video.Id })" class="color-text">
+    <a href="@Url.Action("Watch", "Video", new { id = video.Id })" class="thumbnail color-text">
         <div class="row">
             <div class="col-md-5">
-                <img src="@video.PosterUri" class="img-responsive" />
+                <img src="@Url.Content(video.PosterUri)" class="img-responsive" />
             </div>
             <div class="col-md-7">
                 <p><b>@video.Name</b></p>

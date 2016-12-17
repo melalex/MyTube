@@ -1,10 +1,17 @@
-﻿
+﻿@model IEnumerable<MyTube.BLL.BusinessEntities.VideoProxy>
+
 @{
     ViewBag.Title = "Home";
 }
 
 <h2>Popular videos</h2>
 
+<div class="row">
+    @foreach (MyTube.BLL.BusinessEntities.VideoProxy video in Model)
+    {
+        @Html.Partial("_VideoThumbnail", video)
+    }
+</div>
 
 @section scripts
 {

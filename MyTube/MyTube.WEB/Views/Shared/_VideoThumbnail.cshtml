@@ -1,9 +1,9 @@
 ﻿@model MyTube.BLL.BusinessEntities.VideoProxy
 
 <div class="col-lg-3 col-md-4 co-xs-6 thumb">
-    <a href="@Url.Action("Watch", "Video", new { id = Model.Id })" class="thumbnail">
+    <a href="@Url.Action("Watch", "Video", new { id = Model.Id })" class="thumbnail color-text">
         <img src="@Url.Content(Model.PosterUri)" class="img-show"/>
-        <p><b>@Model.Name</b></p>
+        <h3>@Model.Name</h3>
         <p>@Model.UploderUsername<br/>
         @Model.Views Views<br/>
         @Model.Uploaded.ToString(@"MM\/dd\/yyyy HH:mm")</p>

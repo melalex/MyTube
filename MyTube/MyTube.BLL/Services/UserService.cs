@@ -86,7 +86,50 @@ namespace MyTube.BLL.Services
         }
         #endregion
 
+        #region SearchLogic
+        public async Task<IEnumerable<VideoProxy>> FulltextSearchAsync(string queryString, int skip, int limit)
+        {
+            var videos = await dataStrore.Videos.SearchByStringAsync(queryString, skip, limit);
+            var tasks = videos.Select(async x => await VideoProxy.Create(dataStrore, x)).ToList();
+            return await Task.WhenAll(tasks);
+        }
+
+        public async Task<IEnumerable<VideoProxy>> CategorySearchAsync(string category, int skip, int limit)
+        {
+            var videos = await dataStrore.Videos.SearchByCategoryAsync(category, skip, limit);
+            var tasks = videos.Select(async x => await VideoProxy.Create(dataStrore, x)).ToList();
+            return await Task.WhenAll(tasks);
+        }
+
+        public async Task<IEnumerable<VideoProxy>> TagsSearchAsync(string tag, int skip, int limit)
+        {
+            var videos = await dataStrore.Videos.SearchByTagsAsync(new List<string> { tag }, skip, limit);
+            var tasks = videos.Select(async x => await VideoProxy.Create(dataStrore, x)).ToList();
+            return await Task.WhenAll(tasks);
+        }
+
+        public async Task<long> FulltextCountSearchAsync(string queryString)
+        {
+            return await dataStrore.Videos.FulltextCountSearchAsync(queryString);
+        }
+
+        public async Task<long> CategorySearchCountAsync(string category)
+        {
+            return await dataStrore.Videos.CategorySearchCountAsync(category);
+        }
+
+        public async Task<long> TagsSearchCountAsync(string tag)
+        {
+            return await dataStrore.Videos.TagsSearchCountAsync(new List<string> { tag });
+        }
+        #endregion
+
         #region VideoLogic
+        public async Task<long> VideosCountAsync()
+        {
+            return await dataStrore.Videos.VideosCountAsync();
+        }
+
         public async Task<string> CreateVideoAsync(
             string uploderId,
             string name,
@@ -165,7 +208,7 @@ namespace MyTube.BLL.Services
 
         public async Task<IEnumerable<VideoProxy>> GetSimilarVideosAsync(VideoProxy video, int skip, int limit)
         {
-            IEnumerable<Video> similarVideos = await dataStrore.Videos.SearchBYTagsAsync(video.Tags, skip, limit);
+            IEnumerable<Video> similarVideos = await dataStrore.Videos.SearchByTagsAsync(video.Tags, skip, limit);
             var tasks = similarVideos.Where(v => v.IdString != video.Id)
                 .Select(async v => await VideoProxy.Create(dataStrore, v));
             return await Task.WhenAll(tasks);

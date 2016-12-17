@@ -1,6 +1,10 @@
 ﻿@model IEnumerable<MyTube.BLL.BusinessEntities.VideoProxy>
 
-<h3>@ViewBag.CommentCount videos</h3>
+@{
+    ViewBag.Title = "Search";
+}
+
+<h3>@ViewBag.VideoCount results</h3>
 <div class="row">
     @foreach (MyTube.BLL.BusinessEntities.VideoProxy video in Model)
     {

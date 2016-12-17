@@ -222,7 +222,7 @@ namespace MyTube.Tests.MyTube.DAL.Extensions
             try
             {
                 // Act
-                var result = await unitOfWork.Videos.SearchBYTagsAsync(new List<string> { "tag1", "tag2" }, 0, 20);
+                var result = await unitOfWork.Videos.SearchByTagsAsync(new List<string> { "tag1", "tag2" }, 0, 20);
 
                 // Assert
                 long count = result.Count();

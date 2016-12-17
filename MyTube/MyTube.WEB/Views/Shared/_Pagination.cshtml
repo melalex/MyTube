@@ -13,7 +13,7 @@
             else
             {
                 <li>
-                    <a href="#" aria-label="Previous" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = ViewBag.Page - 1})">
+                    <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = ViewBag.Page - 1})" aria-label="Previous" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = ViewBag.Page - 1})">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
@@ -32,7 +32,7 @@
                     else
                     {
                         <li>
-                            <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
+                            <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
                                 @i<span class="sr-only">(current)</span>
                             </a>
                         </li>
@@ -52,7 +52,7 @@
                     else
                     {
                         <li>
-                            <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
+                            <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
                                 @i<span class="sr-only">(current)</span>
                             </a>
                         </li>
@@ -62,7 +62,7 @@
                 for (int i = ViewBag.PageCount - 5; i <= ViewBag.PageCount; i++)
                 {
                     <li>
-                        <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
+                        <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
                             @i<span class="sr-only">(current)</span>
                         </a>
                     </li>
@@ -73,7 +73,7 @@
                 for (int i = 1; i <= 5; i++)
                 {
                     <li>
-                        <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
+                        <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
                             @i<span class="sr-only">(current)</span>
                         </a>
                     </li>
@@ -90,7 +90,7 @@
                     else
                     {
                         <li>
-                            <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
+                            <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
                                 @i<span class="sr-only">(current)</span>
                             </a>
                         </li>
@@ -100,35 +100,35 @@
             else
             {
                 <li>
-                    <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = 1})">
+                    <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = 1})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = 1})">
                         1<span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = 2})">
+                    <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = 2})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = 2})">
                         2<span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li class="disabled"><span aria-hidden="true">...</span></li>
                 <li>
-                    <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = (ViewBag.Page - 1)})">
+                    <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = (ViewBag.Page - 1)})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = (ViewBag.Page - 1)})">
                         @(ViewBag.Page - 1)<span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li class="active"><span aria-hidden="true">@ViewBag.Page</span></li>
                 <li>
-                    <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = (ViewBag.Page + 1)})">
+                    <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = (ViewBag.Page + 1)})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = (ViewBag.Page + 1)})">
                         @(ViewBag.Page + 1)<span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li class="disabled"><span aria-hidden="true">...</span></li>
                 <li>
-                    <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = (ViewBag.PageCount - 1)})">
+                    <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = (ViewBag.PageCount - 1)})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = (ViewBag.PageCount - 1)})">
                         @(ViewBag.PageCount - 1)<span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = ViewBag.PageCount})">
+                    <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = ViewBag.PageCount})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = ViewBag.PageCount})">
                         @ViewBag.PageCount<span class="sr-only">(current)</span>
                     </a>
                 </li>
@@ -146,7 +146,7 @@
             else
             {
                 <li>
-                    <a href="#" aria-label="Next" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = ViewBag.Page + 1})">
+                    <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = ViewBag.Page + 1})" aria-label="Next" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = ViewBag.Page + 1})">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

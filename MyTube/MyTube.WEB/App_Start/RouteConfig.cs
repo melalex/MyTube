@@ -21,7 +21,7 @@ namespace MyTube.WEB
 
             routes.MapRoute(
                 name: "Pagination",
-                url: "{controller}/{action}/{parametr}/{page}",
+                url: "{controller}/{action}/{page}",
                 defaults: new { page = 1 },
                 constraints: new { page = @"\d+" }
             );

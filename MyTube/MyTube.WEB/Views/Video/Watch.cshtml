@@ -98,13 +98,13 @@
             <dd>@Model.Uploaded.ToString("d")</dd>
 
             <dt>Category: </dt>
-            <dd><a href="#">@Model.VideoCategory</a></dd>
+            <dd>@Html.ActionLink(Model.VideoCategory, "Category", "Search", new { parametr = Model.VideoCategory, page = 1 }, null)</dd>
 
             <dt>Tags: </dt>
             <dd>
                 @foreach (string tag in Model.Tags)
                 {
-                    <a href="#">@tag</a>
+                    @Html.ActionLink(" " + tag, "Tags", "Search", new { parametr = tag, page = 1 }, null)
                 }
             </dd>
 

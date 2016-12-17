@@ -1,6 +1,7 @@
 ﻿function PaginationStartUp(event)
 {
     $("a[data-pagination-request]").click(function (e) {
+        e.preventDefault();
         var url = $(this).data("pagination-request");
         $("#paginationDestination").load(url)
     })

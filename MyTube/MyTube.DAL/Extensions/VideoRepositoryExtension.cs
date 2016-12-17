@@ -27,7 +27,7 @@ namespace MyTube.DAL.Extensions
             return await task.ToListAsync();
         }
 
-        public static async Task<IEnumerable<Video>> SearchBYTagsAsync(
+        public static async Task<IEnumerable<Video>> SearchByTagsAsync(
             this IRepositotory<Video> videos, List<string> tags, int skip, int limit
             )
         {
@@ -38,25 +38,39 @@ namespace MyTube.DAL.Extensions
                 .ToListAsync();
         }
 
+        public static async Task<IEnumerable<Video>> SearchByCategoryAsync(
+            this IRepositotory<Video> videos, string category, int skip, int limit
+            )
+        {
+            var filter = Builders<Video>.Filter.Eq(v => v.Category, category);
+            var options = new FindOptions<Video>
+            {
+                Limit = limit,
+                Skip = skip,
+            };
+            var task = await videos.Collection.FindAsync(filter, options);
+            return await task.ToListAsync();
+        }
+
         public static async Task<IEnumerable<Video>> GetPopularVideosAsync(
             this IRepositotory<Video> videos, int skip, int limit
             )
         {
-            Func<int, int, double> wilsonScore = (likes, dislikes) =>
-            {
-                int n = likes + dislikes;
-                if (n == 0)
-                    return 0;
-                double z = 1.96;
-                double phat = 1.0 * likes / n;
-                return (phat + z * z / (2 * n) - z * Math.Sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) / (1 + z * z / n);
-            };
+            //Func<int, int, double> wilsonScore = (likes, dislikes) =>
+            //{
+            //    int n = likes + dislikes;
+            //    if (n == 0)
+            //        return 0;
+            //    double z = 1.96;
+            //    double phat = 1.0 * likes / n;
+            //    return (phat + z * z / (2 * n) - z * Math.Sqrt((phat * (1 - phat) + z * z / (4 * n)) / n)) / (1 + z * z / n);
+            //};
             return await videos
                 .Collection
-                .AsQueryable()
-                .OrderBy(v => wilsonScore(v.Likes, v.Dislikes))
+                .Find(new BsonDocument())
+                .SortByDescending(v => v.Views)
                 .Skip(skip)
-                .Take(limit)
+                .Limit(limit)
                 .ToListAsync();
         }
 
@@ -78,6 +92,30 @@ namespace MyTube.DAL.Extensions
                 c => c.Uploader, new MongoDBRef(Channel.collectionName, new ObjectId(channel))
                 );
             return await videos.Collection.Find(filter).CountAsync();
+        }
+
+        public static async Task<long> FulltextCountSearchAsync(this IRepositotory<Video> videos, string queryString)
+        {
+            var filter = Builders<Video>.Filter.Text(queryString);
+            return await videos.Collection.Find(filter).CountAsync();
+        }
+
+        public static async Task<long> CategorySearchCountAsync(this IRepositotory<Video> videos, string category)
+        {
+            var filter = Builders<Video>.Filter.Eq(v => v.Category, category);
+            return await videos.Collection.Find(filter).CountAsync();
+        }
+
+        public static async Task<long> TagsSearchCountAsync(this IRepositotory<Video> videos, List<string> tags)
+        {
+            return await videos.Collection
+                .Find(v => v.Tags.Any(tag => tags.Contains(tag)))
+                .CountAsync();
+        }
+
+        public static async Task<long> VideosCountAsync(this IRepositotory<Video> videos)
+        {
+            return await videos.Collection.Find(new BsonDocument()).CountAsync();
         }
 
         #region EstimationLogic
