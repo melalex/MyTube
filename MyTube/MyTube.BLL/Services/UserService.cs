@@ -64,25 +64,26 @@ namespace MyTube.BLL.Services
             Channel channel = await dataStrore.Channels.Get(id);
             if (channel != null)
             {
-                result = new ChannelProxy(dataStrore, channel);
+                result = new ChannelProxy(channel);
             }
             return result;
         }
 
-        public async Task EditChannelUsernameAsync(string channelId, string username)
+        public async Task EditChannelUsernameAsync(ChannelProxy channel, string username)
         {
-            await dataStrore.Channels.UpdateUsernameAsync(channelId, username);         
+            await dataStrore.Channels.UpdateUsernameAsync(channel.Id, username);
+            channel.Username = username;         
         }
 
-        public async Task EditChannelAvatarAsync(string channelId, string avatarPath)
+        public async Task EditChannelAvatarAsync(ChannelProxy channel, string avatarPath)
         {
-            Channel channel = await dataStrore.Channels.Get(channelId);
             if (channel.AvatarUri != fileStore.DefaultAvatarUri)
             {
                 fileStore.DeleteAvatar(channel.AvatarUri);
             }
             string avatarUri = await fileStore.SaveAvatar(avatarPath);
-            await dataStrore.Channels.UpdateAvatarAsync(channelId, avatarUri);
+            await dataStrore.Channels.UpdateAvatarAsync(channel.Id, avatarUri);
+            channel.AvatarUri = avatarUri;
         }
         #endregion
 
@@ -168,28 +169,13 @@ namespace MyTube.BLL.Services
             return createdVideoId;
         }
 
-        public async Task<VideoProxy> GetVideoAsync(string id, string userHostAddress = null)
+        public async Task<VideoProxy> GetVideoAsync(string id)
         {
             VideoProxy result = null;
             Video video = await dataStrore.Videos.Get(id);
             if (video != null)
             {
                 result = await VideoProxy.Create(dataStrore, video);
-                if (userHostAddress != null)
-                {
-                    bool isWatched = await dataStrore.ViewingHistories.IsWatched(userHostAddress, id);
-                    if (!isWatched)
-                    {
-                        dataStrore.Videos.AddView(id);
-                        result.Views++;
-                        ViewingHistory item = new ViewingHistory
-                        {
-                            UserHostAddress = userHostAddress,
-                            DestinationVideoIdString = id,
-                        };
-                        dataStrore.ViewingHistories.CreateAsync(item);
-                    }
-                }
             }
             return result;
         }
@@ -199,6 +185,16 @@ namespace MyTube.BLL.Services
             var videos = await dataStrore.Videos.GetVideosFromChannelAsync(channel, skip, limit);
             var tasks = videos.Select(async x => await VideoProxy.Create(dataStrore, x)).ToList();
             return await Task.WhenAll(tasks);
+        }
+
+        public async Task ForEachVideoFromChannelAsync(string channel, Func<VideoProxy, Task> job)
+        {
+            await dataStrore.Videos.ForEachVideoFromChannelAsync(
+                channel, async v => 
+                {
+                    VideoProxy video = new VideoProxy(v);
+                    await job(video);
+                });
         }
 
         public async Task<long> GetVideosFromChannelCountAsync(string channel)
@@ -269,11 +265,33 @@ namespace MyTube.BLL.Services
             await dataStrore.Videos.DeleteAsync(video.Id);
         }
 
-        public async Task EstimateVideoAsync(ViewedVideoTransferDTO transfer)
+        public async Task<bool> AddView(VideoProxy video, string userHostAddress)
+        {
+            if (userHostAddress != null)
+            {
+                string id = video.Id; 
+                bool isWatched = await dataStrore.ViewingHistories.IsWatched(userHostAddress, id);
+                if (!isWatched)
+                {
+                    dataStrore.Videos.AddView(id);
+                    video.Views++;
+                    ViewingHistory item = new ViewingHistory
+                    {
+                        UserHostAddress = userHostAddress,
+                        DestinationVideoIdString = id,
+                    };
+                    dataStrore.ViewingHistories.CreateAsync(item);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public async Task<bool> EstimateVideoAsync(ViewedVideoTransferDTO transfer, VideoProxy video)
         {
             if (transfer.Status == Interfaces.ViewStatus.IGNORE)
             {
-                return;
+                return false;
             }
 
             ViewedVideoTransfer existingTransfer = await dataStrore.ViewedVideoTransfers.GetByChannelVideoAsync(
@@ -310,19 +328,31 @@ namespace MyTube.BLL.Services
             if (existingViewStatus == Interfaces.ViewStatus.LIKE && transfer.Status == Interfaces.ViewStatus.DISLIKE)
             {
                 dataStrore.Videos.RemoveLikeAndAddDislike(transfer.ViewedVideo);
+                video.Likes--;
+                video.Dislikes++;
             }
             else if (existingViewStatus == Interfaces.ViewStatus.DISLIKE && transfer.Status == Interfaces.ViewStatus.LIKE)
             {
                 dataStrore.Videos.RemoveDislikeAndAddLike(transfer.ViewedVideo);
+                video.Likes++;
+                video.Dislikes--;
             }
             else if (existingViewStatus == Interfaces.ViewStatus.IGNORE && transfer.Status == Interfaces.ViewStatus.LIKE)
             {
                 dataStrore.Videos.AddLike(transfer.ViewedVideo);
+                video.Likes++;
             }
             else if (existingViewStatus == Interfaces.ViewStatus.IGNORE && transfer.Status == Interfaces.ViewStatus.DISLIKE)
             {
                 dataStrore.Videos.AddDislike(transfer.ViewedVideo);
+                video.Dislikes++;
             }
+            else
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<ViewedVideoTransferDTO> GetVideoEstimationAsync(string channel, string video)

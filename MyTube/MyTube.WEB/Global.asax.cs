@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,6 +19,16 @@ namespace MyTube.WEB
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        public override string GetVaryByCustomString(HttpContext context, string custom)
+        {
+            if (custom.Equals("User", StringComparison.InvariantCultureIgnoreCase) && User.Identity.IsAuthenticated)
+            {
+                return "User=" + User.Identity.GetUserId();
+            }
+
+            return base.GetVaryByCustomString(context, custom);
         }
     }
 }

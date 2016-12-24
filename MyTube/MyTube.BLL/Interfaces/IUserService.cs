@@ -20,8 +20,8 @@ namespace MyTube.BLL.Interfaces
     {
         Task<string> CreateChannelAsync(string userName);
         Task<ChannelProxy> GetChannelAsync(string id);
-        Task EditChannelUsernameAsync(string channelId, string username);
-        Task EditChannelAvatarAsync(string channelId, string avatarPath);
+        Task EditChannelUsernameAsync(ChannelProxy channel, string username);
+        Task EditChannelAvatarAsync(ChannelProxy channel, string avatarPath);
 
 
         Task<string> CreateVideoAsync(
@@ -43,8 +43,9 @@ namespace MyTube.BLL.Interfaces
 
         Task<long> VideosCountAsync();
 
-        Task<VideoProxy> GetVideoAsync(string id, string UserHostAddress = null);
+        Task<VideoProxy> GetVideoAsync(string id);
         Task<IEnumerable<VideoProxy>> GetVideosFromChannelAsync(string channel, int skip, int limit);
+        Task ForEachVideoFromChannelAsync(string channel, Func<VideoProxy, Task> job);
         Task<long> GetVideosFromChannelCountAsync(string channel);
         Task<IEnumerable<VideoProxy>> GetSimilarVideosAsync(VideoProxy video, int skip, int limit);
         Task<IEnumerable<VideoProxy>> GetPopularVideosAsync(int skip, int limit);
@@ -53,7 +54,8 @@ namespace MyTube.BLL.Interfaces
         Task<long> GetCommentsCountAsync(string videoId);
         Task AddCommentAsync(CommentDTO comment);
 
-        Task EstimateVideoAsync(ViewedVideoTransferDTO transfer);
+        Task<bool> AddView(VideoProxy video, string userHostAddress);
+        Task<bool> EstimateVideoAsync(ViewedVideoTransferDTO transfer, VideoProxy video);
         Task<ViewedVideoTransferDTO> GetVideoEstimationAsync(string channel, string video);
         
         Task SubscribeAsync(SubscriptionDTO subscription);

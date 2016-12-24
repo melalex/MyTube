@@ -3,6 +3,7 @@ using MyTube.BLL.BusinessEntities;
 using MyTube.BLL.DTO;
 using MyTube.BLL.Interfaces;
 using MyTube.WEB.Models;
+using MyTube.WEB.Models.Caching;
 using MyTube.WEB.Models.Channel;
 using MyTube.WEB.Models.Video;
 using System;
@@ -60,6 +61,15 @@ namespace MyTube.WEB.Controllers
                     FileUpload.RemoveFile(posterPath);
                 });
 
+                Redis.DeleteKeyAsync(CacheKeys.ChannelVideosCacheKey(channelId));
+                Redis.DeleteKeyAsync(CacheKeys.FulltextSearchCacheKey());
+                Redis.DeleteKeyAsync(CacheKeys.CategorySearchCacheKey(model.SelectedCategory));
+
+                foreach (string tag in model.TagsList)
+                {
+                    Redis.DeleteKeyAsync(CacheKeys.TagsSearchCacheKey(tag));
+                }
+
                 return RedirectToAction("Index", "Home");
             }
             return View(model);
@@ -73,7 +83,18 @@ namespace MyTube.WEB.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            VideoProxy video = await userService.GetVideoAsync(id, Request.UserHostAddress);
+            string key = CacheKeys.VideoCacheKey(id);
+
+            VideoProxy video = await Redis.GetCachedAsync(
+                key, async () => 
+                {
+                    var videoProxy = await userService.GetVideoAsync(id);
+                    if (await userService.AddView(videoProxy, Request.UserHostAddress))
+                    {
+                        await Redis.UpdateCacheAsync(key, videoProxy);
+                    }
+                    return videoProxy;
+                });
             
             if (video == null)
             {
@@ -84,29 +105,76 @@ namespace MyTube.WEB.Controllers
             ViewBag.IsMyChannel = currentUser == video.UploaderId;
             ViewBag.IsSubscriber = await userService.IsSubscriberAsync(id, currentUser);
 
+            Response.SetCache(key, false, "id");
+
             return View(video);
+        }
+
+        // GET: Video/Thumbnail/id
+        [HttpGet]
+        [ChildActionOnly]
+        public async Task<ActionResult> Thumbnail(string id)
+        {
+            string key = CacheKeys.VideoCacheKey(id);
+            VideoProxy video = await Redis.GetCachedAsync(key, async () => await userService.GetVideoAsync(id));
+            Response.SetCache(key, false, "id");
+            return PartialView("_VideoThumbnail", video);
+        }
+
+        // GET: Video/SimilarThumbnail/id
+        [HttpGet]
+        [ChildActionOnly]
+        public async Task<ActionResult> SimilarThumbnail(string id)
+        {
+            string key = CacheKeys.VideoCacheKey(id);
+            VideoProxy video = await Redis.GetCachedAsync(key, async () => await userService.GetVideoAsync(id));
+            Response.SetCache(key, false, "id");
+            return PartialView("_SimilarVideoThumbnail", video);
         }
 
         // GET: Video/Similar/id
         public async Task<ActionResult> Similar(string id)
         {
-            VideoProxy video = await userService.GetVideoAsync(id);
-            var similarVideos = await userService.GetSimilarVideosAsync(video, 0, 10);
+            string videoKey = CacheKeys.VideoCacheKey(id);
+            string similarVideosKey = CacheKeys.SimilarVideosCacheKey();
+
+            VideoProxy video = await Redis.GetCachedAsync(videoKey, async () => await userService.GetVideoAsync(id));
+            var similarVideos = await Redis.GetCachedWithParamAsync(
+                similarVideosKey, id, async () => 
+                {
+                    var result = await userService.GetSimilarVideosAsync(video, 0, 10);
+                    return result.Select(v => v.Id);
+                });
+
+            Response.SetCache(videoKey, false, "id");
+            Response.SetCache(similarVideosKey, false, "id");
+
             return PartialView(similarVideos);
         }
 
         // GET: Video/Comments/parametr/page
         public async Task<ActionResult> Comments(string parametr, int page)
         {
-            var comments = await userService.GetCommentsAsync(parametr, (page - 1) * commentsOnPage, commentsOnPage);
-            long commentCount = await userService.GetCommentsCountAsync(parametr);
-            ViewBag.CommentCount = commentCount;
-            ViewBag.PageCount = Math.Ceiling(1.0 * commentCount / commentsOnPage);
+            string key = CacheKeys.VideoCommentsCacheKey(parametr);
+
+            Tuple<IEnumerable<CommentDTO>, long> tuple = await Redis.GetCachedPageAsync(
+                key, page, async () =>
+                {
+                    var comments = await userService.GetCommentsAsync(parametr, (page - 1) * commentsOnPage, commentsOnPage);
+                    long commentCount = await userService.GetCommentsCountAsync(parametr);
+                    return new Tuple<IEnumerable<CommentDTO>, long>(comments, commentCount);
+                });
+
+            ViewBag.CommentCount = tuple.Item2;
+            ViewBag.PageCount = Math.Ceiling(1.0 * tuple.Item2 / commentsOnPage);
             ViewBag.Page = page;
             ViewBag.Action = "Comments";
             ViewBag.Controller = "Video";
             ViewBag.Parametr = parametr;
-            return PartialView(comments);
+
+            Response.SetCache(key, false, "parametr", "page");
+
+            return PartialView(tuple.Item1);
         }
 
         // POST: Video/AddComment/id
@@ -115,6 +183,10 @@ namespace MyTube.WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddComment(string id, string comment)
         {
+            string key = CacheKeys.VideoCommentsCacheKey(id);
+
+            Redis.DeleteKeyAsync(key);
+
             CommentDTO newComment = new CommentDTO
             {
                 CommentatorId = User.Identity.GetUserId(),
@@ -130,8 +202,12 @@ namespace MyTube.WEB.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public ActionResult Estimate(string id, int status)
+        public async Task<ActionResult> Estimate(string id, int status)
         {
+            string key = CacheKeys.VideoCacheKey(id);
+
+            VideoProxy video = await Redis.GetCachedAsync(key, async () => await userService.GetVideoAsync(id));
+
             ViewedVideoTransferDTO transfer = new ViewedVideoTransferDTO
             {
                 Status = (ViewStatus)status,
@@ -139,7 +215,13 @@ namespace MyTube.WEB.Controllers
                 Viewer = User.Identity.GetUserId(),
                 ShowDateTime = DateTimeOffset.Now,
             };
-            userService.EstimateVideoAsync(transfer);
+
+            bool result = await userService.EstimateVideoAsync(transfer, video);
+            if (result)
+            {
+                Redis.UpdateCacheAsync(key, video);
+            }
+
             return Json(new { status = "OK" });
         }
     }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MyTube.BLL.BusinessEntities.VideoProxy>
+﻿@model IEnumerable<string>
 
 @{
     ViewBag.Title = "Home";
@@ -7,9 +7,9 @@
 <h2>Popular videos</h2>
 
 <div class="row">
-    @foreach (MyTube.BLL.BusinessEntities.VideoProxy video in Model)
+    @foreach (string video in Model)
     {
-        @Html.Partial("_VideoThumbnail", video)
+        @Html.Action("Thumbnail", "Video", new { id = video })
     }
 </div>
 

@@ -84,6 +84,26 @@ namespace MyTube.DAL.Extensions
             return await videos.Collection.Find(filter).Skip(skip).Limit(limit).ToListAsync();
         }
 
+        public static async Task ForEachVideoFromChannelAsync(
+            this IRepositotory<Video> videos, string channel, Func<Video, Task> job
+            )
+        {
+            var filter = Builders<Video>.Filter.Eq(
+                c => c.Uploader, new MongoDBRef(Channel.collectionName, new ObjectId(channel))
+                );
+            using (var cursor = await videos.Collection.FindAsync(filter))
+            {
+                while (await cursor.MoveNextAsync())
+                {
+                    var batch = cursor.Current;
+                    foreach (var document in batch)
+                    {
+                        await job(document);
+                    }
+                }
+            }
+        }
+
         public static async Task<long> GetVideosFromChannelCountAsync(
             this IRepositotory<Video> videos, string channel
             )

@@ -12,19 +12,21 @@ namespace MyTube.BLL.BusinessEntities
 {
     public class VideoProxy
     {
-        private IUnitOfWork database;
-
         internal Video video { get; private set; }
 
-        private VideoProxy()
+        public VideoProxy()
         {
-            
+            video = new Video();
+        }
+
+        public VideoProxy(Video video)
+        {
+            this.video = video;
         }
 
         public static async Task<VideoProxy> Create(IUnitOfWork database, Video video)
         {
             VideoProxy thisVideo = new VideoProxy();
-            thisVideo.database = database;
             thisVideo.video = video;
 
             Channel uploder = await database.Channels.Get(video.UploderIdString);
@@ -44,6 +46,10 @@ namespace MyTube.BLL.BusinessEntities
             get
             {
                 return video.IdString;
+            }
+            set
+            {
+                video.IdString = value;
             }
         }
 
@@ -170,25 +176,5 @@ namespace MyTube.BLL.BusinessEntities
                 video.Views = Views;
             }
         } 
-
-        public async Task<IEnumerable<CommentDTO>> CommentsAsync(int skip, int limit)
-        {
-            IEnumerable<Comment> comments = await database.Comments.GetCommentsFromVideoAsync(video.IdString, skip, limit);
-            
-            var tasks =  comments.Select(async x => {
-                Channel commentator = await database.Channels.Get(x.ComentatorIdString);
-                return new CommentDTO
-                {
-                    Id = x.IdString,
-                    VideoId = this.Id,
-                    CommentatorAvatarUri = commentator.AvatarUri,
-                    CommentatorUsername = commentator.Username,
-                    CommentatorId = commentator.IdString,
-                    CommentDateTime = x.CommentDateTime,
-                    CommentText = x.Text,
-                };
-            }).ToList();
-            return await Task.WhenAll(tasks);
-        }
     }
 }

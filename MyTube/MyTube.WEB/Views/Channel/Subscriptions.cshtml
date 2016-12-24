@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MyTube.WEB.Models.Channel.ChannelThumbnailViewModel>
+﻿@model IEnumerable<string>
 
 @{
     ViewBag.Title = "Subscriptions";
@@ -7,9 +7,9 @@
 <h2>@ViewBag.SubscriptionsCount subscriptions</h2>
 
 <div class="row">
-    @foreach (MyTube.WEB.Models.Channel.ChannelThumbnailViewModel channel in Model)
+    @foreach (string channel in Model)
     {
-        @Html.Partial("_ChannelThumbnail", channel)
+        @Html.Action("Thumbnail", "Channel", new { id = channel })
     }
 </div>
 

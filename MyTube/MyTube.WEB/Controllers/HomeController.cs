@@ -1,4 +1,5 @@
 ﻿using MyTube.BLL.Interfaces;
+using MyTube.WEB.Models.Caching;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,17 @@ namespace MyTube.WEB.Controllers
         {
             this.userService = userService;
         }
-
+         
         public async Task<ActionResult> Index()
         {
-            var popular = await userService.GetPopularVideosAsync(0, videosOnPage);
+            string key = CacheKeys.PopularVideosCacheKey();
+            var popular = await Redis.GetCachedPageAsync(
+                key, 1, async () =>
+                {
+                    var result = await userService.GetPopularVideosAsync(0, videosOnPage);
+                    return result.Select(v => v.Id);
+                });
+            Response.SetCache(key);
             return View(popular);
         }
     }

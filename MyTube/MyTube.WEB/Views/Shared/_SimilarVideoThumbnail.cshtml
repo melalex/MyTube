@@ -1,0 +1,16 @@
+﻿@model MyTube.BLL.BusinessEntities.VideoProxy
+
+<a href="@Url.Action("Watch", "Video", new { id = Model.Id })" class="thumbnail color-text">
+    <div class="row">
+        <div class="col-md-5">
+            <img src="@Url.Content(Model.PosterUri)" class="img-responsive" />
+        </div>
+        <div class="col-md-7">
+            <p><b>@Model.Name</b></p>
+            <p>
+                @Model.UploderUsername<br />
+                @Model.Views Views
+            </p>
+        </div>
+    </div>
+</a>

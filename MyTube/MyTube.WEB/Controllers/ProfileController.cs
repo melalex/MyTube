@@ -11,6 +11,7 @@ using MyTube.BLL.Identity.Interfaces;
 using Microsoft.AspNet.Identity.Owin;
 using MyTube.WEB.Models.Profile;
 using MyTube.WEB.Models;
+using MyTube.WEB.Models.Caching;
 
 namespace MyTube.WEB.Controllers
 {
@@ -36,28 +37,40 @@ namespace MyTube.WEB.Controllers
                 _identityService = value;
             }
         }
-
+         
         // GET: Profile/Edit
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult> Edit()
         {
-            var channelId = User.Identity.GetUserId();
-            var user = await ApplicationIdentityService.FindByIdAsync(channelId);
-            var channel = await userService.GetChannelAsync(channelId);
-            var editProfileViewModel = new EditProfileViewModel(user, channel);
+            string channelId = User.Identity.GetUserId();
+            string channelKey = CacheKeys.ChannelCacheKey(channelId);
+
+            var editProfileViewModel = await Redis.GetCachedAsync(
+                channelKey, async () =>
+                {
+                    var user = await ApplicationIdentityService.FindByIdAsync(channelId);
+                    var channel = await userService.GetChannelAsync(channelId);
+                    return new EditProfileViewModel(user, channel);
+                }); 
+
+            Response.SetCache(channelKey, true);
+
             return View(editProfileViewModel);
         }
 
         // POST: Profile/Edit
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(EditProfileViewModel editProfileViewModel)
         {
             ActionResult result = null;
             if (ModelState.IsValid)
             {
+                string channelId = User.Identity.GetUserId();
                 var editResult = await ApplicationIdentityService.EditUserAsync(
-                    User.Identity.GetUserId(),
+                    channelId,
                     editProfileViewModel.Email,
                     editProfileViewModel.Username,
                     editProfileViewModel.NewPassword,
@@ -66,6 +79,20 @@ namespace MyTube.WEB.Controllers
 
                 if (editResult.Succeeded)
                 {
+                    var channel = await Redis.GetCachedAsync(
+                        CacheKeys.ChannelCacheKey(channelId), async () => await userService.GetChannelAsync(channelId)
+                        );
+
+                    await userService.EditChannelUsernameAsync(channel, editProfileViewModel.Username);
+
+                    await Redis.UpdateCacheAsync(CacheKeys.ChannelCacheKey(channelId), channel);
+
+                    await userService.ForEachVideoFromChannelAsync(
+                        channelId, async v => 
+                        {
+                            await Redis.DeleteKeyAsync(CacheKeys.VideoCacheKey(v.Id));
+                        });
+
                     result = RedirectToAction("Index", "Home");
                 }
                 else
@@ -94,7 +121,19 @@ namespace MyTube.WEB.Controllers
                 if (path != null)
                 {
                     string channelId = User.Identity.GetUserId();
-                    await userService.EditChannelAvatarAsync(channelId, path);
+
+                    var channel = await Redis.GetCachedAsync(
+                        CacheKeys.ChannelCacheKey(channelId), async () => await userService.GetChannelAsync(channelId)
+                        );
+
+                    await userService.EditChannelAvatarAsync(channel, path);
+                    await Redis.UpdateCacheAsync(CacheKeys.ChannelCacheKey(channelId), channel);
+
+                    await userService.ForEachVideoFromChannelAsync(
+                        channelId, async v =>
+                        {
+                            await Redis.DeleteKeyAsync(CacheKeys.VideoCacheKey(v.Id));
+                        });
                     result = RedirectToAction("Index", "Home");
                 }
                 else
@@ -112,11 +151,18 @@ namespace MyTube.WEB.Controllers
             return result;
         }
 
+        
         // Get: Profile/AuthenticatedProfileZone/id
+        [ChildActionOnly]
         public ActionResult AuthenticatedProfileZone()
         {
-            var channelId = User.Identity.GetUserId();
-            var channel = Task.Run(() => userService.GetChannelAsync(channelId)).Result;
+            string channelId = User.Identity.GetUserId();
+            string thumbnailCacheKey = CacheKeys.ChannelCacheKey(channelId);
+            var channel = Redis.GetCachedAsync(thumbnailCacheKey, () =>
+            {
+                return Task.Run(() => userService.GetChannelAsync(channelId)).Result;
+            });
+            Response.SetCache(thumbnailCacheKey, true);
             return PartialView("_AuthenticatedProfileZone", channel);
         }
     }

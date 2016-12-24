@@ -2,6 +2,7 @@
 using MyTube.BLL.BusinessEntities;
 using MyTube.BLL.DTO;
 using MyTube.BLL.Interfaces;
+using MyTube.WEB.Models.Caching;
 using MyTube.WEB.Models.Channel;
 using System;
 using System.Collections.Generic;
@@ -27,28 +28,65 @@ namespace MyTube.WEB.Controllers
         public async Task<ActionResult> ChannelProfile(string id)
         {
             string currentUser = User.Identity.GetUserId();
+            var channelProxy = await Redis.GetCachedAsync(
+                CacheKeys.ChannelCacheKey(id), async () => await userService.GetChannelAsync(id)
+                );
             ChannelViewModel channel = new ChannelViewModel
             {
-                Channel = await userService.GetChannelAsync(id),
+                Channel = channelProxy,
                 SubscribersCount = await userService.SubscribersCountAsync(id),
                 IsSubscriber = await userService.IsSubscriberAsync(id, currentUser),
                 IsMyChannel = id == currentUser,
             };
+             
             return View(channel);
+        }
+
+        // GET: Channel/Thumbnail/id
+        [HttpGet]
+        [ChildActionOnly]
+        public async Task<ActionResult> Thumbnail(string id)
+        {
+            string key = CacheKeys.ChannelThumbnailCacheKey(id);
+
+            ChannelThumbnailViewModel channel = await Redis.GetCachedAsync(key, async () => 
+            {
+                return new ChannelThumbnailViewModel
+                {
+                    Channel = await userService.GetChannelAsync(id),
+                    SubscribersCount = await userService.SubscribersCountAsync(id),
+                    VideosCount = await userService.GetVideosFromChannelCountAsync(id),
+                };
+            });
+
+            Response.SetCache(key, false, "id");
+
+            return PartialView("_ChannelThumbnail", channel);
         }
 
         // GET: Channel/Videos/page
         public async Task<ActionResult> Videos(string parametr, int page)
         {
-            var videos = await userService.GetVideosFromChannelAsync(parametr, (page - 1) * videosOnPage, videosOnPage);
-            long videosCount = await userService.GetVideosFromChannelCountAsync(parametr);
-            ViewBag.CommentCount = videosCount;
-            ViewBag.PageCount = Math.Ceiling(1.0 * videosCount / videosOnPage);
+            string key = CacheKeys.ChannelVideosCacheKey(parametr);
+
+            Tuple<IEnumerable<string>, long> tuple = await Redis.GetCachedPageAsync(
+                key, page, async () => 
+                {
+                    var videos = await userService.GetVideosFromChannelAsync(parametr, (page - 1) * videosOnPage, videosOnPage);
+                    long videosCount = await userService.GetVideosFromChannelCountAsync(parametr);
+                    return new Tuple<IEnumerable<string>, long>(videos.Select(v => v.Id), videosCount);
+                });
+
+            ViewBag.CommentCount = tuple.Item2;
+            ViewBag.PageCount = Math.Ceiling(1.0 * tuple.Item2 / videosOnPage);
             ViewBag.Page = page;
             ViewBag.Action = "Videos";
             ViewBag.Controller = "Channel";
             ViewBag.Parametr = parametr;
-            return PartialView(videos);
+
+            Response.SetCache(key, false, "parametr", "page");
+
+            return PartialView(tuple.Item1);
         }
 
         // GET: Channel/Subscriptions/page
@@ -56,27 +94,25 @@ namespace MyTube.WEB.Controllers
         public async Task<ActionResult> Subscriptions(int page = 1)
         {
             string currentUser = User.Identity.GetUserId();
-            var subscriptions = await userService.SubscriptionsAsync(currentUser, (page - 1) * videosOnPage, videosOnPage);
+            string key = CacheKeys.SubscriptionCacheKey(currentUser);
 
-            var tasks = subscriptions.Select(async s => 
-            {
-                return new ChannelThumbnailViewModel
-                {
-                    Channel = s,
-                    SubscribersCount = await userService.SubscribersCountAsync(s.Id),
-                    VideosCount = await userService.GetVideosFromChannelCountAsync(s.Id),
-                };
-            }).ToList();
-            var subscriptionsViewModels = await Task.WhenAll(tasks);
-
-            long subscriptionsCount = await userService.SubscriptionsCountAsync(currentUser);
-            ViewBag.SubscriptionsCount = subscriptionsCount;
-            ViewBag.PageCount = Math.Ceiling(1.0 * subscriptionsCount / videosOnPage);
+            Tuple<IEnumerable<string>, long> tuple = await Redis.GetCachedPageAsync(
+                key, page, async () => {
+                    var subscriptions = await userService.SubscriptionsAsync(currentUser, (page - 1) * videosOnPage, videosOnPage);
+                    long subscriptionsCount = await userService.SubscriptionsCountAsync(currentUser);
+                    return new Tuple<IEnumerable<string>, long>(subscriptions.Select(v => v.Id), subscriptionsCount);
+                });
+                 
+            ViewBag.SubscriptionsCount = tuple.Item2;
+            ViewBag.PageCount = Math.Ceiling(1.0 * tuple.Item2 / videosOnPage);
             ViewBag.Page = page;
             ViewBag.Action = "Subscriptions";
             ViewBag.Controller = "Channel";
             ViewBag.Parametr = null;
-            return View(subscriptions);
+
+            Response.SetCache(key, true);
+
+            return View(tuple.Item1);
         }
 
         // POST: Channel/Subscribe/id
@@ -85,13 +121,21 @@ namespace MyTube.WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Subscribe(string id)
         {
+            string currentUser = User.Identity.GetUserId();
+            string subscriptionKey = CacheKeys.SubscriptionCacheKey(currentUser);
+            string channelKey = CacheKeys.ChannelThumbnailCacheKey(id);
+
             SubscriptionDTO subscription = new SubscriptionDTO
             {
                 StartDate = DateTimeOffset.Now,
                 Publisher = id,
-                Subscriber = User.Identity.GetUserId(),
+                Subscriber = currentUser,
             };
             await userService.SubscribeAsync(subscription);
+
+            await Redis.DeleteKeyAsync(subscriptionKey);
+            await Redis.DeleteKeyAsync(channelKey);
+
             return Json(new { status = "OK" });
         }
 
@@ -101,7 +145,15 @@ namespace MyTube.WEB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Unsubscribe(string id)
         {
-            await userService.UnsubscribeAsync(id, User.Identity.GetUserId());
+            string currentUser = User.Identity.GetUserId();
+            string subscriptionKey = CacheKeys.SubscriptionCacheKey(currentUser);
+            string channelKey = CacheKeys.ChannelThumbnailCacheKey(id);
+
+            await userService.UnsubscribeAsync(id, currentUser);
+
+            await Redis.DeleteKeyAsync(subscriptionKey);
+            await Redis.DeleteKeyAsync(channelKey);
+
             return Json(new { status = "OK" });
         }
     }

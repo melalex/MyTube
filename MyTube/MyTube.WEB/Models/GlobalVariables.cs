@@ -30,6 +30,6 @@ namespace MyTube.WEB.Models
                     "Non-profits & Activism",
                 };
             }
-        } 
+        }
     }
 }

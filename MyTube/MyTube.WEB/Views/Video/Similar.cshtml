@@ -1,19 +1,8 @@
-﻿@model IEnumerable<MyTube.BLL.BusinessEntities.VideoProxy>
+﻿@model IEnumerable<string>
 
 <h3>Similar videos:</h3>
 
-@foreach (MyTube.BLL.BusinessEntities.VideoProxy video in Model)
+@foreach (string video in Model)
 {
-    <a href="@Url.Action("Watch", "Video", new { id = video.Id })" class="thumbnail color-text">
-        <div class="row">
-            <div class="col-md-5">
-                <img src="@Url.Content(video.PosterUri)" class="img-responsive" />
-            </div>
-            <div class="col-md-7">
-                <p><b>@video.Name</b></p>
-                <p>@video.UploderUsername<br />
-                @video.Views Views</p>
-            </div>
-        </div>
-    </a>
+    @Html.Action("SimilarThumbnail", "Video", new { id = video })
 }
