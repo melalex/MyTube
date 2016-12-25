@@ -1,6 +1,6 @@
 ﻿@if (ViewBag.PageCount > 1)
 {
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" class="text-center">
         <ul id="pagination" class="pagination" data-current-page="@ViewBag.Page">
             @if (ViewBag.Page == 1)
             {
@@ -59,7 +59,7 @@
                     }
                 }
                 <li class="disabled"><span aria-hidden="true">...</span></li>
-                for (int i = ViewBag.PageCount - 5; i <= ViewBag.PageCount; i++)
+                for (int i = (int)ViewBag.PageCount - 5; i <= ViewBag.PageCount; i++)
                 {
                     <li>
                         <a href="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})" data-pagination-request="@Url.Action(ViewBag.Action, ViewBag.Controller, new { parametr = ViewBag.Parametr, page = i})">
@@ -79,7 +79,7 @@
                     </li>
                 }
                 <li class="disabled"><span aria-hidden="true">...</span></li>
-                for (int i = ViewBag.PageCount - 5; i <= ViewBag.PageCount; i++)
+                for (int i = (int)ViewBag.PageCount - 5; i <= ViewBag.PageCount; i++)
                 {
                     if (i == ViewBag.Page)
                     {

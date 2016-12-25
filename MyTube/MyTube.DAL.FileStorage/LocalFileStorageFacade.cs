@@ -28,7 +28,7 @@ namespace MyTube.DAL.FileStorage
         public void SetStorageFolder(string storageFolder)
         {
             this.storageFolder = storageFolder;
-            DefaultAvatarUri = (storageFolder + defaultAvatarPath).Replace(Path.DirectorySeparatorChar, '/');
+            DefaultAvatarUri = $@"/Uploads/Files{defaultAvatarPath.Replace(Path.DirectorySeparatorChar, '/')}";
             avatarsStorage = new LocalFileRepository(storageFolder + avatarsStoragePath);
             posterStorage = new LocalFileRepository(storageFolder + posterStoragePath);
             videoStorage = new LocalFileRepository(storageFolder + videoStoragePath);

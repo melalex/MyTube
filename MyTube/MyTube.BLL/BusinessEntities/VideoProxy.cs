@@ -19,12 +19,12 @@ namespace MyTube.BLL.BusinessEntities
             video = new Video();
         }
 
-        public VideoProxy(Video video)
+        internal VideoProxy(Video video)
         {
             this.video = video;
         }
 
-        public static async Task<VideoProxy> Create(IUnitOfWork database, Video video)
+        internal static async Task<VideoProxy> Create(IUnitOfWork database, Video video)
         {
             VideoProxy thisVideo = new VideoProxy();
             thisVideo.video = video;
@@ -38,8 +38,8 @@ namespace MyTube.BLL.BusinessEntities
         }
 
 
-        public string UploderUsername { get; private set; }
-        public string UploderAvatarUri { get; private set; }
+        public string UploderUsername { get; set; }
+        public string UploderAvatarUri { get; set; }
 
         public string Id
         {
@@ -71,6 +71,10 @@ namespace MyTube.BLL.BusinessEntities
             {
                 return video.UploadDate;
             }
+            set
+            {
+                video.UploadDate = value;
+            }
         }
 
         public string UploaderId
@@ -78,6 +82,10 @@ namespace MyTube.BLL.BusinessEntities
             get
             {
                 return video.UploderIdString;
+            }
+            set
+            {
+                video.UploderIdString = value;
             }
         }
 
@@ -173,7 +181,7 @@ namespace MyTube.BLL.BusinessEntities
             }
             set
             {
-                video.Views = Views;
+                video.Views = value;
             }
         } 
     }

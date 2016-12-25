@@ -44,7 +44,7 @@ namespace MyTube.WEB.Controllers
         public async Task<ActionResult> Edit()
         {
             string channelId = User.Identity.GetUserId();
-            string channelKey = CacheKeys.ChannelCacheKey(channelId);
+            string channelKey = CacheKeys.EditChannelCacheKey(channelId);
 
             var editProfileViewModel = await Redis.GetCachedAsync(
                 channelKey, async () =>
@@ -79,13 +79,17 @@ namespace MyTube.WEB.Controllers
 
                 if (editResult.Succeeded)
                 {
+                    string channelKey = CacheKeys.ChannelCacheKey(channelId);
+
                     var channel = await Redis.GetCachedAsync(
-                        CacheKeys.ChannelCacheKey(channelId), async () => await userService.GetChannelAsync(channelId)
+                        channelKey, async () => await userService.GetChannelAsync(channelId)
                         );
 
                     await userService.EditChannelUsernameAsync(channel, editProfileViewModel.Username);
 
-                    await Redis.UpdateCacheAsync(CacheKeys.ChannelCacheKey(channelId), channel);
+                    await Redis.UpdateCacheAsync(channelKey, channel);
+                    await Redis.DeleteKeyAsync(CacheKeys.EditChannelCacheKey(channelId));
+                    await Redis.DeleteKeyAsync(CacheKeys.ChannelThumbnailCacheKey(channelId));
 
                     await userService.ForEachVideoFromChannelAsync(
                         channelId, async v => 
@@ -121,13 +125,14 @@ namespace MyTube.WEB.Controllers
                 if (path != null)
                 {
                     string channelId = User.Identity.GetUserId();
+                    string channelKey = CacheKeys.ChannelCacheKey(channelId);
 
                     var channel = await Redis.GetCachedAsync(
-                        CacheKeys.ChannelCacheKey(channelId), async () => await userService.GetChannelAsync(channelId)
+                        channelKey, async () => await userService.GetChannelAsync(channelId)
                         );
 
                     await userService.EditChannelAvatarAsync(channel, path);
-                    await Redis.UpdateCacheAsync(CacheKeys.ChannelCacheKey(channelId), channel);
+                    await Redis.UpdateCacheAsync(channelKey, channel);
 
                     await userService.ForEachVideoFromChannelAsync(
                         channelId, async v =>
@@ -158,11 +163,11 @@ namespace MyTube.WEB.Controllers
         {
             string channelId = User.Identity.GetUserId();
             string thumbnailCacheKey = CacheKeys.ChannelCacheKey(channelId);
-            var channel = Redis.GetCachedAsync(thumbnailCacheKey, () =>
+            var channel = Redis.GetCached(thumbnailCacheKey, () =>
             {
                 return Task.Run(() => userService.GetChannelAsync(channelId)).Result;
             });
-            Response.SetCache(thumbnailCacheKey, true);
+
             return PartialView("_AuthenticatedProfileZone", channel);
         }
     }

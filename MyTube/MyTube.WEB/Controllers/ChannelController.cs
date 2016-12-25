@@ -28,9 +28,12 @@ namespace MyTube.WEB.Controllers
         public async Task<ActionResult> ChannelProfile(string id)
         {
             string currentUser = User.Identity.GetUserId();
+            string channelKey = CacheKeys.ChannelCacheKey(id);
+
             var channelProxy = await Redis.GetCachedAsync(
-                CacheKeys.ChannelCacheKey(id), async () => await userService.GetChannelAsync(id)
+                channelKey, async () => await userService.GetChannelAsync(id)
                 );
+
             ChannelViewModel channel = new ChannelViewModel
             {
                 Channel = channelProxy,
@@ -38,24 +41,26 @@ namespace MyTube.WEB.Controllers
                 IsSubscriber = await userService.IsSubscriberAsync(id, currentUser),
                 IsMyChannel = id == currentUser,
             };
-             
+            
             return View(channel);
         }
 
         // GET: Channel/Thumbnail/id
         [HttpGet]
         [ChildActionOnly]
-        public async Task<ActionResult> Thumbnail(string id)
+        public ActionResult Thumbnail(string id)
         {
             string key = CacheKeys.ChannelThumbnailCacheKey(id);
 
-            ChannelThumbnailViewModel channel = await Redis.GetCachedAsync(key, async () => 
+            ChannelThumbnailViewModel channel = Redis.GetCached(key, () => 
             {
                 return new ChannelThumbnailViewModel
                 {
-                    Channel = await userService.GetChannelAsync(id),
-                    SubscribersCount = await userService.SubscribersCountAsync(id),
-                    VideosCount = await userService.GetVideosFromChannelCountAsync(id),
+                    Channel = Task.Run(() => Redis.GetCachedAsync(
+                        CacheKeys.ChannelCacheKey(id), async () => await userService.GetChannelAsync(id)
+                        )).Result,
+                    SubscribersCount = Task.Run(() => userService.SubscribersCountAsync(id)).Result,
+                    VideosCount = Task.Run(() => userService.GetVideosFromChannelCountAsync(id)).Result,
                 };
             });
 

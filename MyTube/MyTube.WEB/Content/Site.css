@@ -21,12 +21,12 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 100%;
 }
 
 
 .search-input {
-    width: 800px;
+    width: 550px !important;
 }
 
 .modal-container {
@@ -41,16 +41,18 @@ textarea {
 }
 
 .img-show {
-    max-width: 100% !important;
-    height: auto !important;
+    width: 304px !important;
+    height: 236px !important;
 }
 
 .avatar {
     max-height: 40px !important;
-    width: auto !important;
+    width: 40px !important;
     vertical-align: middle !important;
     padding-bottom: 0px !important;
     padding-top: 0px !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
 }
 
 .avatar-edit{
@@ -60,7 +62,7 @@ textarea {
 
 .avatar-show{
     max-height: 60px !important;
-    width: auto !important;
+    width: 60px !important;
 }
 
 .auth-items {
@@ -91,4 +93,12 @@ textarea {
 
 .thumb {
     margin-bottom: 30px;
+}
+
+.input-block {
+    width: 100%;
+}
+
+.margin-left {
+    margin-left: 10px !important;
 }

@@ -99,7 +99,7 @@ namespace MyTube.WEB.Controllers
         // GET: Search/Popular/page
         public async Task<ActionResult> Popular(int page)
         {
-            string key = CacheKeys.PopularVideosCacheKey();
+            string key = CacheKeys.PopularVideosWithPaginationCacheKey();
 
             Tuple<IEnumerable<string>, long> tuple = await Redis.GetCachedPageAsync(
                 key, page, async () =>

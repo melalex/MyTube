@@ -13,6 +13,13 @@
 *.userosscache
 *.sln.docstates
 *.vcxproj.filters
+*.png
+*.gif
+*.jpg
+*.mp4
+*.ogg
+*.webm
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

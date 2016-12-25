@@ -113,10 +113,10 @@ namespace MyTube.WEB.Controllers
         // GET: Video/Thumbnail/id
         [HttpGet]
         [ChildActionOnly]
-        public async Task<ActionResult> Thumbnail(string id)
+        public ActionResult Thumbnail(string id)
         {
             string key = CacheKeys.VideoCacheKey(id);
-            VideoProxy video = await Redis.GetCachedAsync(key, async () => await userService.GetVideoAsync(id));
+            VideoProxy video = Redis.GetCached(key, () => Task.Run(() => userService.GetVideoAsync(id)).Result);
             Response.SetCache(key, false, "id");
             return PartialView("_VideoThumbnail", video);
         }
@@ -124,10 +124,10 @@ namespace MyTube.WEB.Controllers
         // GET: Video/SimilarThumbnail/id
         [HttpGet]
         [ChildActionOnly]
-        public async Task<ActionResult> SimilarThumbnail(string id)
+        public ActionResult SimilarThumbnail(string id)
         {
             string key = CacheKeys.VideoCacheKey(id);
-            VideoProxy video = await Redis.GetCachedAsync(key, async () => await userService.GetVideoAsync(id));
+            VideoProxy video = Redis.GetCached(key, () => Task.Run(() => userService.GetVideoAsync(id)).Result);
             Response.SetCache(key, false, "id");
             return PartialView("_SimilarVideoThumbnail", video);
         }

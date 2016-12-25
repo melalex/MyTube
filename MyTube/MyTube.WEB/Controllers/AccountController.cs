@@ -111,6 +111,10 @@ namespace MyTube.WEB.Controllers
 
                     return PartialView("_Success");
                 }
+                else
+                {
+                    await userService.DeleteChannelAsync(channelId);
+                }
                 AddErrors(result);
             }
 

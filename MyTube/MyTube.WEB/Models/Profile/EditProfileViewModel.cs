@@ -40,5 +40,10 @@ namespace MyTube.WEB.Models.Profile
             Email = user.Email;
             AvatarUri = channel.AvatarUri;
         }
+
+        public EditProfileViewModel()
+        {
+
+        }
     }
 }

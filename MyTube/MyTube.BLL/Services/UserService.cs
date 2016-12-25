@@ -69,6 +69,11 @@ namespace MyTube.BLL.Services
             return result;
         }
 
+        public async Task DeleteChannelAsync(string id)
+        {
+            await dataStrore.Channels.DeleteAsync(id);
+        }
+        
         public async Task EditChannelUsernameAsync(ChannelProxy channel, string username)
         {
             await dataStrore.Channels.UpdateUsernameAsync(channel.Id, username);

@@ -14,7 +14,7 @@
                 @Html.LabelFor(model => model.Email, new { @class = "control-label" })
                 <div>
                     @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control input-block" })
                 </div>
             </div>
 
@@ -22,7 +22,7 @@
                 @Html.LabelFor(model => model.Email, new { @class = "control-label" })
                 <div>
                     @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                    @Html.PasswordFor(model => model.Password, new { @class = "form-control input-block" })
                 </div>
             </div>
 

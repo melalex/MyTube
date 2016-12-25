@@ -20,6 +20,7 @@ namespace MyTube.BLL.Interfaces
     {
         Task<string> CreateChannelAsync(string userName);
         Task<ChannelProxy> GetChannelAsync(string id);
+        Task DeleteChannelAsync(string id);
         Task EditChannelUsernameAsync(ChannelProxy channel, string username);
         Task EditChannelAvatarAsync(ChannelProxy channel, string avatarPath);
 

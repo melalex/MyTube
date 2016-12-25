@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Test users upload</h2>
+
+@using (Html.BeginForm("Index", "UserInitialize", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="upload" accept=".csv" /><br>
+    <input type="submit" value="Upload" />
+}

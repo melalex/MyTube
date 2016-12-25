@@ -18,15 +18,18 @@ namespace MyTube.WEB.Models.Caching
             return new RedisCacheDependency(key);
         }
 
-        public async static Task<T> GetCachedAsync<T>(string key, Func<T> getter) where T : class
+        public static T GetCached<T>(string key, Func<T> getter) where T : class
         {
             var localCache = HttpRuntime.Cache;
             var result = (T)localCache.Get(key);
-            if (result != null) return result;
+            if (result != null)
+            {
+                return result;
+            }
 
             var redisDb = Client.GetDatabase();
 
-            var value = await redisDb.StringGetAsync(key);
+            var value = redisDb.StringGet(key);
             if (!value.IsNullOrEmpty)
             {
                 result = Json.Decode<T>(value);
@@ -36,7 +39,7 @@ namespace MyTube.WEB.Models.Caching
 
             result = getter();
 
-            await redisDb.StringSetAsync(key, Json.Encode(result));
+            redisDb.StringSet(key, Json.Encode(result));
             localCache.Insert(key, result, CreateDependency(key));
             return result;
         }
@@ -45,7 +48,10 @@ namespace MyTube.WEB.Models.Caching
         {
             var localCache = HttpRuntime.Cache;
             var result = (T)localCache.Get(key);
-            if (result != null) return result;
+            if (result != null)
+            {
+                return result;
+            }
 
             var redisDb = Client.GetDatabase();
 

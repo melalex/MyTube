@@ -12,6 +12,11 @@ namespace MyTube.WEB.Models.Caching
             return $"channel:{userId}";
         }
 
+        public static string EditChannelCacheKey(string userId)
+        {
+            return $"channel:edit:{userId}";
+        }
+
         public static string ChannelThumbnailCacheKey(string userId)
         {
             return $"channel:thumbnail:{userId}";
@@ -38,6 +43,11 @@ namespace MyTube.WEB.Models.Caching
             return "videos:popular";
         }
 
+        public static string PopularVideosWithPaginationCacheKey()
+        {
+            return "videos:popular:pagination";
+        }
+
         public static string SimilarVideosCacheKey()
         {
             return $"videos:similar";
@@ -46,6 +56,16 @@ namespace MyTube.WEB.Models.Caching
         public static string SubscriptionCacheKey(string userId)
         {
             return $"subscription:{userId}";
+        }
+
+        public static string SubscribersCountCacheKey(string userId)
+        {
+            return $"subscribers:count:{userId}";
+        }
+
+        public static string IsSubscriberCacheKey(string publisher, string subscriber)
+        {
+            return $"subscribers:{publisher}:{subscriber}";
         }
 
         public static string FulltextSearchCacheKey()
