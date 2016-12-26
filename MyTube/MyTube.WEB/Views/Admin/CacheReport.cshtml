@@ -1,0 +1,26 @@
+﻿@model Dictionary<string, Dictionary<string, long>>
+
+@{
+    ViewBag.Title = "CacheReport";
+}
+
+<h2>CacheReport</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Controller:Action</th>
+        <th>Asp.Net cache read count</th>
+        <th>Redis read count</th>
+        <th>MongoDB read count</th>
+    </tr>
+    
+    @foreach (var row in Model)
+    {
+        <tr>
+            <td>@row.Key</td>
+            <td>@row.Value[ViewBag.ASP]</td>
+            <td>@row.Value[ViewBag.Redis]</td>
+            <td>@row.Value[ViewBag.Mongo]</td>
+        </tr>
+    }
+</table>

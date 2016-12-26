@@ -13,6 +13,7 @@ using MyTube.BLL.Identity.Infrastructure;
 using AutoMapper;
 using MyTube.DAL.Identity.Entities;
 using MyTube.DAL.Identity.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace MyTube.BLL.Identity.Services
 {
@@ -103,6 +104,14 @@ namespace MyTube.BLL.Identity.Services
                 string[] errors = new string[] { "Incorrect password" };
                 return IdentityResult.Failed(errors); 
             }
+        }
+
+        public void BecomeAdmin(string id)
+        {
+            var adminRole = new ApplicationRole { Name = "Admin"};
+
+            database.RoleManager.Create(adminRole);
+            database.UserManager.AddToRole(id, adminRole.Name);
         }
 
         public void Dispose()

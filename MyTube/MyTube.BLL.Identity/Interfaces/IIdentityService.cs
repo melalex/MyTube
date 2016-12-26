@@ -22,5 +22,7 @@ namespace MyTube.BLL.Identity.Interfaces
         Task<bool> IsEmailConfirmedAsync(string userId);
         Task<IdentityResult> EditUserAsync(string userId, string newEmail, string newUsername, string newPassword, string oldPassword);
         Task<IdentityResult> ResetPasswordAsync(string userId, string token, string newPassword);
+
+        void BecomeAdmin(string id);
     }
 }

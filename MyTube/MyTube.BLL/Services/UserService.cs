@@ -278,14 +278,14 @@ namespace MyTube.BLL.Services
                 bool isWatched = await dataStrore.ViewingHistories.IsWatched(userHostAddress, id);
                 if (!isWatched)
                 {
-                    dataStrore.Videos.AddView(id);
+                    await dataStrore.Videos.AddView(id);
                     video.Views++;
                     ViewingHistory item = new ViewingHistory
                     {
                         UserHostAddress = userHostAddress,
                         DestinationVideoIdString = id,
                     };
-                    dataStrore.ViewingHistories.CreateAsync(item);
+                    await dataStrore.ViewingHistories.CreateAsync(item);
                     return true;
                 }
             }

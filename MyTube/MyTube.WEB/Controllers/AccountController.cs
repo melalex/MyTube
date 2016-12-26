@@ -54,6 +54,15 @@ namespace MyTube.WEB.Controllers
         }
 
         //
+        // GET: /Account/LoginPage
+        [AllowAnonymous]
+        public ActionResult LoginPage(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
+        //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
@@ -76,6 +85,30 @@ namespace MyTube.WEB.Controllers
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return PartialView(model);
+            }
+        }
+
+        //
+        // POST: /Account/Login
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> LoginPage(LoginViewModel model, string returnUrl)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await ApplicationIdentityService.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToLocal(returnUrl);
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                    return View(model);
             }
         }
 

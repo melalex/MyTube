@@ -16,6 +16,7 @@ namespace MyTube.WEB.App_Start
     using Util;
     using Ninject.Modules;
     using BLL.Infrastructure;
+    using System.Configuration;
 
     public static class NinjectWebCommon 
     {
@@ -45,9 +46,10 @@ namespace MyTube.WEB.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
+            string mongoConnection = ConfigurationManager.ConnectionStrings["DefaultMongoDBConnection"].ConnectionString;
             var modules = new NinjectModule[] 
             {
-                new ServiceModule("DefaultMongoDBConnection", "DefaultConnection")
+                new ServiceModule(mongoConnection, "DefaultConnection")
             };
             var kernel = new StandardKernel(modules);
             try

@@ -28,6 +28,12 @@ namespace MyTube.DAL.Repositories
             database = mongoClient.GetDatabase(dataBaseName);
         }
 
+        public MongoUnitOfWork(string connectionString)
+        {
+            MongoClient mongoClient = new MongoClient(connectionString);
+            database = mongoClient.GetDatabase(dataBaseName);
+        }
+
         public IRepositotory<Channel> Channels
         {
             get

@@ -89,16 +89,17 @@ namespace MyTube.WEB.Controllers
                 key, async () => 
                 {
                     var videoProxy = await userService.GetVideoAsync(id);
-                    if (await userService.AddView(videoProxy, Request.UserHostAddress))
-                    {
-                        await Redis.UpdateCacheAsync(key, videoProxy);
-                    }
                     return videoProxy;
                 });
             
             if (video == null)
             {
                 throw new HttpException(404, "Video does not exist");
+            }
+
+            if (await userService.AddView(video, Request.UserHostAddress))
+            {
+                await Redis.UpdateCacheAsync(key, video);
             }
 
             string currentUser = User.Identity.GetUserId();
